@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { TELEGRAM_URL } from "../lib/constants";
+import { DotGrid, PanelChrome } from "./PanelChrome";
 
 const TABS = [
   { key: "bookings", icon: CalendarClock },
@@ -394,17 +395,21 @@ export function BusinessOS() {
           </div>
 
           <div className="card-glass relative mt-6 min-h-[340px] overflow-hidden rounded-3xl p-5 sm:p-7">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <ActivePanel />
-              </motion.div>
-            </AnimatePresence>
+            <DotGrid />
+            <div className="relative">
+              <PanelChrome label={t("heroMockup.brand")} />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <ActivePanel />
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
 
           <div className="mt-8 flex justify-center">

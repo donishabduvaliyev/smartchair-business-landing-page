@@ -2,6 +2,7 @@ import type { RefObject } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useCountUp } from "../hooks/useCountUp";
+import { DotGrid, PanelChrome } from "./PanelChrome";
 
 // Placeholder launch numbers — swap for real figures once you have them.
 const STATS = [
@@ -50,17 +51,23 @@ export function Stats() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="card-glass grid grid-cols-2 gap-10 rounded-[32px] px-8 py-12 sm:grid-cols-4"
+          className="card-glass relative overflow-hidden rounded-[32px] px-8 py-10"
         >
-          {STATS.map((s) => (
-            <StatItem
-              key={s.key}
-              value={s.value}
-              suffix={s.suffix}
-              isDecimal={s.isDecimal}
-              label={t(`stats.${s.key}`)}
-            />
-          ))}
+          <DotGrid />
+          <div className="relative">
+            <PanelChrome label={t("stats.panelLabel")} />
+            <div className="grid grid-cols-2 gap-10 pt-2 sm:grid-cols-4">
+              {STATS.map((s) => (
+                <StatItem
+                  key={s.key}
+                  value={s.value}
+                  suffix={s.suffix}
+                  isDecimal={s.isDecimal}
+                  label={t(`stats.${s.key}`)}
+                />
+              ))}
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { TELEGRAM_URL } from "../lib/constants";
 import { LogoMark } from "./Logo";
+import { DotGrid } from "./PanelChrome";
 
 export function CTA() {
   const { t } = useTranslation();
@@ -16,6 +17,7 @@ export function CTA() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="relative overflow-hidden rounded-[40px] border border-border bg-gradient-to-br from-surface via-surface to-surface-2 px-8 py-16 text-center sm:px-16"
         >
+          <DotGrid />
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute left-1/2 top-0 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/25 blur-[120px]" />
           </div>

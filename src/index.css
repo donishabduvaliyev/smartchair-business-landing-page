@@ -85,6 +85,11 @@ h1, h2, h3, h4 {
   backdrop-filter: blur(16px);
 }
 
+.bg-dot-grid {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }

@@ -109,6 +109,7 @@
     }
   },
   "stats": {
+    "panelLabel": "SmartChair Platform",
     "businesses": "Businesses listed",
     "bookings": "Bookings made",
     "categories": "Service categories",

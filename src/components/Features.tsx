@@ -8,6 +8,7 @@ import {
   MapPinned,
   Zap,
 } from "lucide-react";
+import { DotGrid } from "./PanelChrome";
 
 const FEATURE_KEYS = [
   { icon: MapPinned, key: "map" },
@@ -65,14 +66,15 @@ export function Features() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="card-glass group relative overflow-hidden rounded-3xl p-7"
             >
+              <DotGrid />
               <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-accent/10 blur-2xl transition-opacity duration-500 group-hover:opacity-100 opacity-0" />
-              <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-accent-soft/20 to-accent-dim/20 text-accent">
+              <span className="relative mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-accent-soft/20 to-accent-dim/20 text-accent">
                 <f.icon size={22} strokeWidth={1.8} />
               </span>
-              <h3 className="text-lg font-bold text-text">
+              <h3 className="relative text-lg font-bold text-text">
                 {t(`features.items.${f.key}.title`)}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-text-muted">
+              <p className="relative mt-2 text-sm leading-relaxed text-text-muted">
                 {t(`features.items.${f.key}.desc`)}
               </p>
             </motion.div>

@@ -109,6 +109,7 @@
     }
   },
   "stats": {
+    "panelLabel": "Платформа SmartChair",
     "businesses": "Заведений на платформе",
     "bookings": "Выполненных записей",
     "categories": "Категорий услуг",

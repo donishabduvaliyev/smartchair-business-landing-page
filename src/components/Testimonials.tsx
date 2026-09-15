@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { DotGrid } from "./PanelChrome";
 
 export function Testimonials() {
   const { t } = useTranslation();
@@ -37,17 +38,18 @@ export function Testimonials() {
           {[...quotes, ...quotes].map((q, i) => (
             <div
               key={i}
-              className="card-glass w-[320px] shrink-0 rounded-3xl p-7 sm:w-[380px]"
+              className="card-glass relative w-[320px] shrink-0 overflow-hidden rounded-3xl p-7 sm:w-[380px]"
             >
-              <div className="flex gap-1 text-accent">
+              <DotGrid />
+              <div className="relative flex gap-1 text-accent">
                 {Array.from({ length: 5 }).map((_, s) => (
                   <Star key={s} size={14} className="fill-accent" />
                 ))}
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-text-muted">
+              <p className="relative mt-4 text-sm leading-relaxed text-text-muted">
                 &ldquo;{q.quote}&rdquo;
               </p>
-              <div className="mt-6 flex items-center gap-3">
+              <div className="relative mt-6 flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-accent-soft to-accent-dim text-sm font-bold text-accent-ink">
                   {q.name[0]}
                 </span>
