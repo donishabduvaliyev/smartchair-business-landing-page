@@ -1,0 +1,160 @@
+{
+  "nav": {
+    "forBusiness": "For Business",
+    "features": "Features",
+    "howItWorks": "How it Works",
+    "reviews": "Reviews",
+    "customerApp": "Customer app",
+    "listBusiness": "List your business"
+  },
+  "hero": {
+    "badge": "Live in {{city}} · EN / RU / UZ",
+    "titleLine1": "Your next appointment,",
+    "titleHighlight": "in seconds",
+    "titleLine2": "— not calls.",
+    "subtitle": "SmartChair finds barbershops, salons, spas and self-care specialists near you, shows real prices and ratings, and books your exact time instantly — all inside Telegram. No app install, no waiting on hold.",
+    "ctaBusiness": "List your business",
+    "ctaCustomer": "See the customer app",
+    "rating": "average rating",
+    "businesses": "businesses listed"
+  },
+  "heroMockup": {
+    "brand": "SmartChair Business",
+    "thisWeek": "This week",
+    "change": "+18%",
+    "revenueToday": "2.4M UZS today",
+    "revenueDesc": "Revenue, +18% vs last week",
+    "newBooking": "New booking",
+    "newBookingDesc": "Confirmed · reminder sent",
+    "staffOnShift": "4 staff on shift",
+    "live": "Live",
+    "occupancy": "82% booked today",
+    "occupancyDesc": "6 of 7 chairs full",
+    "days": "Mo,Tu,We,Th,Fr,Sa,Su"
+  },
+  "categories": {
+    "barber": "Barber",
+    "hair": "Hair",
+    "nails": "Nails",
+    "massage": "Massage",
+    "spa": "Spa",
+    "cosmetology": "Cosmetology",
+    "makeup": "Makeup",
+    "browsLashes": "Brows & Lashes"
+  },
+  "businessOS": {
+    "eyebrow": "Built for business owners",
+    "title": "Your salon, fully under control",
+    "subtitle": "One dashboard for bookings, staff schedules, services, customer history, and the numbers that tell you how business is actually going.",
+    "tabs": {
+      "bookings": "Bookings & Calendar",
+      "staff": "Staff & Schedules",
+      "services": "Services & Pricing",
+      "crm": "Customer CRM",
+      "analytics": "Analytics"
+    },
+    "bookings": {
+      "today": "Today's schedule",
+      "now": "Now",
+      "free": "Free",
+      "booked": "Booked"
+    },
+    "status": {
+      "onShift": "On shift",
+      "onBreak": "On break",
+      "offToday": "Off today"
+    },
+    "tags": {
+      "vip": "VIP",
+      "new": "New",
+      "regular": "Regular"
+    },
+    "services": {
+      "header": { "service": "Service", "category": "Category", "duration": "Duration", "price": "Price" }
+    },
+    "crm": { "visits": "visits", "last": "last" },
+    "analytics": {
+      "revenue": "Revenue",
+      "bookings": "Bookings",
+      "noShows": "No-shows",
+      "rating": "Rating",
+      "thisMonth": "this month",
+      "down": "down 2%",
+      "avg": "avg"
+    },
+    "cta": "List your business for free"
+  },
+  "features": {
+    "eyebrow": "Why SmartChair",
+    "title": "Everything you need to skip the wait",
+    "subtitle": "Built for people who want great service without the chase — and businesses that want their chairs full.",
+    "items": {
+      "map": { "title": "Find businesses near you", "desc": "An interactive map shows every barbershop, salon, and spa around you, with distance and live availability." },
+      "filter": { "title": "Filter & compare", "desc": "Sort by top rated, best prices, or editor's choice to find the right specialist in seconds." },
+      "instant": { "title": "Book instantly", "desc": "Pick a service, specialist, date and time — your request goes out immediately, no back-and-forth." },
+      "reminders": { "title": "Automatic reminders", "desc": "SmartChair messages you on Telegram before your appointment so you never miss a visit." },
+      "favorites": { "title": "Save your favorites", "desc": "Keep your go-to specialists and salons one tap away, and rebook your last visit instantly." },
+      "language": { "title": "Speaks your language", "desc": "Fully available in English, Russian, and Uzbek — switch anytime from your profile." }
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "From open chat to booked seat",
+    "subtitle": "Four steps. Under a minute.",
+    "steps": {
+      "open": { "title": "Open the bot", "desc": "Tap the link and SmartChair opens instantly inside Telegram — nothing to download." },
+      "browse": { "title": "Browse or search", "desc": "Explore nearby shops on the map, or search by service, rating, or price." },
+      "book": { "title": "Pick a time & book", "desc": "Choose your specialist, service, date and time, then send your request in one tap." },
+      "confirm": { "title": "Get confirmed", "desc": "Receive instant confirmation and a reminder message before your appointment." }
+    }
+  },
+  "stats": {
+    "businesses": "Businesses listed",
+    "bookings": "Bookings made",
+    "categories": "Service categories",
+    "rating": "Avg. rating"
+  },
+  "testimonials": {
+    "eyebrow": "Loved on both sides of the chair",
+    "title": "What people are saying",
+    "quotes": [
+      { "name": "Aziz", "role": "Customer, Namangan", "quote": "Found a barber near my office and booked in under a minute. No calling, no waiting on hold." },
+      { "name": "Malika", "role": "Nail studio owner", "quote": "The QR code at our counter turns walk-ins into repeat bookings. No-shows dropped almost immediately." },
+      { "name": "Sardor", "role": "Customer, Namangan", "quote": "I like that reminders come straight to Telegram — I've stopped forgetting appointments entirely." },
+      { "name": "Dilnoza", "role": "Spa & beauty salon manager", "quote": "Managing requests in real time instead of a phone log made our Saturdays so much calmer." }
+    ]
+  },
+  "cta": {
+    "title": "Ready to fill your calendar?",
+    "subtitle": "List your business on SmartChair for free and start taking bookings through Telegram today.",
+    "ctaBusiness": "List your business",
+    "ctaCustomer": "I'm a customer"
+  },
+  "footer": {
+    "tagline": "Discover and book barbershops, salons, spas and self-care specialists in seconds, right inside Telegram. Available in English, Russian, and Uzbek.",
+    "cta": "List your business",
+    "columns": {
+      "product": "Product",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "links": {
+      "features": "Features",
+      "howItWorks": "How it works",
+      "forBusiness": "For businesses",
+      "reviews": "Reviews",
+      "about": "About",
+      "contact": "Contact",
+      "support": "Support",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    },
+    "rights": "All rights reserved.",
+    "madeFor": "Made for the beauty & self-care businesses of Namangan."
+  },
+  "lang": {
+    "en": "English",
+    "ru": "Русский",
+    "uz": "O'zbekcha"
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "nav": {
+    "forBusiness": "Biznes uchun",
+    "features": "Imkoniyatlar",
+    "howItWorks": "Qanday ishlaydi",
+    "reviews": "Sharhlar",
+    "customerApp": "Mijoz ilovasi",
+    "listBusiness": "Biznesni ro'yxatga oling"
+  },
+  "hero": {
+    "badge": "{{city}}da ishlaydi · EN / RU / UZ",
+    "titleLine1": "Keyingi navbatingiz",
+    "titleHighlight": "soniyalarda",
+    "titleLine2": "— qo'ng'iroqsiz.",
+    "subtitle": "SmartChair atrofingizdagi sartaroshxona, salon, spa va go'zallik mutaxassislarini topadi, haqiqiy narx va reytinglarni ko'rsatadi va aniq vaqtni zudlik bilan band qiladi — barchasi Telegram ichida. Ilova o'rnatish shart emas, navbatda kutish yo'q.",
+    "ctaBusiness": "Biznesni ro'yxatga oling",
+    "ctaCustomer": "Mijoz ilovasini ko'rish",
+    "rating": "o'rtacha reyting",
+    "businesses": "ta biznes ro'yxatda"
+  },
+  "heroMockup": {
+    "brand": "SmartChair Business",
+    "thisWeek": "Shu hafta",
+    "change": "+18%",
+    "revenueToday": "Bugun 2.4 mln UZS",
+    "revenueDesc": "Daromad, o'tgan haftaga nisbatan +18%",
+    "newBooking": "Yangi band",
+    "newBookingDesc": "Tasdiqlandi · eslatma yuborildi",
+    "staffOnShift": "4 xodim ishda",
+    "live": "Onlayn",
+    "occupancy": "Bugun 82% band",
+    "occupancyDesc": "7 tadan 6 joy band",
+    "days": "Du,Se,Cho,Pa,Ju,Sha,Ya"
+  },
+  "categories": {
+    "barber": "Sartarosh",
+    "hair": "Soch",
+    "nails": "Manikyur",
+    "massage": "Massaj",
+    "spa": "Spa",
+    "cosmetology": "Kosmetologiya",
+    "makeup": "Makiyaj",
+    "browsLashes": "Qosh va kirpik"
+  },
+  "businessOS": {
+    "eyebrow": "Biznes egalari uchun",
+    "title": "Saloningiz to'liq nazorat ostida",
+    "subtitle": "Bandlar, xodimlar jadvali, xizmatlar, mijozlar tarixi va biznes qanday ketayotganini ko'rsatadigan raqamlar uchun yagona boshqaruv paneli.",
+    "tabs": {
+      "bookings": "Bandlar va kalendar",
+      "staff": "Xodimlar va jadval",
+      "services": "Xizmatlar va narxlar",
+      "crm": "Mijozlar CRM",
+      "analytics": "Statistika"
+    },
+    "bookings": {
+      "today": "Bugungi jadval",
+      "now": "Hozir",
+      "free": "Bo'sh",
+      "booked": "Band"
+    },
+    "status": {
+      "onShift": "Ishda",
+      "onBreak": "Tanaffusda",
+      "offToday": "Bugun dam olishda"
+    },
+    "tags": {
+      "vip": "VIP",
+      "new": "Yangi",
+      "regular": "Doimiy"
+    },
+    "services": {
+      "header": { "service": "Xizmat", "category": "Toifa", "duration": "Davomiyligi", "price": "Narxi" }
+    },
+    "crm": { "visits": "tashrif", "last": "oxirgi" },
+    "analytics": {
+      "revenue": "Daromad",
+      "bookings": "Bandlar",
+      "noShows": "Kelmaganlar",
+      "rating": "Reyting",
+      "thisMonth": "shu oyda",
+      "down": "2% pasaydi",
+      "avg": "o'rtacha"
+    },
+    "cta": "Biznesni bepul ro'yxatga oling"
+  },
+  "features": {
+    "eyebrow": "Nega aynan SmartChair",
+    "title": "Navbatda kutmaslik uchun kerak bo'lgan hamma narsa",
+    "subtitle": "Sifatli xizmatni ortiqcha yugur-yugursiz xohlaydigan odamlar va o'z joylarini to'ldirishni xohlaydigan bizneslar uchun yaratilgan.",
+    "items": {
+      "map": { "title": "Yaqin atrofdagi bizneslarni toping", "desc": "Interaktiv xarita atrofingizdagi barcha sartaroshxona, salon va spalarni masofasi va real vaqtdagi bandligi bilan ko'rsatadi." },
+      "filter": { "title": "Filtrlang va solishtiring", "desc": "Eng yuqori reytingli, eng arzon yoki tahririyat tanlovi bo'yicha saralab, kerakli mutaxassisni soniyalarda toping." },
+      "instant": { "title": "Zudlik bilan band qiling", "desc": "Xizmat, mutaxassis, sana va vaqtni tanlang — so'rovingiz darhol yuboriladi, ortiqcha yozishmasiz." },
+      "reminders": { "title": "Avtomatik eslatmalar", "desc": "SmartChair navbatdan oldin Telegramda sizga xabar yuboradi, shunda hech qachon tashrifni o'tkazib yubormaysiz." },
+      "favorites": { "title": "Sevimlilaringizni saqlang", "desc": "Doimiy mutaxassis va salonlaringizni qo'l ostida saqlang va oxirgi tashrifni bir tegishda qayta band qiling." },
+      "language": { "title": "Sizning tilingizda gaplashadi", "desc": "Ingliz, rus va o'zbek tillarida to'liq mavjud — istalgan vaqtda profilingizdan almashtiring." }
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "Qanday ishlaydi",
+    "title": "Chatni ochishdan bandlashgacha",
+    "subtitle": "To'rt qadam. Bir daqiqadan kamroq.",
+    "steps": {
+      "open": { "title": "Botni oching", "desc": "Havolani bosing — SmartChair Telegram ichida darhol ochiladi, hech narsa yuklab olish shart emas." },
+      "browse": { "title": "Ko'rib chiqing yoki qidiring", "desc": "Xaritada yaqin atrofdagi joylarni ko'ring yoki xizmat, reyting yoki narx bo'yicha qidiring." },
+      "book": { "title": "Vaqtni tanlang va band qiling", "desc": "Mutaxassis, xizmat, sana va vaqtni tanlang, so'ng so'rovingizni bir tegishda yuboring." },
+      "confirm": { "title": "Tasdiqni oling", "desc": "Zudlik bilan tasdiqlash va navbatdan oldin eslatma xabari." }
+    }
+  },
+  "stats": {
+    "businesses": "Ro'yxatdagi bizneslar",
+    "bookings": "Amalga oshirilgan bandlar",
+    "categories": "Xizmat toifalari",
+    "rating": "O'rtacha reyting"
+  },
+  "testimonials": {
+    "eyebrow": "Ikki tomon ham yaxshi ko'radi",
+    "title": "Odamlar nima deyishyapti",
+    "quotes": [
+      { "name": "Aziz", "role": "Mijoz, Namangan", "quote": "Ofisim yaqinidan sartaroshni topdim va bir daqiqadan kamroq vaqtda band qildim. Qo'ng'iroq yo'q, navbatda kutish yo'q." },
+      { "name": "Malika", "role": "Manikyur studiyasi egasi", "quote": "Peshtaxtamizdagi QR-kod tasodifiy mijozlarni doimiy mijozlarga aylantiradi. Kelmay qolishlar deyarli darhol kamaydi." },
+      { "name": "Sardor", "role": "Mijoz, Namangan", "quote": "Eslatmalar to'g'ridan-to'g'ri Telegramga kelishi yoqadi — navbatlarni umuman unutmay qo'ydim." },
+      { "name": "Dilnoza", "role": "Spa va go'zallik saloni menejeri", "quote": "Qo'ng'iroqlar daftari o'rniga real vaqtda so'rovlarni boshqarish shanba kunlarimizni ancha osonlashtirdi." }
+    ]
+  },
+  "cta": {
+    "title": "Jadvalingizni to'ldirishga tayyormisiz?",
+    "subtitle": "Biznesingizni SmartChairga bepul qo'shing va bugundan Telegram orqali bandlar qabul qilishni boshlang.",
+    "ctaBusiness": "Biznesni ro'yxatga oling",
+    "ctaCustomer": "Men mijozman"
+  },
+  "footer": {
+    "tagline": "Sartaroshxona, salon, spa va go'zallik mutaxassislarini soniyalarda toping va band qiling — to'g'ridan-to'g'ri Telegramda. Ingliz, rus va o'zbek tillarida mavjud.",
+    "cta": "Biznesni ro'yxatga oling",
+    "columns": {
+      "product": "Mahsulot",
+      "company": "Kompaniya",
+      "legal": "Huquqiy"
+    },
+    "links": {
+      "features": "Imkoniyatlar",
+      "howItWorks": "Qanday ishlaydi",
+      "forBusiness": "Biznes uchun",
+      "reviews": "Sharhlar",
+      "about": "Biz haqimizda",
+      "contact": "Aloqa",
+      "support": "Qo'llab-quvvatlash",
+      "privacy": "Maxfiylik siyosati",
+      "terms": "Foydalanish shartlari"
+    },
+    "rights": "Barcha huquqlar himoyalangan.",
+    "madeFor": "Namanganning go'zallik va o'z-o'ziga g'amxo'rlik bizneslari uchun yaratilgan."
+  },
+  "lang": {
+    "en": "English",
+    "ru": "Русский",
+    "uz": "O'zbekcha"
+  }
+}

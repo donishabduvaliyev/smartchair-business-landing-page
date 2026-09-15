@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #08080a;
+  --color-bg-soft: #0e0e11;
+  --color-surface: #131317;
+  --color-surface-2: #1a1a1f;
+  --color-surface-3: #212127;
+  --color-border: #27272e;
+  --color-border-soft: #1d1d23;
+
+  --color-text: #f4f4f5;
+  --color-text-muted: #9c9ca6;
+  --color-text-faint: #64646d;
+
+  --color-accent: #d4af5a;
+  --color-accent-soft: #e2c176;
+  --color-accent-dim: #8f6a26;
+  --color-accent-ink: #1a1409;
+
+  --color-info: #5b9df9;
+  --color-warning: #f0b84c;
+  --color-danger: #f2685c;
+  --color-success: #3ddc97;
+
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  --font-display: "Manrope", "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: "Fraunces", "Georgia", "Times New Roman", serif;
+
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-float-slow: float-slow 7s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
+}
+
+#top,
+#features,
+#how-it-works,
+#for-business,
+#reviews {
+  scroll-margin-top: 5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg);
+}
+
+body {
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  color: #fff;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(100deg, #f3d98b 0%, #d4af5a 45%, #a97e2f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+.card-glass {
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(16px);
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-14px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-3);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-dim);
+}
