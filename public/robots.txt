@@ -1,0 +1,6 @@
+# robots.txt for SmartChair (https://smartchair.uz)
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://smartchair.uz/sitemap.xml
