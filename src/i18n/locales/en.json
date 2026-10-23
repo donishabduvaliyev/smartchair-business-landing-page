@@ -4,6 +4,7 @@
     "features": "Features",
     "howItWorks": "How it Works",
     "reviews": "Reviews",
+    "faq": "FAQ",
     "customerApp": "Customer app",
     "listBusiness": "List your business"
   },
@@ -40,7 +41,8 @@
     "spa": "Spa",
     "cosmetology": "Cosmetology",
     "makeup": "Makeup",
-    "browsLashes": "Brows & Lashes"
+    "browsLashes": "Brows & Lashes",
+    "other": "Other Beauty / Wellness"
   },
   "businessOS": {
     "eyebrow": "Built for business owners",
@@ -125,6 +127,123 @@
       { "name": "Dilnoza", "role": "Spa & beauty salon manager", "quote": "Managing requests in real time instead of a phone log made our Saturdays so much calmer." }
     ]
   },
+  "faq": {
+    "eyebrow": "Frequently Asked Questions",
+    "title": "Everything you need to know",
+    "subtitle": "Clear answers for customers booking their next visit and business owners ready to grow with SmartChair.",
+    "tabs": {
+      "customers": "For Customers",
+      "businesses": "For Business Owners"
+    },
+    "customers": [
+      {
+        "q": "How do I book an appointment on SmartChair?",
+        "a": "Open our Telegram Mini App (@SmartChairNamanganbot) or mobile app, browse nearby barbershops, beauty salons, or spas on the list or map, choose your service and specialist, and tap an available time slot. Your booking request is sent immediately."
+      },
+      {
+        "q": "Is SmartChair free for customers?",
+        "a": "Yes, booking through SmartChair is 100% free for customers. There are no hidden booking fees — you pay the exact listed UZS price directly at the barbershop or salon after your service."
+      },
+      {
+        "q": "How do I know my appointment is confirmed?",
+        "a": "As soon as the salon or specialist confirms your slot, you receive an instant Telegram notification. SmartChair also sends an automated reminder before your appointment so you never miss your turn."
+      },
+      {
+        "q": "What if I need to cancel or reschedule my visit?",
+        "a": "You can cancel or reschedule directly from your Profile / Booking History inside the app at any time before your appointment. Please cancel at least 2 hours in advance so the specialist can offer the slot to another client."
+      },
+      {
+        "q": "How is my personal data used and protected?",
+        "a": "In strict compliance with Uzbekistan Law No. O‘RQ-547 'On Personal Data', we only collect your name, phone number, and Telegram ID to process your appointments and share them solely with the specific salon you book. We never sell your data to third parties."
+      },
+      {
+        "q": "How can I delete my account and personal data?",
+        "a": "You have the full right to withdraw consent and erase your personal data at any time. Visit our Delete Account page (/delete-account) to submit an instant deletion request or contact support, and all personal records are permanently removed within 72 hours."
+      }
+    ],
+    "businesses": [
+      {
+        "q": "How do I connect my barbershop or beauty salon to SmartChair?",
+        "a": "Click 'List your business' to fill out the 1-minute partner inquiry form on this page, or call us directly at +998 94 982 70 70. Our team will set up your salon profile, service catalog, photos, and staff schedules within 24 hours."
+      },
+      {
+        "q": "Why doesn't the 'List your business' button open the customer bot anymore?",
+        "a": "Every barbershop and salon gets a verified partner workspace, custom staff schedules, and dedicated admin credentials. Submitting the Partner Form connects you directly with our onboarding team so we configure your business properly from day one."
+      },
+      {
+        "q": "How do my barbers and specialists receive bookings?",
+        "a": "The moment a client requests a time slot, your salon receives an instant notification in Telegram and on your live SmartChair Business Dashboard. You can accept, reschedule, or log walk-in clients in one tap."
+      },
+      {
+        "q": "How does SmartChair reduce no-shows?",
+        "a": "SmartChair automatically sends Telegram reminders to clients before their scheduled appointment and tracks customer visit reliability in your CRM, cutting missed appointments by up to 60%."
+      },
+      {
+        "q": "Do I need a computer or special equipment at my salon?",
+        "a": "No special hardware is required. You and your staff can manage the entire calendar, services, working hours, and analytics from any smartphone, tablet, or laptop."
+      },
+      {
+        "q": "Can we customize individual staff working hours and days off?",
+        "a": "Yes. Each specialist can have their own service list, shift hours, break times, and days off. Only genuinely open slots are shown to customers."
+      }
+    ],
+    "stillHaveQuestions": "Still have questions or want a live demo for your salon?",
+    "callDirectly": "Call +998 94 982 70 70",
+    "applyPartner": "Apply as a Partner"
+  },
+  "partnerForm": {
+    "eyebrow": "Partner Onboarding · B2B",
+    "title": "Bring your barbershop or salon to SmartChair",
+    "subtitle": "Leave your details below and our onboarding team will contact you within a few hours to set up your salon profile, staff schedules, and admin dashboard — or call us directly right now.",
+    "modalTitle": "Partner with SmartChair",
+    "modalSubtitle": "Fill out this quick form and we'll contact you to onboard your business, or reach us directly by phone.",
+    "directContactTitle": "Prefer to talk right now?",
+    "directContactDesc": "Call or message our founder directly for immediate onboarding and live demo setup.",
+    "callFounder": "Call +998 94 982 70 70",
+    "messageInstagram": "Instagram @_smartchair",
+    "benefitsTitle": "What you get with SmartChair Business:",
+    "benefits": [
+      "Full 24/7 online booking calendar & Telegram bot integration",
+      "Real-time staff shift management, break times & walk-in logging",
+      "Automated client reminders that drastically cut no-shows",
+      "Multilingual listing (Uzbek, Russian & English) on map & search",
+      "Dedicated onboarding support & custom QR stand for your counter"
+    ],
+    "fields": {
+      "businessName": "Business / Salon Name",
+      "businessNamePlaceholder": "e.g. Top Blade Barbershop",
+      "ownerName": "Your Full Name (Owner / Manager)",
+      "ownerNamePlaceholder": "e.g. Azizbek Karimov",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+998 90 123 45 67",
+      "category": "Business Category",
+      "city": "City / District",
+      "cityPlaceholder": "e.g. Namangan, Chorsu",
+      "staffCount": "Number of Specialists / Chairs",
+      "staffOptions": {
+        "1-2": "1–2 specialists",
+        "3-5": "3–5 specialists",
+        "6-10": "6–10 specialists",
+        "10+": "10+ specialists"
+      },
+      "social": "Telegram or Instagram Handle (optional)",
+      "socialPlaceholder": "@your_salon",
+      "message": "Additional Notes (optional)",
+      "messagePlaceholder": "Tell us about your salon or preferred time to call..."
+    },
+    "consentPrefix": "I agree to the processing of my personal data in accordance with Republic of Uzbekistan Law No. O‘RQ-547 and the ",
+    "consentPrivacyLink": "Privacy Policy",
+    "consentMiddle": " & ",
+    "consentTermsLink": "Public Offer",
+    "submit": "Send Partner Application",
+    "submitting": "Sending inquiry...",
+    "errorRequired": "Please enter your business name, your name, and a valid phone number.",
+    "errorConsent": "Please accept the personal data processing consent to continue.",
+    "successTitle": "Application Received!",
+    "successDesc": "Thank you! We have received your business details and will contact you shortly at your phone number. Need faster setup? Call us directly below:",
+    "submitAnother": "Submit another inquiry",
+    "closeModal": "Close"
+  },
   "cta": {
     "title": "Ready to fill your calendar?",
     "subtitle": "List your business on SmartChair for free and start taking bookings through Telegram today.",
@@ -137,21 +256,24 @@
     "columns": {
       "product": "Product",
       "company": "Company",
-      "legal": "Legal"
+      "legal": "Legal & Policies"
     },
     "links": {
       "features": "Features",
       "howItWorks": "How it works",
       "forBusiness": "For businesses",
       "reviews": "Reviews",
+      "faq": "FAQ",
       "about": "About",
-      "contact": "Contact",
+      "contact": "Partner Inquiry",
       "support": "Support",
-      "privacy": "Privacy Policy",
-      "terms": "Terms of Service"
+      "privacy": "Privacy & Data Policy",
+      "terms": "Terms & Public Offer",
+      "refund": "Refund & Cancellation",
+      "deleteAccount": "Delete Account & Data"
     },
     "rights": "All rights reserved.",
-    "madeFor": "Made for the beauty & self-care businesses of Namangan."
+    "madeFor": "Made for the beauty & self-care businesses of Uzbekistan."
   },
   "lang": {
     "en": "English",

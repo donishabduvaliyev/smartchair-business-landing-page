@@ -1,6 +1,7 @@
 import { motion, type Variants } from "framer-motion";
 import { ArrowRight, MapPin, Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { usePartnerModal } from "../context/PartnerModalContext";
 import { TELEGRAM_URL, CITY } from "../lib/constants";
 import { DashboardMockup } from "./DashboardMockup";
 
@@ -15,6 +16,7 @@ const fadeUp: Variants = {
 
 export function Hero() {
   const { t } = useTranslation();
+  const { openPartnerModal } = usePartnerModal();
 
   return (
     <section
@@ -73,13 +75,14 @@ export function Hero() {
             custom={3}
             className="mt-9 flex flex-col items-center gap-3.5 sm:flex-row lg:justify-start"
           >
-            <a
-              href="#for-business"
+            <button
+              type="button"
+              onClick={openPartnerModal}
               className="btn-gold press-spring group inline-flex w-full items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold sm:w-auto"
             >
               {t("hero.ctaBusiness")}
               <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
-            </a>
+            </button>
             <a
               href={TELEGRAM_URL}
               target="_blank"

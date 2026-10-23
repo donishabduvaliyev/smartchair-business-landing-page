@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { usePartnerModal } from "../context/PartnerModalContext";
 import { cn } from "../lib/utils";
 import { TELEGRAM_URL } from "../lib/constants";
 import { Logo } from "./Logo";
@@ -10,6 +11,7 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Navbar() {
   const { t } = useTranslation();
+  const { openPartnerModal } = usePartnerModal();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -18,6 +20,7 @@ export function Navbar() {
     { label: t("nav.features"), href: "/#features" },
     { label: t("nav.howItWorks"), href: "/#how-it-works" },
     { label: t("nav.reviews"), href: "/#reviews" },
+    { label: t("nav.faq"), href: "/#faq" },
   ];
 
   useEffect(() => {
@@ -64,14 +67,13 @@ export function Navbar() {
           >
             {t("nav.customerApp")}
           </a>
-          <a
-            href={TELEGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={openPartnerModal}
             className="btn-gold press-spring rounded-full px-5 py-2.5 text-sm font-semibold"
           >
             {t("nav.listBusiness")}
-          </a>
+          </button>
         </div>
 
         <div className="flex items-center gap-2 xl:hidden">
@@ -115,14 +117,16 @@ export function Navbar() {
               >
                 {t("nav.customerApp")}
               </a>
-              <a
-                href={TELEGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  openPartnerModal();
+                }}
                 className="btn-gold press-spring mt-2.5 rounded-full px-5 py-3 text-center text-sm font-semibold"
               >
                 {t("nav.listBusiness")}
-              </a>
+              </button>
             </div>
           </motion.div>
         )}

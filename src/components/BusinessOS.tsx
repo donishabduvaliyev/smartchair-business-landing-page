@@ -9,7 +9,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { TELEGRAM_URL } from "../lib/constants";
+import { usePartnerModal } from "../context/PartnerModalContext";
 import { DotGrid, PanelChrome } from "./PanelChrome";
 
 const TABS = [
@@ -344,6 +344,7 @@ const PANELS: Record<TabKey, React.ComponentType> = {
 
 export function BusinessOS() {
   const { t } = useTranslation();
+  const { openPartnerModal } = usePartnerModal();
   const [active, setActive] = useState<TabKey>("bookings");
   const ActivePanel = PANELS[active];
 
@@ -422,15 +423,14 @@ export function BusinessOS() {
           </div>
 
           <div className="mt-8 flex justify-center">
-            <a
-              href={TELEGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={openPartnerModal}
               className="btn-secondary press-spring group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold"
             >
               {t("businessOS.cta")}
               <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
-            </a>
+            </button>
           </div>
         </motion.div>
       </div>

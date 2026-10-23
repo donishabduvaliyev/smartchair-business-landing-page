@@ -4,8 +4,9 @@
     "features": "Imkoniyatlar",
     "howItWorks": "Qanday ishlaydi",
     "reviews": "Sharhlar",
+    "faq": "Savol-javob",
     "customerApp": "Mijoz ilovasi",
-    "listBusiness": "Biznesni ro'yxatga oling"
+    "listBusiness": "Biznesni qo'shish"
   },
   "hero": {
     "badge": "{{city}}da ishlaydi · EN / RU / UZ",
@@ -13,7 +14,7 @@
     "titleHighlight": "soniyalarda",
     "titleLine2": "— qo'ng'iroqsiz.",
     "subtitle": "SmartChair atrofingizdagi sartaroshxona, salon, spa va go'zallik mutaxassislarini topadi, haqiqiy narx va reytinglarni ko'rsatadi va aniq vaqtni zudlik bilan band qiladi — barchasi Telegram ichida. Ilova o'rnatish shart emas, navbatda kutish yo'q.",
-    "ctaBusiness": "Biznesni ro'yxatga oling",
+    "ctaBusiness": "Biznesni qo'shish",
     "ctaCustomer": "Mijoz ilovasini ko'rish",
     "rating": "o'rtacha reyting",
     "businesses": "ta biznes ro'yxatda"
@@ -33,14 +34,15 @@
     "days": "Du,Se,Cho,Pa,Ju,Sha,Ya"
   },
   "categories": {
-    "barber": "Sartarosh",
-    "hair": "Soch",
+    "barber": "Sartaroshxona",
+    "hair": "Soch saloni",
     "nails": "Manikyur",
     "massage": "Massaj",
     "spa": "Spa",
     "cosmetology": "Kosmetologiya",
     "makeup": "Makiyaj",
-    "browsLashes": "Qosh va kirpik"
+    "browsLashes": "Qosh va kirpik",
+    "other": "Boshqa go'zallik markazi"
   },
   "businessOS": {
     "eyebrow": "Biznes egalari uchun",
@@ -125,33 +127,154 @@
       { "name": "Dilnoza", "role": "Spa va go'zallik saloni menejeri", "quote": "Qo'ng'iroqlar daftari o'rniga real vaqtda so'rovlarni boshqarish shanba kunlarimizni ancha osonlashtirdi." }
     ]
   },
+  "faq": {
+    "eyebrow": "Ko'p beriladigan savollar (FAQ)",
+    "title": "Barcha savollaringizga aniq javoblar",
+    "subtitle": "Navbat band qiluvchi mijozlar hamda SmartChair orqali o'z biznesini rivojlantirmoqchi bo'lgan salon egalari uchun muhim ma'lumotlar.",
+    "tabs": {
+      "customers": "Mijozlar uchun",
+      "businesses": "Biznes egalari uchun"
+    },
+    "customers": [
+      {
+        "q": "SmartChair orqali qanday qilib navbat band qilaman?",
+        "a": "Telegram botimiz (@SmartChairNamanganbot) yoki mobil ilovamizni oching, ro'yxat yoki xaritadan o'zingizga yaqin sartaroshxona yoki go'zallik salonini tanlang, xizmat turi va ustani belgilab, bo'sh vaqt tugmasini bosing. So'rovingiz bir soniyada yuboriladi."
+      },
+      {
+        "q": "SmartChair orqali navbat olish mijozlar uchun pullikmi?",
+        "a": "Yo'q, mijozlar uchun SmartChair platformasidan foydalanish va navbat band qilish 100% bepul. Siz faqat ko'rsatilgan xizmat haqini bevosita sartaroshxona yoki salonda to'laysiz."
+      },
+      {
+        "q": "Navbatim tasdiqlanganini qanday bilaman?",
+        "a": "Usta yoki salon ma'muri so'rovingizni tasdiqlashi bilan sizga Telegram orqali xabarnoma keladi. Shuningdek, tashrif vaqti yaqinlashganda avtomatik eslatma yuboriladi."
+      },
+      {
+        "q": "Navbatni bekor qilish yoki boshqa vaqtga ko'chirish mumkinmi?",
+        "a": "Ha, ilova ichidagi 'Profil' bo'limidan istalgan vaqtda band qilingan navbatni bekor qilishingiz yoki boshqa bo'sh vaqtga o'zgartirishingiz mumkin. Iltimos, boshqa mijozlar foydalana olishi uchun kamida 2 soat oldin xabar bering."
+      },
+      {
+        "q": "Mening shaxsiy ma'lumotlarim qanday himoyalanadi?",
+        "a": "O'zbekiston Respublikasining 'Shaxsiy ma'lumotlar to'g'risida'gi O‘RQ-547-sonli Qonuniga muvofiq, ismingiz va telefon raqamingiz faqat siz tanlagan salonga navbatni rasmiylashtirish uchungina uzatiladi va uchinchi shaxslarga reklama maqsadida berilmaydi."
+      },
+      {
+        "q": "Hisobimni va shaxsiy ma'lumotlarimni qanday o'chirishim mumkin?",
+        "a": "Siz istalgan vaqtda shaxsiy ma'lumotlaringizni qayta ishlashga bergan roziligingizni qaytarib olishingiz va hisobingizni o'chirishingiz mumkin. Buning uchun saytimizdagi 'Hisobni o'chirish' (/delete-account) sahifasi orqali so'rov qoldiring — ma'lumotlaringiz 72 soat ichida butunlay o'chiriladi."
+      }
+    ],
+    "businesses": [
+      {
+        "q": "Sartaroshxonam yoki go'zallik salonimni SmartChairga qanday qo'shaman?",
+        "a": "Saytdagi 'Biznesni qo'shish' tugmasini bosib, qisqa so'rovnomani to'ldiring yoki to'g'ridan-to'g'ri +998 94 982 70 70 raqamiga qo'ng'iroq qiling. Jamoamiz 24 soat ichida saloningiz profilini, xizmatlar narxnomasi va ustalar jadvalini sozlab beradi."
+      },
+      {
+        "q": "Nega biznes qo'shish tugmasi oddiy mijoz botiga emas, hamkorlik anketasiga olib o'tadi?",
+        "a": "Har bir sartaroshxona va salon uchun maxsus boshqaruv paneli (Admin Dashboard), ustalar ish grafigi va Telegram-nazorat boti individual tarzda ulab beriladi. Anketani to'ldirishingiz bilan mutaxassisimiz siz bilan bog'lanib, barchasini tayyorlab beradi."
+      },
+      {
+        "q": "Ustalar yangi mijoz yozilganini qanday ko'rishadi?",
+        "a": "Mijoz vaqt band qilishi bilan saloningizning Telegram boshqaruv botiga hamda SmartChair Business paneliga ovozli xabar keladi. Usta birgina tugma bilan navbatni tasdiqlashi yoki joyida kelgan (walk-in) mijozni jadvalga kiritishi mumkin."
+      },
+      {
+        "q": "SmartChair kelmay qoladigan mijozlar (no-show) sonini qanday kamaytiradi?",
+        "a": "Tizim har bir mijozga navbatidan oldin Telegram orqali avtomatik eslatma yuboradi hamda CRM bo'limida mijozning oldingi tashriflari tarixini ko'rsatadi. Bu band qilingan o'rinlar bo'sh qolishini 60% gacha qisqartiradi."
+      },
+      {
+        "q": "Salonda kompyuter bo'lishi shartmi?",
+        "a": "Mutlaqo shart emas. SmartChair Business boshqaruv paneli istalgan smartfon, planshet yoki kompyuterda mukammal ishlaydi."
+      },
+      {
+        "q": "Har bir usta uchun alohida ish vaqti va dam olish kunlarini belgilasa bo'ladimi?",
+        "a": "Ha! Har bir mutaxassis uchun alohida xizmatlar, ish soatlari, tushlik tanaffusi va dam olish kunlarini kiritish mumkin. Mijozlarga faqat haqiqiy bo'sh vaqtlar ko'rinadi."
+      }
+    ],
+    "stillHaveQuestions": "Qo'shimcha savolingiz bormi yoki saloningiz uchun jonli taqdimot xohlaysizmi?",
+    "callDirectly": "Qo'ng'iroq: +998 94 982 70 70",
+    "applyPartner": "Hamkorlik so'rovini yuborish"
+  },
+  "partnerForm": {
+    "eyebrow": "Biznes Hamkorlik · B2B",
+    "title": "Sartaroshxona yoki saloningizni SmartChairga qo'shing",
+    "subtitle": "Quyidagi qisqa anketani to'ldiring — mutaxassisimiz siz bilan bog'lanib, saloningiz sahifasi, ustalar jadvali va boshqaruv panelini sozlab beradi. Yoki hoziroq bizga qo'ng'iroq qiling!",
+    "modalTitle": "SmartChair bilan hamkor bo'ling",
+    "modalSubtitle": "Biznesingiz ma'lumotlarini qoldiring — tez orada siz bilan bog'lanamiz yoki quyidagi raqamga to'g'ridan-to'g'ri qo'ng'iroq qiling.",
+    "directContactTitle": "Hoziroq bog'lanmoqchimisiz?",
+    "directContactDesc": "Tizimni tezkor ulash va barcha savollar bo'yicha asoschimiz bilan bevosita bog'laning:",
+    "callFounder": "+998 94 982 70 70 ga qo'ng'iroq",
+    "messageInstagram": "Instagram @_smartchair",
+    "benefitsTitle": "SmartChair Business sizga nima beradi:",
+    "benefits": [
+      "24/7 onlayn navbat qabul qilish va Telegram bot integratsiyasi",
+      "Ustalar ish grafigi, tanaffuslar va jonli navbatni oson boshqarish",
+      "Mijozlarga avtomatik eslatmalar yuborish orqali bo'sh qolishlarni kamaytirish",
+      "Xarita va qidiruvda O'zbek, Rus va Ingliz tillarida ko'rinish",
+      "Bepul texnik sozlash va peshtaxtangiz uchun maxsus QR-kod stendi"
+    ],
+    "fields": {
+      "businessName": "Biznes / Salon nomi",
+      "businessNamePlaceholder": "Masalan: Royal Blade Barbershop",
+      "ownerName": "Ism-sharifingiz (Rahbar / Menejer)",
+      "ownerNamePlaceholder": "Masalan: Azizbek Karimov",
+      "phone": "Telefon raqamingiz",
+      "phonePlaceholder": "+998 90 123 45 67",
+      "category": "Faoliyat yo'nalishi",
+      "city": "Shahar / Tuman / Mo'ljal",
+      "cityPlaceholder": "Masalan: Namangan sh., Chorsu",
+      "staffCount": "Ustalar / Kreslolar soni",
+      "staffOptions": {
+        "1-2": "1–2 nafar usta",
+        "3-5": "3–5 nafar usta",
+        "6-10": "6–10 nafar usta",
+        "10+": "10+ nafar usta"
+      },
+      "social": "Telegram yoki Instagram sahifangiz (ixtiyoriy)",
+      "socialPlaceholder": "@salon_nomi",
+      "message": "Qo'shimcha izoh (ixtiyoriy)",
+      "messagePlaceholder": "Saloningiz haqida yoki bog'lanish uchun qulay vaqt..."
+    },
+    "consentPrefix": "O'zbekiston Respublikasining O‘RQ-547-sonli Qonuni hamda ",
+    "consentPrivacyLink": "Maxfiylik siyosati",
+    "consentMiddle": " va ",
+    "consentTermsLink": "Ommaviy oferta",
+    "consentSuffix": " shartlariga muvofiq shaxsiy ma'lumotlarim qayta ishlanishiga roziman.",
+    "submit": "So'rovni yuborish",
+    "submitting": "Yuborilmoqda...",
+    "errorRequired": "Iltimos, biznes nomi, ismingiz va to'g'ri telefon raqamingizni kiriting.",
+    "errorConsent": "Davom etish uchun shaxsiy ma'lumotlarni qayta ishlashga rozilik belgisini qo'ying.",
+    "successTitle": "So'rovingiz qabul qilindi!",
+    "successDesc": "Rahmat! Biznesingiz bo'yicha so'rov adminga yetkazildi. Tez orada ko'rsatilgan telefon raqamingizga bog'lanamiz. Hoziroq gaplashish uchun quyidagi raqamga qo'ng'iroq qilishingiz mumkin:",
+    "submitAnother": "Yana so'rov yuborish",
+    "closeModal": "Yopish"
+  },
   "cta": {
     "title": "Jadvalingizni to'ldirishga tayyormisiz?",
     "subtitle": "Biznesingizni SmartChairga bepul qo'shing va bugundan Telegram orqali bandlar qabul qilishni boshlang.",
-    "ctaBusiness": "Biznesni ro'yxatga oling",
+    "ctaBusiness": "Biznesni qo'shish",
     "ctaCustomer": "Men mijozman"
   },
   "footer": {
     "tagline": "Sartaroshxona, salon, spa va go'zallik mutaxassislarini soniyalarda toping va band qiling — to'g'ridan-to'g'ri Telegramda. Ingliz, rus va o'zbek tillarida mavjud.",
-    "cta": "Biznesni ro'yxatga oling",
+    "cta": "Biznesni qo'shish",
     "columns": {
       "product": "Mahsulot",
       "company": "Kompaniya",
-      "legal": "Huquqiy"
+      "legal": "Huquqiy hujjatlar"
     },
     "links": {
       "features": "Imkoniyatlar",
       "howItWorks": "Qanday ishlaydi",
       "forBusiness": "Biznes uchun",
       "reviews": "Sharhlar",
+      "faq": "Ko'p beriladigan savollar",
       "about": "Biz haqimizda",
-      "contact": "Aloqa",
+      "contact": "Hamkor bo'lish",
       "support": "Qo'llab-quvvatlash",
-      "privacy": "Maxfiylik siyosati",
-      "terms": "Foydalanish shartlari"
+      "privacy": "Maxfiylik siyosati (O‘RQ-547)",
+      "terms": "Foydalanish shartlari (Oferta)",
+      "refund": "Bekor qilish va to'lovni qaytarish",
+      "deleteAccount": "Hisob va ma'lumotlarni o'chirish"
     },
     "rights": "Barcha huquqlar himoyalangan.",
-    "madeFor": "Namanganning go'zallik va o'z-o'ziga g'amxo'rlik bizneslari uchun yaratilgan."
+    "madeFor": "O'zbekiston go'zallik va o'z-o'ziga g'amxo'rlik bizneslari uchun yaratilgan."
   },
   "lang": {
     "en": "English",

@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { usePartnerModal } from "../context/PartnerModalContext";
 import { TELEGRAM_URL } from "../lib/constants";
 import { LogoMark } from "./Logo";
 import { DotGrid } from "./PanelChrome";
 
 export function CTA() {
   const { t } = useTranslation();
+  const { openPartnerModal } = usePartnerModal();
   return (
     <section className="relative py-28">
       <div className="mx-auto max-w-5xl px-6 lg:px-8">
@@ -38,15 +40,14 @@ export function CTA() {
           </p>
 
           <div className="relative mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row">
-            <a
-              href={TELEGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={openPartnerModal}
               className="btn-gold press-spring group inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-semibold sm:w-auto"
             >
               {t("cta.ctaBusiness")}
               <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
-            </a>
+            </button>
             <a
               href={TELEGRAM_URL}
               target="_blank"
