@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown, Globe } from "lucide-react";
 import { cn } from "../lib/utils";
 
@@ -27,31 +28,39 @@ export function LanguageSwitcher({ className }: { className?: string }) {
     <div ref={ref} className={cn("relative", className)}>
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1.5 rounded-full border border-border bg-surface/60 px-3 py-2 text-xs font-medium text-text-muted transition-colors hover:text-text"
+        className="press-spring flex items-center gap-1.5 rounded-full border border-border bg-surface/60 px-3 py-2 text-xs font-medium text-text-muted transition-colors hover:text-text hover:border-border-soft"
         aria-label="Change language"
       >
         <Globe size={14} />
         {LANGS.find((l) => l.code === current)?.label}
-        <ChevronDown size={12} className={cn("transition-transform", open && "rotate-180")} />
+        <ChevronDown size={12} className={cn("transition-transform duration-200", open && "rotate-180")} />
       </button>
 
-      {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-36 overflow-hidden rounded-xl border border-border bg-surface shadow-xl">
-          {LANGS.map((lang) => (
-            <button
-              key={lang.code}
-              onClick={() => {
-                i18n.changeLanguage(lang.code);
-                setOpen(false);
-              }}
-              className="flex w-full items-center justify-between px-3.5 py-2.5 text-left text-sm text-text-muted transition-colors hover:bg-surface-2 hover:text-text"
-            >
-              {t(`lang.${lang.code}`)}
-              {current === lang.code && <Check size={14} className="text-accent" />}
-            </button>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -6, scale: 0.96 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            className="card-glass absolute right-0 top-full z-50 mt-2 w-36 overflow-hidden rounded-xl border border-border bg-surface-2/95 p-1 shadow-2xl backdrop-blur-xl"
+          >
+            {LANGS.map((lang) => (
+              <button
+                key={lang.code}
+                onClick={() => {
+                  i18n.changeLanguage(lang.code);
+                  setOpen(false);
+                }}
+                className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-xs font-medium text-text-muted transition-colors hover:bg-surface-3 hover:text-text"
+              >
+                {t(`lang.${lang.code}`)}
+                {current === lang.code && <Check size={14} className="text-accent" />}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

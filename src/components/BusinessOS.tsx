@@ -382,14 +382,23 @@ export function BusinessOS() {
               <button
                 key={tab.key}
                 onClick={() => setActive(tab.key)}
-                className={`flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-medium transition-colors sm:text-sm ${
+                className={`press-spring relative flex items-center gap-1.5 rounded-full border border-border/60 bg-surface/40 px-4 py-2 text-xs font-medium transition-colors sm:text-sm ${
                   active === tab.key
-                    ? "border-accent/40 bg-accent/10 text-accent"
-                    : "border-border bg-surface/60 text-text-muted hover:text-text"
+                    ? "text-accent"
+                    : "text-text-muted hover:text-text"
                 }`}
               >
-                <tab.icon size={14} />
-                {t(`businessOS.tabs.${tab.key}`)}
+                {active === tab.key && (
+                  <motion.div
+                    layoutId="activeBusinessTab"
+                    className="absolute inset-0 rounded-full border border-accent/50 bg-accent/15 shadow-[0_0_20px_rgba(212,175,90,0.2)]"
+                    transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center gap-1.5">
+                  <tab.icon size={14} />
+                  {t(`businessOS.tabs.${tab.key}`)}
+                </span>
               </button>
             ))}
           </div>
@@ -417,10 +426,10 @@ export function BusinessOS() {
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 rounded-full border border-border bg-surface px-7 py-3.5 text-sm font-semibold text-text transition-colors hover:bg-surface-2"
+              className="btn-secondary press-spring group inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold"
             >
               {t("businessOS.cta")}
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
             </a>
           </div>
         </motion.div>

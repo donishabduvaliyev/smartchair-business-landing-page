@@ -68,7 +68,7 @@ export function Navbar() {
             href={TELEGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-gradient-to-r from-accent-soft to-accent px-5 py-2.5 text-sm font-semibold text-accent-ink shadow-[0_0_24px_rgba(212,175,90,0.25)] transition-transform hover:scale-105 active:scale-95"
+            className="btn-gold press-spring rounded-full px-5 py-2.5 text-sm font-semibold"
           >
             {t("nav.listBusiness")}
           </a>
@@ -78,7 +78,7 @@ export function Navbar() {
           <LanguageSwitcher />
           <button
             onClick={() => setOpen((v) => !v)}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-border text-text"
+            className="press-spring flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface/60 text-text"
             aria-label="Toggle menu"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -92,7 +92,7 @@ export function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden border-t border-border bg-bg/95 backdrop-blur-xl xl:hidden"
           >
             <div className="flex flex-col gap-1 px-6 py-4">
@@ -101,7 +101,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-3 text-sm font-medium text-text-muted hover:bg-surface hover:text-text"
+                  className="rounded-xl px-3.5 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-surface hover:text-text"
                 >
                   {link.label}
                 </a>
@@ -111,7 +111,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-3 py-3 text-sm font-medium text-text-muted hover:bg-surface hover:text-text"
+                className="rounded-xl px-3.5 py-3 text-sm font-medium text-text-muted transition-colors hover:bg-surface hover:text-text"
               >
                 {t("nav.customerApp")}
               </a>
@@ -119,7 +119,7 @@ export function Navbar() {
                 href={TELEGRAM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 rounded-full bg-gradient-to-r from-accent-soft to-accent px-5 py-3 text-center text-sm font-semibold text-accent-ink"
+                className="btn-gold press-spring mt-2.5 rounded-full px-5 py-3 text-center text-sm font-semibold"
               >
                 {t("nav.listBusiness")}
               </a>

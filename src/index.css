@@ -30,6 +30,8 @@
   --font-serif: "Fraunces", "Georgia", "Times New Roman", serif;
 
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-press: cubic-bezier(0.2, 0, 0, 1);
 
   --animate-marquee: marquee 32s linear infinite;
   --animate-float-slow: float-slow 7s ease-in-out infinite;
@@ -56,6 +58,7 @@ body {
   letter-spacing: -0.01em;
   background: var(--color-bg);
   color: var(--color-text);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 h1, h2, h3, h4 {
@@ -80,9 +83,38 @@ h1, h2, h3, h4 {
 }
 
 .card-glass {
-  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 72%, transparent);
   border: 1px solid var(--color-border);
   backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 10px 30px -10px rgba(0, 0, 0, 0.45);
+}
+
+.press-spring {
+  transition: transform 0.16s var(--ease-press), box-shadow 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+}
+.press-spring:active {
+  transform: scale(0.978);
+}
+
+.btn-gold {
+  background: linear-gradient(to right, var(--color-accent-soft), var(--color-accent));
+  color: var(--color-accent-ink);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.35), 0 4px 24px rgba(212, 175, 90, 0.32);
+}
+.btn-gold:hover {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.45), 0 6px 30px rgba(212, 175, 90, 0.42);
+}
+
+.btn-secondary {
+  background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(12px);
+  color: var(--color-text);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+}
+.btn-secondary:hover {
+  background: var(--color-surface-2);
+  border-color: color-mix(in srgb, var(--color-accent) 30%, var(--color-border));
 }
 
 .bg-dot-grid {

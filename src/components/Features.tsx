@@ -64,7 +64,7 @@ export function Features() {
               variants={item}
               whileHover={{ y: -6 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="card-glass group relative overflow-hidden rounded-3xl p-7"
+              className="card-glass group relative overflow-hidden rounded-3xl p-7 transition-colors duration-300 hover:border-accent/30"
             >
               <DotGrid />
               <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-accent/10 blur-2xl transition-opacity duration-500 group-hover:opacity-100 opacity-0" />

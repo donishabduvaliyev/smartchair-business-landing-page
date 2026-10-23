@@ -37,21 +37,21 @@ export function CTA() {
             {t("cta.subtitle")}
           </p>
 
-          <div className="relative mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="relative mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row">
             <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent-soft to-accent px-8 py-4 text-sm font-semibold text-accent-ink shadow-[0_0_30px_rgba(212,175,90,0.35)] transition-transform hover:scale-[1.03] active:scale-95 sm:w-auto"
+              className="btn-gold press-spring group inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-semibold sm:w-auto"
             >
               {t("cta.ctaBusiness")}
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
             </a>
             <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border px-8 py-4 text-sm font-semibold text-text transition-colors hover:bg-surface-2 sm:w-auto"
+              className="btn-secondary press-spring inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-semibold sm:w-auto"
             >
               {t("cta.ctaCustomer")}
             </a>

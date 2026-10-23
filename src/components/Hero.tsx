@@ -71,20 +71,20 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={3}
-            className="mt-9 flex flex-col items-center gap-3 sm:flex-row lg:justify-start"
+            className="mt-9 flex flex-col items-center gap-3.5 sm:flex-row lg:justify-start"
           >
             <a
               href="#for-business"
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent-soft to-accent px-7 py-3.5 text-sm font-semibold text-accent-ink shadow-[0_0_30px_rgba(212,175,90,0.35)] transition-transform hover:scale-[1.03] active:scale-95 sm:w-auto"
+              className="btn-gold press-spring group inline-flex w-full items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold sm:w-auto"
             >
               {t("hero.ctaBusiness")}
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
             </a>
             <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-surface/60 px-7 py-3.5 text-sm font-semibold text-text backdrop-blur transition-colors hover:bg-surface-2 sm:w-auto"
+              className="btn-secondary press-spring inline-flex w-full items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold sm:w-auto"
             >
               {t("hero.ctaCustomer")}
             </a>
