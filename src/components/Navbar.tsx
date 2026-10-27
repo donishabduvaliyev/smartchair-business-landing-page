@@ -41,7 +41,7 @@ export function Navbar() {
       )}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-        <Link to="/">
+        <Link to="/" aria-label="SmartChair Home">
           <Logo />
         </Link>
 

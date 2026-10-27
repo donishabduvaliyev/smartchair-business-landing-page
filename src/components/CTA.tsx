@@ -29,7 +29,7 @@ export function CTA() {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-2 p-3 text-text shadow-[0_0_40px_rgba(212,175,90,0.35)]"
           >
-            <LogoMark />
+            <LogoMark aria-label="SmartChair Logo" />
           </motion.span>
 
           <h2 className="relative text-3xl font-extrabold tracking-tight text-text sm:text-4xl">

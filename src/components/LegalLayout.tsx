@@ -21,6 +21,7 @@ import {
   TELEGRAM_HANDLE,
   TELEGRAM_URL,
 } from "../lib/constants";
+import { useSEO } from "../hooks/useSEO";
 import { cn } from "../lib/utils";
 
 export function LegalLayout({
@@ -34,6 +35,12 @@ export function LegalLayout({
   const { pathname } = useLocation();
   const lang = resolveLegalLang(i18n.language);
   const bundle = LEGAL_CONTENT[lang];
+
+  useSEO({
+    title: `${doc.title} | SmartChair`,
+    description: `${doc.subtitle} — SmartChair platformasi. ${doc.complianceNote}`,
+    canonicalPath: pathname,
+  });
 
   const LEGAL_TABS = [
     { to: "/privacy", label: bundle.nav.privacy, icon: ShieldCheck },

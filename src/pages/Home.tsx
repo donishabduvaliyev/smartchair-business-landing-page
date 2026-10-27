@@ -1,3 +1,4 @@
+import { useSEO } from "../hooks/useSEO";
 import { Hero } from "../components/Hero";
 import { CategoryStrip } from "../components/CategoryStrip";
 import { BusinessOS } from "../components/BusinessOS";
@@ -10,6 +11,8 @@ import { PartnerInquirySection } from "../components/PartnerInquirySection";
 import { CTA } from "../components/CTA";
 
 export function Home() {
+  useSEO({ canonicalPath: "/" });
+
   return (
     <>
       <Hero />
@@ -25,3 +28,4 @@ export function Home() {
     </>
   );
 }
+

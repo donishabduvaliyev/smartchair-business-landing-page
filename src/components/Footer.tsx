@@ -56,7 +56,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link to="/">
+            <Link to="/" aria-label="SmartChair Home">
               <Logo />
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-text-muted">
@@ -72,7 +72,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-text">{t("footer.columns.product")}</h4>
+            <h3 className="text-sm font-semibold text-text">{t("footer.columns.product")}</h3>
             <ul className="mt-4 space-y-3">
               {PRODUCT_LINKS.map((link) => (
                 <li key={link.label}>
@@ -88,7 +88,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-text">{t("footer.columns.company")}</h4>
+            <h3 className="text-sm font-semibold text-text">{t("footer.columns.company")}</h3>
             <ul className="mt-4 space-y-3">
               {CONTACT_LINKS.map((link) => (
                 <li key={link.label}>
@@ -107,7 +107,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-text">{t("footer.columns.legal")}</h4>
+            <h3 className="text-sm font-semibold text-text">{t("footer.columns.legal")}</h3>
             <ul className="mt-4 space-y-3">
               <li>
                 <Link
