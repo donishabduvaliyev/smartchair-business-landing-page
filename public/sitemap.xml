@@ -1,25 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <!-- Homepage -->
   <url>
     <loc>https://smartchair.uz/</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/" />
     <xhtml:link rel="alternate" hreflang="uz" href="https://smartchair.uz/?lang=uz" />
     <xhtml:link rel="alternate" hreflang="ru" href="https://smartchair.uz/?lang=ru" />
     <xhtml:link rel="alternate" hreflang="en" href="https://smartchair.uz/?lang=en" />
   </url>
+
+  <!-- Privacy Policy -->
   <url>
     <loc>https://smartchair.uz/privacy</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/privacy" />
+    <xhtml:link rel="alternate" hreflang="uz" href="https://smartchair.uz/privacy?lang=uz" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://smartchair.uz/privacy?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://smartchair.uz/privacy?lang=en" />
   </url>
+
+  <!-- Terms of Service -->
   <url>
     <loc>https://smartchair.uz/terms</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/terms" />
+    <xhtml:link rel="alternate" hreflang="uz" href="https://smartchair.uz/terms?lang=uz" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://smartchair.uz/terms?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://smartchair.uz/terms?lang=en" />
+  </url>
+
+  <!-- Refund Policy -->
+  <url>
+    <loc>https://smartchair.uz/refund</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/refund" />
+    <xhtml:link rel="alternate" hreflang="uz" href="https://smartchair.uz/refund?lang=uz" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://smartchair.uz/refund?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://smartchair.uz/refund?lang=en" />
+  </url>
+
+  <!-- Account Deletion Request -->
+  <url>
+    <loc>https://smartchair.uz/delete-account</loc>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/delete-account" />
+    <xhtml:link rel="alternate" hreflang="uz" href="https://smartchair.uz/delete-account?lang=uz" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://smartchair.uz/delete-account?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://smartchair.uz/delete-account?lang=en" />
   </url>
 </urlset>
