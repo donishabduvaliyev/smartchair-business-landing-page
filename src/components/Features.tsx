@@ -1,5 +1,6 @@
 import { Check, MapPin, MessageSquare, QrCode, Receipt, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { renderEditorialHeading } from "../lib/editorial";
 
 type FeatureRow = {
   eyebrow: string;
@@ -263,7 +264,7 @@ export function Features() {
       <div>
         <p className="text-[13px] font-medium text-text-muted">{t("features.eyebrow")}</p>
         <h2 className="mt-2.5 max-w-[26ch] text-[28px] font-medium leading-[1.12] tracking-[-0.025em] text-text [text-wrap:balance] sm:text-[36px]">
-          {t("features.title")}
+          {renderEditorialHeading(t("features.title"))}
         </h2>
         <p className="mt-3.5 max-w-[54ch] text-base leading-[1.6] text-text-secondary">
           {t("features.subtitle")}
@@ -271,29 +272,51 @@ export function Features() {
       </div>
 
       <div className="mt-14 grid grid-cols-1 gap-5 lg:grid-cols-12">
-        <div className="surface-card flex flex-col justify-between rounded-[20px] p-6 sm:p-7 lg:col-span-7">
+        <div className="specular-card flex flex-col justify-between overflow-hidden rounded-[20px] p-6 sm:p-7 lg:col-span-7">
           <div>
+            <div className="relative -mx-6 -mt-6 mb-6 h-44 overflow-hidden sm:-mx-7 sm:-mt-7 sm:h-48">
+              <img
+                src="/images/craft-shears.webp"
+                alt="Handcrafted steel barber shears on dark honed slate"
+                width={1376}
+                height={768}
+                loading="lazy"
+                className="h-full w-full object-cover opacity-85"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0d0e11] via-[#0d0e11]/35 to-transparent" />
+            </div>
             <FeatureCellHeader row={rows[0]} />
           </div>
           <BookingVisual />
         </div>
 
-        <div className="surface-card flex flex-col justify-between rounded-[20px] p-6 sm:p-7 lg:col-span-5">
+        <div className="specular-card flex flex-col justify-between overflow-hidden rounded-[20px] p-6 sm:p-7 lg:col-span-5">
           <div>
             <FeatureCellHeader row={rows[1]} />
           </div>
           <WalkInQueueVisual />
         </div>
 
-        <div className="surface-card flex flex-col justify-between rounded-[20px] p-6 sm:p-7 lg:col-span-5">
+        <div className="specular-card flex flex-col justify-between overflow-hidden rounded-[20px] p-6 sm:p-7 lg:col-span-5">
           <div>
             <FeatureCellHeader row={rows[2]} />
           </div>
           <CashierRegisterVisual />
         </div>
 
-        <div className="surface-card flex flex-col justify-between rounded-[20px] p-6 sm:p-7 lg:col-span-7">
+        <div className="specular-card flex flex-col justify-between overflow-hidden rounded-[20px] p-6 sm:p-7 lg:col-span-7">
           <div>
+            <div className="relative -mx-6 -mt-6 mb-6 h-44 overflow-hidden sm:-mx-7 sm:-mt-7 sm:h-48">
+              <img
+                src="/images/salon-sanctuary.webp"
+                alt="Minimalist luxury salon reception counter in warm chiaroscuro light"
+                width={1376}
+                height={768}
+                loading="lazy"
+                className="h-full w-full object-cover opacity-85"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0d0e11] via-[#0d0e11]/35 to-transparent" />
+            </div>
             <FeatureCellHeader row={rows[3]} />
           </div>
           <StaffPayrollCrmVisual />

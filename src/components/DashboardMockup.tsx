@@ -100,7 +100,7 @@ export function DashboardMockup() {
         className="relative w-full max-w-md"
       >
         {/* Depth 0: Main Dashboard Panel */}
-        <DepthLayer z={0} className="surface-card relative w-full overflow-hidden rounded-[20px] p-5 sm:p-6">
+        <DepthLayer z={0} className="specular-card relative w-full overflow-hidden rounded-[20px] p-5 sm:p-6">
           <div className="mb-5 flex items-center justify-between border-b border-white/[0.06] pb-3.5">
             <div className="flex items-center gap-2.5">
               <span className="h-2 w-2 rounded-xs bg-accent" />

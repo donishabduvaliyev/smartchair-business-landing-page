@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  /* 4-Step Neutral Graphite Surface Ladder (Linear / Raycast) */
-  --color-bg: #09090b;
-  --color-surface-1: #111215;
-  --color-surface-2: #18191e;
-  --color-surface-3: #22242b;
+  /* "The Monolith" 4-Step Carbon Surface Ladder (Apple Pro × Squire × Linear) */
+  --color-bg: #060608;
+  --color-surface-1: #0d0e11;
+  --color-surface-2: #14161b;
+  --color-surface-3: #1d2026;
 
   /* Moonlight Hairlines */
   --color-hairline: rgba(255, 255, 255, 0.06);
   --color-hairline-strong: rgba(255, 255, 255, 0.11);
 
   /* 3-Role WCAG AA Text Hierarchy */
-  --color-text: #ededef;
+  --color-text: #f2f2f3;
   --color-text-secondary: #a1a1aa;
   --color-text-muted: #71717a;
 
@@ -26,38 +26,39 @@
   --color-warn: #fbbf24;
   --color-danger: #f87171;
 
-  /* 2-Font Typography + Emil Kowalski Easing */
+  /* 3-Font Editorial + Precision System + Emil Kowalski Easing */
+  --font-editorial: "Cormorant Garamond", Georgia, serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
 
-  /* Semantic compatibility aliases pointing to the dark ladder */
-  --color-paper: #09090b;
-  --color-paper-subtle: #111215;
-  --color-surface: #111215;
+  /* Semantic compatibility aliases pointing to the carbon ladder */
+  --color-paper: #060608;
+  --color-paper-subtle: #0d0e11;
+  --color-surface: #0d0e11;
   --color-grid: rgba(255, 255, 255, 0.06);
   --color-grid-strong: rgba(255, 255, 255, 0.11);
-  --color-ink: #ededef;
+  --color-ink: #f2f2f3;
   --color-ink-muted: #a1a1aa;
   --color-ink-faint: #71717a;
-  --color-obsidian: #09090b;
-  --color-obsidian-surface: #111215;
-  --color-obsidian-raised: #18191e;
+  --color-obsidian: #060608;
+  --color-obsidian-surface: #0d0e11;
+  --color-obsidian-raised: #14161b;
   --color-obsidian-border: rgba(255, 255, 255, 0.06);
-  --color-obsidian-text: #ededef;
+  --color-obsidian-text: #f2f2f3;
   --color-obsidian-muted: #a1a1aa;
   --color-obsidian-faint: #71717a;
   --color-brass: #d4af5a;
   --color-brass-hover: #e2c176;
   --color-brass-ink: #d4af5a;
   --color-brass-wash: rgba(212, 175, 90, 0.12);
-  --color-bg-soft: #111215;
+  --color-bg-soft: #0d0e11;
   --color-border: rgba(255, 255, 255, 0.06);
   --color-border-strong: rgba(255, 255, 255, 0.11);
   --color-border-soft: rgba(255, 255, 255, 0.06);
   --color-text-faint: #71717a;
-  --color-ink-dark: #09090b;
-  --color-ink-panel: #111215;
+  --color-ink-dark: #060608;
+  --color-ink-panel: #0d0e11;
   --color-ink-border: rgba(255, 255, 255, 0.06);
   --color-accent-on-dark: #d4af5a;
   --color-status-ok: #34d399;
@@ -82,8 +83,8 @@ html {
 
 html,
 body {
-  background: #09090b;
-  color: #ededef;
+  background: #060608;
+  color: #f2f2f3;
   font-family: var(--font-sans);
   color-scheme: dark;
   -webkit-font-smoothing: antialiased;
@@ -95,15 +96,46 @@ h1, h2, h3, h4 {
   font-family: var(--font-sans);
 }
 
+.font-editorial {
+  font-family: var(--font-editorial);
+  letter-spacing: -0.015em;
+}
+
 ::selection {
   background: rgba(212, 175, 90, 0.24);
-  color: #ededef;
+  color: #f2f2f3;
 }
 
 .surface-card {
-  background: var(--color-surface-1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0%, rgba(255, 255, 255, 0) 100%),
+    var(--color-surface-1);
   border: 1px solid var(--color-hairline);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 18px 38px -18px rgba(0, 0, 0, 0.72);
+}
+
+.specular-card {
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0) 100%),
+    var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 24px 48px -16px rgba(0, 0, 0, 0.78);
+}
+
+.specular-card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  pointer-events: none;
 }
 
 .surface-floating {
@@ -111,8 +143,8 @@ h1, h2, h3, h4 {
   border: 1px solid var(--color-hairline-strong);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 20px 40px -12px rgba(0, 0, 0, 0.75),
-    0 4px 12px rgba(0, 0, 0, 0.5);
+    0 20px 40px -12px rgba(0, 0, 0, 0.78),
+    0 4px 12px rgba(0, 0, 0, 0.55);
 }
 
 .press-spring {
@@ -128,7 +160,7 @@ h1, h2, h3, h4 {
 
 .btn-primary {
   background: #f4f4f5;
-  color: #09090b;
+  color: #060608;
   transition:
     transform 100ms ease-out,
     background-color 150ms ease;
@@ -142,7 +174,7 @@ h1, h2, h3, h4 {
 
 .btn-secondary {
   background: var(--color-surface-2);
-  color: #ededef;
+  color: #f2f2f3;
   border: 1px solid var(--color-hairline-strong);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition:
@@ -161,7 +193,7 @@ h1, h2, h3, h4 {
 .btn-brass,
 .btn-obsidian {
   background: #f4f4f5;
-  color: #09090b;
+  color: #060608;
   transition:
     transform 100ms ease-out,
     background-color 150ms ease;
@@ -177,7 +209,7 @@ h1, h2, h3, h4 {
 
 .btn-ghost-dark {
   border: 1px solid var(--color-hairline-strong);
-  color: #ededef;
+  color: #f2f2f3;
   background: transparent;
 }
 .btn-ghost-dark:hover {
@@ -188,7 +220,7 @@ h1, h2, h3, h4 {
 .btn-outline {
   background: var(--color-surface-2);
   border: 1px solid var(--color-hairline-strong);
-  color: #ededef;
+  color: #f2f2f3;
 }
 .btn-ghost-light:hover,
 .btn-outline:hover {
@@ -199,7 +231,7 @@ h1, h2, h3, h4 {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #09090b;
+  background: #060608;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.08);

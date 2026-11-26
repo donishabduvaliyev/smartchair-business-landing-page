@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Building2, ChevronDown, Phone, UserCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PHONE_HREF } from "../lib/constants";
+import { renderEditorialHeading } from "../lib/editorial";
 import { cn } from "../lib/utils";
 
 type FaqTab = "customers" | "businesses";
@@ -36,7 +37,7 @@ export function FAQ() {
                 {t("faq.eyebrow")}
               </p>
               <h2 className="mt-2.5 text-[28px] font-medium leading-[1.12] tracking-[-0.025em] text-text [text-wrap:balance] sm:text-[36px]">
-                {t("faq.title")}
+                {renderEditorialHeading(t("faq.title"))}
               </h2>
               <p className="mt-3.5 text-sm leading-[1.6] tracking-[0.005em] text-text-secondary">
                 {t("faq.subtitle")}

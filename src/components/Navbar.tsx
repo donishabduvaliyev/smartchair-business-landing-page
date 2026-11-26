@@ -36,12 +36,12 @@ export function Navbar() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors duration-150",
         scrolled || open
-          ? "border-b border-white/[0.06] bg-[#09090b]/85 backdrop-blur-md"
+          ? "bg-[#060608]/80 backdrop-blur-xl border-b border-white/[0.06]"
           : "border-b border-transparent bg-transparent"
       )}
     >
       <nav className="mx-auto flex h-16 max-w-[1160px] items-center justify-between gap-4 px-6 lg:px-8">
-        <Link to="/" aria-label="SmartChair Home" className="shrink-0">
+        <Link to="/" aria-label="SmartChair Home" className="shrink-0 whitespace-nowrap">
           <Logo />
         </Link>
 
@@ -97,7 +97,7 @@ export function Navbar() {
             animate={reducedMotion ? { opacity: 1 } : { height: "auto", opacity: 1 }}
             exit={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
             transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-            className="overflow-hidden border-t border-white/[0.06] bg-[#09090b]/95 backdrop-blur-md lg:hidden"
+            className="overflow-hidden border-t border-white/[0.06] bg-[#060608]/95 backdrop-blur-xl lg:hidden"
           >
             <div className="mx-auto flex max-w-[1160px] flex-col gap-1 px-6 py-4">
               {LINKS.map((link) => (
@@ -105,7 +105,7 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-[10px] px-3.5 py-2.5 text-sm font-normal text-text-secondary transition-colors hover:bg-surface-1 hover:text-text"
+                  className="whitespace-nowrap rounded-[10px] px-3.5 py-2.5 text-sm font-normal text-text-secondary transition-colors hover:bg-surface-1 hover:text-text"
                 >
                   {link.label}
                 </a>
@@ -115,7 +115,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
-                className="rounded-[10px] px-3.5 py-2.5 text-sm font-normal text-text-secondary transition-colors hover:bg-surface-1 hover:text-text"
+                className="whitespace-nowrap rounded-[10px] px-3.5 py-2.5 text-sm font-normal text-text-secondary transition-colors hover:bg-surface-1 hover:text-text"
               >
                 {t("nav.customerApp")}
               </a>
@@ -125,7 +125,7 @@ export function Navbar() {
                   setOpen(false);
                   openPartnerModal();
                 }}
-                className="btn-primary mt-2.5 inline-flex h-10 items-center justify-center rounded-[10px] px-4 text-sm font-medium"
+                className="btn-primary mt-2.5 inline-flex h-10 items-center justify-center whitespace-nowrap rounded-[10px] px-4 text-sm font-medium"
               >
                 {t("nav.listBusiness")}
               </button>

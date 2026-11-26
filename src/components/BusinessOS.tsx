@@ -419,6 +419,15 @@ export function BusinessOS() {
   const reducedMotion = useReducedMotion();
   const ActivePanel = PANELS[active];
 
+  const rawTitle = t("businessOS.title").trim();
+  const titleWords = rawTitle.split(/\s+/);
+  const accentCount =
+    titleWords.length > 2 && titleWords[titleWords.length - 2] === "SmartChair"
+      ? 1
+      : Math.min(2, Math.max(1, titleWords.length - 1));
+  const titleLead = titleWords.slice(0, -accentCount).join(" ");
+  const titleEditorial = titleWords.slice(-accentCount).join(" ");
+
   return (
     <section
       id="for-business"
@@ -427,7 +436,10 @@ export function BusinessOS() {
       <div>
         <p className="text-[13px] font-medium text-text-muted">{t("businessOS.eyebrow")}</p>
         <h2 className="mt-2.5 max-w-[26ch] text-[28px] font-medium leading-[1.12] tracking-[-0.025em] text-text [text-wrap:balance] sm:text-[36px]">
-          {t("businessOS.title")}
+          {titleLead ? `${titleLead} ` : ""}
+          <span className="font-editorial italic font-normal text-[1.12em] text-text">
+            {titleEditorial}
+          </span>
         </h2>
         <p className="mt-3.5 max-w-[54ch] text-base leading-[1.6] text-text-secondary">
           {t("businessOS.subtitle")}
@@ -485,7 +497,7 @@ export function BusinessOS() {
         id={`panel-${active}`}
         role="tabpanel"
         aria-labelledby={`tab-${active}`}
-        className="surface-card mt-6 rounded-[20px] p-6 sm:p-8"
+        className="specular-card mt-6 rounded-[20px] p-6 sm:p-8"
       >
         <AnimatePresence mode="wait">
           <motion.div

@@ -36,11 +36,11 @@ export function Logo({
 }) {
   void _tone;
   return (
-    <span className={cn("flex items-center gap-2.5", className)}>
-      <span className="h-7 w-7 text-text sm:h-8 sm:w-8">
+    <span className={cn("inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap", className)}>
+      <span className="h-7 w-7 shrink-0 text-text sm:h-8 sm:w-8">
         <LogoMark />
       </span>
-      <span className="font-sans text-[17px] font-medium tracking-tight text-text sm:text-lg">
+      <span className="font-sans text-[17px] font-medium tracking-[-0.02em] text-text sm:text-lg">
         SmartChair
       </span>
     </span>

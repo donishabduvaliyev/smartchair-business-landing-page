@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { renderEditorialHeading } from "../lib/editorial";
 
 interface QuoteItem {
   name: string;
@@ -11,6 +12,10 @@ export function Testimonials() {
   const { t } = useTranslation();
   const reducedMotion = useReducedMotion();
   const quotes = (t("testimonials.quotes", { returnObjects: true }) as QuoteItem[]) || [];
+
+  const featureIdx = quotes[1] ? 1 : 0;
+  const featured = quotes[featureIdx];
+  const secondaryQuotes = quotes.filter((_, idx) => idx !== featureIdx);
 
   return (
     <section id="reviews" className="py-24 lg:py-32">
@@ -25,47 +30,56 @@ export function Testimonials() {
             {t("testimonials.eyebrow")}
           </p>
           <h2 className="mt-2.5 max-w-[26ch] text-[28px] font-medium leading-[1.12] tracking-[-0.025em] text-text [text-wrap:balance] sm:text-[36px]">
-            {t("testimonials.title")}
+            {renderEditorialHeading(t("testimonials.title"))}
           </h2>
         </motion.div>
 
-        <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-3">
-          {Array.isArray(quotes) &&
-            quotes.map((q, i) => {
-              const initial = q.name?.trim().charAt(0).toUpperCase() || "S";
-              return (
-                <motion.div
+        {Array.isArray(quotes) && quotes.length > 0 && (
+          <div className="mt-14 grid grid-cols-1 items-start gap-12 lg:grid-cols-12 lg:gap-16">
+            {featured && (
+              <motion.blockquote
+                initial={reducedMotion ? false : { opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
+                className="lg:col-span-7"
+              >
+                <p className="font-editorial italic text-[28px] leading-[1.18] text-text sm:text-[36px] lg:text-[42px]">
+                  &ldquo;{featured.quote}&rdquo;
+                </p>
+                <footer className="mt-6 flex items-center gap-3">
+                  <span aria-hidden="true" className="h-px w-8 shrink-0 bg-accent" />
+                  <span className="text-sm font-medium text-text">{featured.name}</span>
+                  <span className="text-sm text-text-muted">{featured.role}</span>
+                </footer>
+              </motion.blockquote>
+            )}
+
+            <div className="divide-y divide-white/[0.07] border-t border-white/[0.07] lg:col-span-5 lg:border-t-0">
+              {secondaryQuotes.map((q, i) => (
+                <motion.blockquote
                   key={q.name || i}
                   initial={reducedMotion ? false : { opacity: 0, y: 14 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{
                     duration: 0.28,
-                    delay: reducedMotion ? 0 : i * 0.05,
+                    delay: reducedMotion ? 0 : (i + 1) * 0.05,
                     ease: [0.23, 1, 0.32, 1],
                   }}
-                  className="surface-card flex flex-col justify-between rounded-[20px] p-7"
+                  className="py-6 first:lg:pt-0"
                 >
-                  <p className="text-sm leading-[1.65] tracking-[0.005em] text-text-secondary">
-                    {q.quote}
+                  <p className="text-[15px] leading-[1.7] tracking-[0.005em] text-text-secondary">
+                    &ldquo;{q.quote}&rdquo;
                   </p>
-
-                  <div className="mt-7 flex items-center gap-3 border-t border-white/[0.06] pt-5">
-                    <span
-                      aria-hidden="true"
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-2 text-xs font-medium text-text"
-                    >
-                      {initial}
-                    </span>
-                    <div>
-                      <p className="text-sm font-medium text-text">{q.name}</p>
-                      <p className="mt-0.5 text-xs text-text-muted">{q.role}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-        </div>
+                  <footer className="mt-3 text-xs text-text-muted">
+                    {q.name} &middot; {q.role}
+                  </footer>
+                </motion.blockquote>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

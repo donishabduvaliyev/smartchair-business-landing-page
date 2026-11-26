@@ -157,6 +157,13 @@ export function Footer() {
           </p>
           <p>{t("footer.madeFor")}</p>
         </div>
+
+        <div
+          aria-hidden="true"
+          className="mt-12 overflow-hidden select-none text-center font-editorial italic text-[clamp(64px,13vw,164px)] leading-[0.82] tracking-[-0.03em] text-white/[0.04]"
+        >
+          SmartChair
+        </div>
       </div>
     </footer>
   );

@@ -15,14 +15,18 @@ export function Hero() {
       id="top"
       className="relative overflow-x-clip bg-bg pt-32 pb-24 lg:pt-40 lg:pb-32"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(55% 50% at 72% 50%, rgba(255,255,255,0.035), transparent)",
-        }}
-      />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <img
+          src="/images/hero-studio.webp"
+          alt=""
+          width={1376}
+          height={768}
+          fetchPriority="high"
+          className="h-full w-full object-cover object-right opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#060608] via-[#060608]/88 to-[#060608]/35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#060608] via-transparent to-[#060608]" />
+      </div>
 
       <div className="relative mx-auto grid max-w-[1160px] grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:gap-10 lg:px-8">
         {/* Left editorial column */}
@@ -33,7 +37,11 @@ export function Hero() {
           </span>
 
           <h1 className="mt-6 text-[38px] font-medium leading-[1.06] tracking-[-0.03em] text-text [text-wrap:balance] sm:text-[48px] lg:text-[54px]">
-            {t("hero.titleLine1")} {t("hero.titleHighlight")} {t("hero.titleLine2")}
+            {t("hero.titleLine1")}{" "}
+            <span className="font-editorial italic font-normal text-[1.14em] text-accent">
+              {t("hero.titleHighlight")}
+            </span>{" "}
+            {t("hero.titleLine2")}
           </h1>
 
           <p className="mt-5 max-w-[48ch] text-base leading-[1.6] tracking-[0.005em] text-text-secondary [text-wrap:pretty] sm:text-[17px]">

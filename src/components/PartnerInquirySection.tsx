@@ -7,6 +7,7 @@ import {
   PHONE_HREF,
   PHONE_NUMBER,
 } from "../lib/constants";
+import { renderEditorialHeading } from "../lib/editorial";
 import { PartnerFormBody } from "./PartnerApplicationModal";
 
 export function PartnerInquirySection() {
@@ -32,7 +33,7 @@ export function PartnerInquirySection() {
               </p>
 
               <h2 className="mt-2.5 max-w-[26ch] text-[28px] font-medium leading-[1.12] tracking-[-0.025em] text-text [text-wrap:balance] sm:text-[36px]">
-                {t("partnerForm.title")}
+                {renderEditorialHeading(t("partnerForm.title"))}
               </h2>
               <p className="mt-3.5 text-sm leading-[1.6] tracking-[0.005em] text-text-secondary">
                 {t("partnerForm.subtitle")}
@@ -59,8 +60,8 @@ export function PartnerInquirySection() {
               </div>
             </div>
 
-            {/* Founder Contact Card */}
-            <div className="surface-card mt-8 rounded-[20px] p-6">
+            {/* Direct Founder Hairline Block */}
+            <div className="mt-10 border-t border-white/[0.08] pt-8">
               <p className="text-sm font-medium text-text">
                 {t("partnerForm.directContactTitle")}
               </p>
@@ -97,7 +98,7 @@ export function PartnerInquirySection() {
               delay: reducedMotion ? 0 : 0.05,
               ease: [0.23, 1, 0.32, 1],
             }}
-            className="surface-card rounded-[20px] p-6 sm:p-8 lg:col-span-7"
+            className="specular-card rounded-[20px] p-6 sm:p-8 lg:col-span-7"
           >
             <PartnerFormBody />
           </motion.div>
