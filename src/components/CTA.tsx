@@ -3,56 +3,64 @@ import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { usePartnerModal } from "../context/PartnerModalContext";
 import { TELEGRAM_URL } from "../lib/constants";
-import { LogoMark } from "./Logo";
-import { DotGrid } from "./PanelChrome";
+
+function renderAccentTitle(title: string) {
+  const parts = title.trim().split(" ");
+  if (parts.length <= 1) {
+    return <span className="font-serif italic font-normal text-brass">{title}</span>;
+  }
+  const lastWord = parts.pop();
+  return (
+    <>
+      {parts.join(" ")}{" "}
+      <span className="font-serif italic font-normal text-brass">{lastWord}</span>
+    </>
+  );
+}
 
 export function CTA() {
   const { t } = useTranslation();
   const { openPartnerModal } = usePartnerModal();
+
   return (
-    <section className="relative py-28">
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+    <section className="bg-obsidian text-obsidian-text">
+      <div className="mx-auto max-w-[1200px] border-x border-white/[0.06] py-20 lg:py-24 px-8 lg:px-12 border-b border-white/[0.08]">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="relative overflow-hidden rounded-[40px] border border-border bg-gradient-to-br from-surface via-surface to-surface-2 px-8 py-16 text-center sm:px-16"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end"
         >
-          <DotGrid />
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute left-1/2 top-0 h-[300px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/25 blur-[120px]" />
+          <div className="max-w-2xl">
+            <span className="font-mono text-xs uppercase tracking-wider text-brass">
+              [07 / LAUNCH]
+            </span>
+            <h2 className="mt-3 text-3xl font-semibold tracking-[-0.025em] text-obsidian-text sm:text-4xl lg:text-[44px] lg:leading-[1.1]">
+              {renderAccentTitle(t("cta.title"))}
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-obsidian-muted">
+              {t("cta.subtitle")}
+            </p>
           </div>
 
-          <motion.span
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="relative mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-2 p-3 text-text shadow-[0_0_40px_rgba(212,175,90,0.35)]"
-          >
-            <LogoMark aria-label="SmartChair Logo" />
-          </motion.span>
-
-          <h2 className="relative text-3xl font-extrabold tracking-tight text-text sm:text-4xl">
-            {t("cta.title")}
-          </h2>
-          <p className="relative mx-auto mt-4 max-w-md text-lg text-text-muted">
-            {t("cta.subtitle")}
-          </p>
-
-          <div className="relative mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row">
+          <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto sm:flex-row">
             <button
               type="button"
               onClick={openPartnerModal}
-              className="btn-gold press-spring group inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-semibold sm:w-auto"
+              className="btn-brass press-spring group inline-flex w-full shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-7 py-3.5 text-sm font-semibold sm:w-auto"
             >
               {t("cta.ctaBusiness")}
-              <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
+              <ArrowRight
+                size={16}
+                className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+              />
             </button>
             <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary press-spring inline-flex w-full items-center justify-center gap-2 rounded-full px-8 py-4 text-sm font-semibold sm:w-auto"
+              className="btn-ghost-dark press-spring inline-flex w-full shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-7 py-3.5 text-sm font-semibold sm:w-auto"
             >
               {t("cta.ctaCustomer")}
             </a>

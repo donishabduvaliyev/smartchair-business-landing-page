@@ -1,126 +1,84 @@
-import { motion, type Variants } from "framer-motion";
-import { ArrowRight, MapPin, Star } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { usePartnerModal } from "../context/PartnerModalContext";
-import { TELEGRAM_URL, CITY } from "../lib/constants";
-import { DashboardMockup } from "./DashboardMockup";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 28 },
-  show: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.1, duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
+import { CITY, TELEGRAM_URL } from "../lib/constants";
+import { Crosshair } from "./BlueprintGrid";
+import { SpatialPlatform3D } from "./SpatialPlatform3D";
 
 export function Hero() {
   const { t } = useTranslation();
   const { openPartnerModal } = usePartnerModal();
+  const trustRaw = t("hero.trust", { returnObjects: true });
+  const trustItems = Array.isArray(trustRaw) ? (trustRaw as string[]) : [];
 
   return (
     <section
       id="top"
-      className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-16"
+      className="border-b border-obsidian-border bg-obsidian text-obsidian-text"
     >
-      {/* Ambient gradient background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-bg" />
-        <div className="absolute left-1/2 top-[-10%] h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-accent/20 blur-[140px]" />
-        <div className="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-info/10 blur-[120px]" />
-        <div className="bg-grain absolute inset-0" />
-      </div>
+      <div className="relative mx-auto max-w-[1200px] border-x border-white/[0.06] px-6 pt-28 pb-20 lg:px-10 lg:pt-36 lg:pb-28">
+        <Crosshair dark position="bl" />
+        <Crosshair dark position="br" />
 
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-2 lg:gap-8 lg:px-8">
-        {/* Copy column */}
-        <div className="relative z-10 text-center lg:text-left">
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={0}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-4 py-1.5 text-xs font-medium text-text-muted backdrop-blur"
-          >
-            <span className="h-1.5 w-1.5 animate-glow-pulse rounded-full bg-accent" />
-            {t("hero.badge", { city: CITY })}
-          </motion.div>
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-12">
+          {/* Left editorial column */}
+          <div className="lg:col-span-6">
+            <p className="mb-5 font-mono text-xs text-brass">
+              [00] · {t("hero.badge", { city: CITY })}
+            </p>
 
-          <motion.h1
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={1}
-            className="text-4xl font-extrabold leading-[1.08] tracking-tight text-text sm:text-5xl lg:text-6xl"
-          >
-            {t("hero.titleLine1")}
-            <br />
-            <span className="text-gradient-gold">{t("hero.titleHighlight")}</span>{" "}
-            {t("hero.titleLine2")}
-          </motion.h1>
+            <h1 className="text-[36px] leading-[1.04] font-medium tracking-[-0.03em] text-obsidian-text sm:text-[48px] lg:text-[54px]">
+              {t("hero.titleLine1")}
+              <br />
+              <span className="font-serif font-normal italic text-brass">
+                {t("hero.titleHighlight")}
+              </span>{" "}
+              {t("hero.titleLine2")}
+            </h1>
 
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={2}
-            className="mx-auto mt-6 max-w-lg text-lg text-text-muted lg:mx-0"
-          >
-            {t("hero.subtitle")}
-          </motion.p>
+            <p className="mt-6 max-w-[500px] text-base leading-relaxed text-obsidian-muted sm:text-lg">
+              {t("hero.subtitle")}
+            </p>
 
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={3}
-            className="mt-9 flex flex-col items-center gap-3.5 sm:flex-row lg:justify-start"
-          >
-            <button
-              type="button"
-              onClick={openPartnerModal}
-              className="btn-gold press-spring group inline-flex w-full items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold sm:w-auto"
-            >
-              {t("hero.ctaBusiness")}
-              <ArrowRight size={16} className="transition-transform duration-200 ease-out group-hover:translate-x-1" />
-            </button>
-            <a
-              href={TELEGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary press-spring inline-flex w-full items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold sm:w-auto"
-            >
-              {t("hero.ctaCustomer")}
-            </a>
-          </motion.div>
-
-          <motion.div
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            custom={4}
-            className="mt-10 flex items-center justify-center gap-6 text-sm text-text-faint lg:justify-start"
-          >
-            <div className="flex items-center gap-1.5">
-              <Star size={15} className="fill-accent text-accent" />
-              <span className="text-text-muted">4.9 {t("hero.rating")}</span>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={openPartnerModal}
+                className="btn-brass press-spring group inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3.5 text-sm font-medium"
+              >
+                {t("hero.ctaBusiness")}
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-200 ease-out group-hover:translate-x-1"
+                />
+              </button>
+              <a
+                href={TELEGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost-dark press-spring inline-flex items-center justify-center rounded-lg px-6 py-3.5 text-sm font-medium"
+              >
+                {t("hero.ctaCustomer")}
+              </a>
             </div>
-            <div className="hidden h-4 w-px bg-border sm:block" />
-            <div className="hidden items-center gap-1.5 sm:flex">
-              <MapPin size={15} className="text-accent" />
-              <span className="text-text-muted">30+ {t("hero.businesses")}</span>
-            </div>
-          </motion.div>
+
+            {trustItems.length > 0 && (
+              <ul className="mt-8 grid max-w-[460px] grid-cols-1 gap-x-6 gap-y-2.5 sm:grid-cols-2">
+                {trustItems.map((item) => (
+                  <li key={item} className="flex items-center gap-2 text-sm text-obsidian-muted">
+                    <Check size={15} className="shrink-0 text-brass" strokeWidth={2} />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Right 3D Spatial Platform column */}
+          <div className="lg:col-span-6">
+            <SpatialPlatform3D />
+          </div>
         </div>
-
-        {/* Dashboard mockup column */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="relative mx-auto h-[380px] w-full max-w-md sm:h-[440px] lg:h-[500px] lg:max-w-none"
-        >
-          <DashboardMockup />
-        </motion.div>
       </div>
     </section>
   );

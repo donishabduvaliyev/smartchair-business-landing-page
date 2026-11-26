@@ -180,6 +180,14 @@
         "Custom reception Walk-In QR stand design",
         "Direct founder & onboarding support in UZ, RU, EN"
       ]
+    },
+    "slaLedger": {
+      "items": [
+        { "value": "0 UZS", "label": "Client booking fee" },
+        { "value": "24h", "label": "Concierge workspace setup" },
+        { "value": "UZ · RU · EN", "label": "Multilingual UI & support" },
+        { "value": "O‘RQ-547", "label": "Data privacy compliance" }
+      ]
     }
   },
   "testimonials": {
@@ -311,6 +319,7 @@
     "consentPrivacyLink": "Privacy Policy",
     "consentMiddle": " & ",
     "consentTermsLink": "Public Offer",
+    "consentSuffix": ".",
     "submit": "Send partner application",
     "submitting": "Submitting...",
     "errorRequired": "Please enter your business name, your name, and a valid phone number.",

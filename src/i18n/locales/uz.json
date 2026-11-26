@@ -180,6 +180,14 @@
         "Peshtaxta uchun maxsus Walk-In QR stend dizayni",
         "O'zbek, rus va ingliz tillarida bevosita qo'llab-quvvatlash"
       ]
+    },
+    "slaLedger": {
+      "items": [
+        { "value": "0 UZS", "label": "Mijoz uchun bron komissiyasi" },
+        { "value": "24h", "label": "Tayyor tizimni ishga tushirish" },
+        { "value": "UZ · RU · EN", "label": "Ko‘p tilli interfeys va qo‘llab-quvvatlash" },
+        { "value": "O‘RQ-547", "label": "Shaxsiy ma'lumotlar himoyasi" }
+      ]
     }
   },
   "testimonials": {

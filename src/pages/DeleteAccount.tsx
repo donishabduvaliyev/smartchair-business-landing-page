@@ -79,7 +79,7 @@ export function DeleteAccount() {
 
   return (
     <LegalLayout doc={bundle.deleteAccount}>
-      <div className="card-glass rounded-3xl border border-danger/30 p-6 sm:p-8">
+      <div className="rounded-3xl border border-danger/30 bg-surface p-6 sm:p-8">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-danger/15 text-danger">
             <Trash2 size={20} />

@@ -1,74 +1,85 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { CalendarCheck, MessageCircleMore, Search, Send } from "lucide-react";
+import { BlueprintFrame } from "./BlueprintGrid";
 
-const STEP_KEYS = [
-  { icon: Send, key: "open" },
-  { icon: Search, key: "browse" },
-  { icon: CalendarCheck, key: "book" },
-  { icon: MessageCircleMore, key: "confirm" },
-] as const;
+interface HowItWorksStep {
+  num: string;
+  title: string;
+  desc: string;
+}
+
+interface SlaLedgerItem {
+  value: string;
+  label: string;
+}
 
 export function HowItWorks() {
   const { t } = useTranslation();
+  const steps = (t("howItWorks.steps", { returnObjects: true }) as HowItWorksStep[]) || [];
+  const slaItems =
+    (t("howItWorks.slaLedger.items", { returnObjects: true }) as SlaLedgerItem[]) || [];
 
   return (
-    <section id="how-it-works" className="relative py-28">
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+    <section id="how-it-works" className="bg-paper border-b border-grid">
+      <BlueprintFrame>
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mx-auto max-w-2xl text-center"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="p-8 lg:p-12 border-b border-grid"
         >
-          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-            {t("howItWorks.eyebrow")}
+          <span className="font-mono text-xs uppercase tracking-wider text-brass-ink">
+            [04 / ONBOARDING]
           </span>
-          <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-text sm:text-4xl">
+          <h2 className="mt-3 text-3xl font-semibold tracking-[-0.025em] text-ink sm:text-4xl">
             {t("howItWorks.title")}
           </h2>
-          <p className="mt-4 text-lg text-text-muted">{t("howItWorks.subtitle")}</p>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-ink-muted">
+            {t("howItWorks.subtitle")}
+          </p>
         </motion.div>
 
-        <div className="relative mt-20">
-          <div className="absolute left-0 right-0 top-8 hidden h-px bg-gradient-to-r from-transparent via-border to-transparent lg:block" />
-          <motion.div
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            style={{ transformOrigin: "left" }}
-            className="absolute left-0 right-0 top-8 hidden h-px bg-gradient-to-r from-accent via-accent-soft to-info lg:block"
-          />
-
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {STEP_KEYS.map((step, i) => (
+        {/* Flush 3-Column Timeline */}
+        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-grid border-b border-grid">
+          {Array.isArray(steps) &&
+            steps.map((step, i) => (
               <motion.div
-                key={step.key}
-                initial={{ opacity: 0, y: 30 }}
+                key={step.num || i}
+                initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.6, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                className="relative flex flex-col items-center text-center lg:items-start lg:text-left"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.4, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                className="p-8 lg:p-10"
               >
-                <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface text-accent shadow-[0_0_30px_rgba(212,175,90,0.12)]">
-                  <step.icon size={26} strokeWidth={1.8} />
-                  <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accent-ink">
-                    {i + 1}
+                <div className="flex items-baseline justify-between gap-4">
+                  <span className="font-mono text-xs uppercase tracking-wider text-ink-faint">
+                    STEP {step.num}
+                  </span>
+                  <span className="font-serif text-3xl italic leading-none text-brass-ink">
+                    {step.num}
                   </span>
                 </div>
-                <h3 className="mt-5 text-lg font-bold text-text">
-                  {t(`howItWorks.steps.${step.key}.title`)}
-                </h3>
-                <p className="mt-2 max-w-[220px] text-sm leading-relaxed text-text-muted">
-                  {t(`howItWorks.steps.${step.key}.desc`)}
-                </p>
+                <h3 className="mt-6 text-lg font-semibold text-ink">{step.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-ink-muted">{step.desc}</p>
               </motion.div>
             ))}
-          </div>
         </div>
-      </div>
+
+        {/* 4-Cell Architectural SLA & Terms Ledger */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-y lg:divide-y-0 divide-grid bg-paper-subtle">
+          {Array.isArray(slaItems) &&
+            slaItems.map((item, idx) => (
+              <div key={idx} className="p-6 lg:p-8">
+                <p className="font-mono text-2xl font-medium tabular-nums text-ink">
+                  {item.value}
+                </p>
+                <p className="mt-1.5 text-xs text-ink-muted">{item.label}</p>
+              </div>
+            ))}
+        </div>
+      </BlueprintFrame>
     </section>
   );
 }

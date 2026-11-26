@@ -11,11 +11,7 @@ export function LegalPage({
   children: ReactNode;
 }) {
   return (
-    <section className="relative pb-28 pt-32">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-bg" />
-        <div className="absolute left-1/2 top-[-10%] h-[400px] w-[500px] -translate-x-1/2 rounded-full bg-accent/10 blur-[140px]" />
-      </div>
+    <section className="relative bg-bg pb-28 pt-32">
 
       <div className="mx-auto max-w-3xl px-6 lg:px-8">
         <motion.div
