@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -13,6 +13,15 @@ export function Navbar() {
   const { t } = useTranslation();
   const { openPartnerModal } = usePartnerModal();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const LINKS = [
     { label: t("nav.forBusiness"), href: "/#for-business" },
@@ -22,79 +31,59 @@ export function Navbar() {
     { label: t("nav.faq"), href: "/#faq" },
   ];
 
-  const isDark = true;
-  const tone = "dark";
-
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md transition-colors duration-200",
-        isDark
-          ? "border-obsidian-border bg-obsidian/90 text-obsidian-text"
-          : "border-grid bg-paper/95 text-ink"
+        "fixed inset-x-0 top-0 z-50 transition-colors duration-150",
+        scrolled || open
+          ? "border-b border-white/[0.06] bg-[#09090b]/85 backdrop-blur-md"
+          : "border-b border-transparent bg-transparent"
       )}
     >
-      <nav className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between gap-4 px-6 lg:px-8">
+      <nav className="mx-auto flex h-16 max-w-[1160px] items-center justify-between gap-4 px-6 lg:px-8">
         <Link to="/" aria-label="SmartChair Home" className="shrink-0">
-          <Logo tone={tone} />
+          <Logo />
         </Link>
 
-        <div className="hidden items-center gap-6 lg:flex">
+        <div className="hidden items-center gap-4 xl:gap-6 lg:flex">
           {LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className={cn(
-                "text-sm font-medium transition-colors",
-                isDark
-                  ? "text-obsidian-muted hover:text-obsidian-text"
-                  : "text-ink-muted hover:text-ink"
-              )}
+              className="whitespace-nowrap text-sm font-normal text-text-secondary transition-colors hover:text-text"
             >
               {link.label}
             </a>
           ))}
         </div>
 
-        <div className="hidden items-center gap-3 lg:flex">
-          <LanguageSwitcher tone={tone} />
+        <div className="hidden shrink-0 items-center gap-3 lg:flex">
+          <LanguageSwitcher />
           <a
             href={TELEGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(
-              "px-2 py-1.5 text-sm font-medium transition-colors",
-              isDark
-                ? "text-obsidian-muted hover:text-obsidian-text"
-                : "text-ink-muted hover:text-ink"
-            )}
+            className="whitespace-nowrap px-2 py-1.5 text-sm font-normal text-text-secondary transition-colors hover:text-text"
           >
             {t("nav.customerApp")}
           </a>
           <button
             type="button"
             onClick={openPartnerModal}
-            className={cn(
-              "press-spring rounded-lg px-5 py-2.5 text-sm font-medium",
-              isDark ? "btn-brass" : "btn-obsidian"
-            )}
+            className="btn-primary inline-flex h-9 shrink-0 items-center justify-center whitespace-nowrap rounded-[10px] px-4 text-sm font-medium"
           >
             {t("nav.listBusiness")}
           </button>
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <LanguageSwitcher tone={tone} />
+          <LanguageSwitcher />
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className={cn(
-              "press-spring flex h-10 w-10 items-center justify-center rounded-lg border transition-colors",
-              isDark
-                ? "border-obsidian-border bg-obsidian-surface text-obsidian-text"
-                : "border-grid bg-surface text-ink"
-            )}
+            className="press-spring flex h-10 w-10 items-center justify-center rounded-[10px] border border-hairline bg-surface-1 text-text transition-colors hover:bg-surface-2"
             aria-label="Toggle menu"
+            aria-expanded={open}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -104,29 +93,19 @@ export function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className={cn(
-              "overflow-hidden border-t lg:hidden",
-              isDark
-                ? "border-obsidian-border bg-obsidian text-obsidian-text"
-                : "border-grid bg-paper text-ink"
-            )}
+            initial={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            animate={reducedMotion ? { opacity: 1 } : { height: "auto", opacity: 1 }}
+            exit={reducedMotion ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+            className="overflow-hidden border-t border-white/[0.06] bg-[#09090b]/95 backdrop-blur-md lg:hidden"
           >
-            <div className="mx-auto flex max-w-[1200px] flex-col gap-1 px-6 py-4">
+            <div className="mx-auto flex max-w-[1160px] flex-col gap-1 px-6 py-4">
               {LINKS.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className={cn(
-                    "rounded-lg px-3.5 py-3 text-sm font-medium transition-colors",
-                    isDark
-                      ? "text-obsidian-muted hover:bg-obsidian-surface hover:text-obsidian-text"
-                      : "text-ink-muted hover:bg-paper-subtle hover:text-ink"
-                  )}
+                  className="rounded-[10px] px-3.5 py-2.5 text-sm font-normal text-text-secondary transition-colors hover:bg-surface-1 hover:text-text"
                 >
                   {link.label}
                 </a>
@@ -136,12 +115,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-lg px-3.5 py-3 text-sm font-medium transition-colors",
-                  isDark
-                    ? "text-obsidian-muted hover:bg-obsidian-surface hover:text-obsidian-text"
-                    : "text-ink-muted hover:bg-paper-subtle hover:text-ink"
-                )}
+                className="rounded-[10px] px-3.5 py-2.5 text-sm font-normal text-text-secondary transition-colors hover:bg-surface-1 hover:text-text"
               >
                 {t("nav.customerApp")}
               </a>
@@ -151,10 +125,7 @@ export function Navbar() {
                   setOpen(false);
                   openPartnerModal();
                 }}
-                className={cn(
-                  "press-spring mt-2.5 rounded-lg px-5 py-3 text-center text-sm font-medium",
-                  isDark ? "btn-brass" : "btn-obsidian"
-                )}
+                className="btn-primary mt-2.5 inline-flex h-10 items-center justify-center rounded-[10px] px-4 text-sm font-medium"
               >
                 {t("nav.listBusiness")}
               </button>

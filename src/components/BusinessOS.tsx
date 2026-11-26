@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
   CalendarClock,
@@ -10,14 +10,13 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { usePartnerModal } from "../context/PartnerModalContext";
-import { Crosshair } from "./BlueprintGrid";
 
 const TABS = [
-  { key: "bookings", num: "01", icon: CalendarClock },
-  { key: "queue", num: "02", icon: QrCode },
-  { key: "register", num: "03", icon: Receipt },
-  { key: "staff", num: "04", icon: UsersRound },
-  { key: "crm", num: "05", icon: Users2 },
+  { key: "bookings", icon: CalendarClock },
+  { key: "queue", icon: QrCode },
+  { key: "register", icon: Receipt },
+  { key: "staff", icon: UsersRound },
+  { key: "crm", icon: Users2 },
 ] as const;
 
 type TabKey = (typeof TABS)[number]["key"];
@@ -30,8 +29,8 @@ type StaffColumn = { name: string; accent: string; dot: string; segments: Bookin
 const STAFF_COLUMNS: StaffColumn[] = [
   {
     name: "Aziz",
-    accent: "border-l-brass",
-    dot: "bg-brass",
+    accent: "border-l-accent",
+    dot: "bg-accent",
     segments: [
       { span: 1 },
       { span: 2, label: "Haircut", time: "10:00–12:00" },
@@ -42,8 +41,8 @@ const STAFF_COLUMNS: StaffColumn[] = [
   },
   {
     name: "Bekzod",
-    accent: "border-l-status-info",
-    dot: "bg-status-info",
+    accent: "border-l-info",
+    dot: "bg-info",
     segments: [
       { span: 2 },
       { span: 1, label: "Fade", time: "11:00–12:00" },
@@ -54,8 +53,8 @@ const STAFF_COLUMNS: StaffColumn[] = [
   },
   {
     name: "Sardor",
-    accent: "border-l-status-ok",
-    dot: "bg-status-ok",
+    accent: "border-l-ok",
+    dot: "bg-ok",
     segments: [
       { span: 2, label: "Cut + Beard", time: "09:00–11:00" },
       { span: 4 },
@@ -89,10 +88,10 @@ function StatusPill({ statusKey }: { statusKey: string }) {
   const { t } = useTranslation();
   const tone =
     statusKey === "onShift"
-      ? "bg-status-ok/15 text-status-ok"
+      ? "bg-ok/15 text-ok"
       : statusKey === "onBreak"
-        ? "bg-status-warn/15 text-status-warn"
-        : "bg-obsidian-raised text-obsidian-muted";
+        ? "bg-warn/15 text-warn"
+        : "bg-surface-3 text-text-muted";
   return (
     <span className={`shrink-0 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium ${tone}`}>
       {t(`businessOS.status.${statusKey}`)}
@@ -104,10 +103,10 @@ function TagPill({ tagKey }: { tagKey: string }) {
   const { t } = useTranslation();
   const tone =
     tagKey === "vip"
-      ? "bg-brass-wash text-brass"
+      ? "bg-accent-soft text-accent"
       : tagKey === "new"
-        ? "bg-status-info/15 text-status-info"
-        : "bg-obsidian-raised text-obsidian-muted";
+        ? "bg-info/15 text-info"
+        : "bg-surface-3 text-text-muted";
   return (
     <span className={`shrink-0 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium ${tone}`}>
       {t(`businessOS.tags.${tagKey}`)}
@@ -127,10 +126,10 @@ function BookingsPanel() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between border-b border-obsidian-border pb-3">
-        <p className="text-sm font-semibold text-obsidian-text">{t("businessOS.bookings.today")}</p>
-        <span className="flex items-center gap-2 text-xs tabular-nums text-obsidian-muted">
-          <span className="h-2 w-2 rounded-full bg-status-danger" />
+      <div className="mb-4 flex items-center justify-between border-b border-hairline pb-3">
+        <p className="text-sm font-medium text-text">{t("businessOS.bookings.today")}</p>
+        <span className="flex items-center gap-2 font-mono text-xs tabular-nums text-text-muted">
+          <span className="h-2 w-2 rounded-full bg-danger" />
           {t("businessOS.bookings.now")} 12:40
         </span>
       </div>
@@ -145,7 +144,7 @@ function BookingsPanel() {
             {STAFF_COLUMNS.map((col) => (
               <div key={col.name} className="mb-2.5 flex items-center gap-2">
                 <span className={`h-2 w-2 rounded-full ${col.dot}`} />
-                <p className="truncate text-xs font-semibold text-obsidian-text">{col.name}</p>
+                <p className="truncate text-xs font-medium text-text">{col.name}</p>
               </div>
             ))}
           </div>
@@ -159,7 +158,7 @@ function BookingsPanel() {
                 {TIME_LABELS.slice(0, -1).map((label, i) => (
                   <span
                     key={label}
-                    className="absolute right-2 -translate-y-1/2 font-mono text-xs tabular-nums text-obsidian-muted"
+                    className="absolute right-2 -translate-y-1/2 font-mono text-xs tabular-nums text-text-muted"
                     style={{ top: i * ROW_HEIGHT }}
                   >
                     {label}
@@ -178,12 +177,12 @@ function BookingsPanel() {
                       <div
                         key={i}
                         style={{ flexGrow: seg.span, flexBasis: 0 }}
-                        className={`flex flex-col justify-center overflow-hidden rounded-lg border border-obsidian-border border-l-2 ${col.accent} bg-obsidian-raised px-2.5 py-1`}
+                        className={`flex flex-col justify-center overflow-hidden rounded-[10px] border border-hairline border-l-2 ${col.accent} bg-surface-2 px-2.5 py-1`}
                       >
-                        <span className="truncate text-xs font-semibold text-obsidian-text">
+                        <span className="truncate text-xs font-medium text-text">
                           {seg.label}
                         </span>
-                        <span className="truncate text-xs tabular-nums text-obsidian-muted">
+                        <span className="truncate font-mono text-xs tabular-nums text-text-muted">
                           {seg.time}
                         </span>
                       </div>
@@ -191,7 +190,7 @@ function BookingsPanel() {
                       <div
                         key={i}
                         style={{ flexGrow: seg.span, flexBasis: 0 }}
-                        className="rounded-lg border border-dashed border-obsidian-border/70 bg-transparent"
+                        className="rounded-[10px] border border-dashed border-hairline bg-transparent"
                       />
                     )
                   )}
@@ -203,20 +202,20 @@ function BookingsPanel() {
               className="pointer-events-none absolute flex items-center"
               style={{ top: nowTop, left: AXIS_WIDTH + 8, right: 0 }}
             >
-              <span className="-ml-1 h-2 w-2 shrink-0 rounded-full bg-status-danger" />
-              <span className="h-px w-full bg-status-danger/70" />
+              <span className="-ml-1 h-2 w-2 shrink-0 rounded-full bg-danger" />
+              <span className="h-px w-full bg-danger/70" />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center gap-4 border-t border-obsidian-border pt-3 text-xs text-obsidian-muted">
+      <div className="mt-4 flex items-center gap-4 border-t border-hairline pt-3 text-xs text-text-muted">
         <span className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-sm border border-dashed border-obsidian-muted" />
+          <span className="h-2.5 w-2.5 rounded-xs border border-dashed border-text-muted" />
           {t("businessOS.bookings.free")}
         </span>
         <span className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-sm border-l-2 border-brass bg-obsidian-raised" />
+          <span className="h-2.5 w-2.5 rounded-xs border-l-2 border-accent bg-surface-2" />
           {t("businessOS.bookings.booked")}
         </span>
       </div>
@@ -228,16 +227,16 @@ function QueuePanel() {
   const { t } = useTranslation();
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-obsidian-border pb-3">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
         <div>
-          <p className="text-sm font-semibold text-obsidian-text">{t("businessOS.queue.title")}</p>
-          <p className="text-xs text-obsidian-muted">{t("businessOS.queue.scanHint")}</p>
+          <p className="text-sm font-medium text-text">{t("businessOS.queue.title")}</p>
+          <p className="text-xs text-text-muted">{t("businessOS.queue.scanHint")}</p>
         </div>
-        <div className="flex items-center gap-2.5 text-xs tabular-nums">
-          <span className="rounded-md bg-obsidian-raised px-3 py-1 text-obsidian-text">
+        <div className="flex items-center gap-2.5 font-mono text-xs tabular-nums">
+          <span className="rounded-md bg-surface-2 px-3 py-1 text-text-secondary">
             {t("businessOS.queue.waiting")}: 3
           </span>
-          <span className="rounded-md bg-brass-wash px-3 py-1 text-brass">
+          <span className="rounded-md bg-accent-soft px-3 py-1 text-accent">
             {t("businessOS.queue.avgWait")}: 12 min
           </span>
         </div>
@@ -247,26 +246,26 @@ function QueuePanel() {
         {QUEUE_TICKETS.map((item) => (
           <div
             key={item.ticket}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-obsidian-border bg-obsidian-raised px-4 py-3"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-hairline bg-surface-2 px-4 py-3"
           >
             <div className="flex items-center gap-3">
-              <span className="rounded-md border border-obsidian-border bg-obsidian-surface px-2.5 py-1 font-mono text-xs font-semibold tabular-nums text-brass">
+              <span className="rounded-md border border-hairline bg-surface-1 px-2.5 py-1 font-mono text-xs font-medium tabular-nums text-accent">
                 {item.ticket}
               </span>
               <div>
-                <p className="text-xs font-semibold text-obsidian-text">
+                <p className="text-xs font-medium text-text">
                   {item.client} · {item.service}
                 </p>
-                <p className="text-xs text-obsidian-muted">{item.master}</p>
+                <p className="text-xs text-text-muted">{item.master}</p>
               </div>
             </div>
             <div className="flex items-center gap-2.5">
-              <span className="text-xs tabular-nums text-obsidian-muted">{item.time}</span>
+              <span className="font-mono text-xs tabular-nums text-text-muted">{item.time}</span>
               <span
                 className={`shrink-0 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium ${
                   item.state === "inChair"
-                    ? "bg-status-ok/15 text-status-ok"
-                    : "bg-obsidian-surface text-obsidian-muted"
+                    ? "bg-ok/15 text-ok"
+                    : "bg-surface-3 text-text-muted"
                 }`}
               >
                 {t(`businessOS.queue.${item.state}`)}
@@ -289,46 +288,44 @@ function RegisterPanel() {
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-obsidian-border pb-3">
-        <p className="text-sm font-semibold text-obsidian-text">{t("businessOS.register.title")}</p>
-        <span className="shrink-0 whitespace-nowrap rounded-md bg-status-ok/15 px-3 py-1 text-xs font-medium text-status-ok">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
+        <p className="text-sm font-medium text-text">{t("businessOS.register.title")}</p>
+        <span className="shrink-0 whitespace-nowrap rounded-md bg-ok/15 px-3 py-1 text-xs font-medium text-ok">
           {t("businessOS.register.open")}
         </span>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="rounded-lg border border-obsidian-border bg-obsidian-raised p-4">
-          <p className="text-xs text-obsidian-muted">{t("businessOS.register.total")}</p>
-          <p className="mt-1.5 text-2xl font-semibold tabular-nums text-obsidian-text">
+        <div className="rounded-xl border border-hairline bg-surface-2 p-4">
+          <p className="text-xs text-text-muted">{t("businessOS.register.total")}</p>
+          <p className="mt-1.5 font-mono text-2xl font-medium tabular-nums text-text">
             2,450,000 UZS
           </p>
-          <div className="mt-4 space-y-2 border-t border-obsidian-border pt-3">
+          <div className="mt-4 space-y-2 border-t border-hairline pt-3">
             {rows.map((r) => (
               <div key={r.label} className="flex items-center justify-between text-xs">
-                <span className="text-obsidian-muted">{r.label}</span>
-                <span className="font-semibold tabular-nums text-obsidian-text">{r.value}</span>
+                <span className="text-text-secondary">{r.label}</span>
+                <span className="font-mono font-medium tabular-nums text-text">{r.value}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex flex-col justify-between rounded-lg border border-obsidian-border bg-obsidian-raised p-4">
+        <div className="flex flex-col justify-between rounded-xl border border-hairline bg-surface-2 p-4">
           <div>
-            <p className="text-sm font-semibold text-obsidian-text">
-              {t("businessOS.register.zReport")}
-            </p>
-            <p className="mt-1 text-xs tabular-nums text-obsidian-muted">
+            <p className="text-sm font-medium text-text">{t("businessOS.register.zReport")}</p>
+            <p className="mt-1 font-mono text-xs tabular-nums text-text-muted">
               14 completed receipts · 0 refunds
             </p>
           </div>
-          <div className="mt-6 rounded-lg border border-obsidian-border bg-obsidian-surface px-3.5 py-3">
+          <div className="mt-6 rounded-[10px] border border-hairline bg-surface-1 px-3.5 py-3">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-obsidian-muted">Expected cash</span>
-              <span className="tabular-nums text-obsidian-text">920,000 UZS</span>
+              <span className="text-text-secondary">Expected cash</span>
+              <span className="font-mono tabular-nums text-text">920,000 UZS</span>
             </div>
             <div className="mt-2 flex items-center justify-between text-xs">
-              <span className="text-obsidian-muted">Reconciliation</span>
-              <span className="font-semibold tabular-nums text-status-ok">
+              <span className="text-text-secondary">Reconciliation</span>
+              <span className="font-mono font-medium tabular-nums text-accent">
                 {t("businessOS.register.variance")}
               </span>
             </div>
@@ -343,9 +340,9 @@ function StaffPanel() {
   const { t } = useTranslation();
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-obsidian-border pb-3">
-        <p className="text-sm font-semibold text-obsidian-text">{t("businessOS.staff.title")}</p>
-        <span className="text-xs text-obsidian-muted">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
+        <p className="text-sm font-medium text-text">{t("businessOS.staff.title")}</p>
+        <span className="text-xs text-text-muted">
           {t("businessOS.staff.commission")} · {t("businessOS.staff.payout")}
         </span>
       </div>
@@ -354,13 +351,13 @@ function StaffPanel() {
         {STAFF_LIST.map((s) => (
           <div
             key={s.name}
-            className="flex items-center justify-between gap-3 rounded-lg border border-obsidian-border bg-obsidian-raised px-4 py-3"
+            className="flex items-center justify-between gap-3 rounded-xl border border-hairline bg-surface-2 px-4 py-3"
           >
             <div className="min-w-0">
-              <p className="truncate text-xs font-semibold text-obsidian-text">{s.name}</p>
-              <p className="mt-0.5 truncate text-xs text-obsidian-muted">{s.role}</p>
-              <p className="mt-1.5 text-xs tabular-nums text-brass">
-                {s.commission} · {s.payout}
+              <p className="truncate text-xs font-medium text-text">{s.name}</p>
+              <p className="mt-0.5 truncate text-xs text-text-muted">{s.role}</p>
+              <p className="mt-1.5 font-mono text-xs tabular-nums text-text-secondary">
+                {s.commission} · <span className="text-text">{s.payout}</span>
               </p>
             </div>
             <StatusPill statusKey={s.status} />
@@ -375,26 +372,26 @@ function CrmPanel() {
   const { t } = useTranslation();
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between border-b border-obsidian-border pb-3">
-        <p className="text-sm font-semibold text-obsidian-text">{t("businessOS.crm.title")}</p>
-        <span className="font-mono text-xs text-brass">Telegram CRM</span>
+      <div className="mb-4 flex items-center justify-between border-b border-hairline pb-3">
+        <p className="text-sm font-medium text-text">{t("businessOS.crm.title")}</p>
+        <span className="font-mono text-xs text-text-muted">Telegram CRM</span>
       </div>
 
       <div className="space-y-2.5">
         {CUSTOMERS.map((c) => (
           <div
             key={c.name}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-obsidian-border bg-obsidian-raised px-4 py-3"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-hairline bg-surface-2 px-4 py-3"
           >
             <div>
-              <p className="text-xs font-semibold text-obsidian-text">{c.name}</p>
-              <p className="mt-0.5 text-xs tabular-nums text-obsidian-muted">
+              <p className="text-xs font-medium text-text">{c.name}</p>
+              <p className="mt-0.5 font-mono text-xs tabular-nums text-text-muted">
                 {c.visits} {t("businessOS.crm.visits")} · {t("businessOS.crm.last")} {c.last}
               </p>
             </div>
             <div className="flex items-center gap-2">
               {c.overdue && (
-                <span className="shrink-0 whitespace-nowrap rounded-md bg-brass-wash px-2.5 py-1 text-xs font-medium text-brass">
+                <span className="shrink-0 whitespace-nowrap rounded-md bg-accent-soft px-2.5 py-1 text-xs font-medium text-accent">
                   {t("businessOS.crm.winBackSent")}
                 </span>
               )}
@@ -419,111 +416,110 @@ export function BusinessOS() {
   const { t } = useTranslation();
   const { openPartnerModal } = usePartnerModal();
   const [active, setActive] = useState<TabKey>("bookings");
+  const reducedMotion = useReducedMotion();
   const ActivePanel = PANELS[active];
 
   return (
     <section
       id="for-business"
-      className="border-b border-obsidian-border bg-obsidian text-obsidian-text"
+      className="mx-auto max-w-[1160px] px-6 py-24 lg:px-8 lg:py-32"
     >
-      <div className="relative mx-auto max-w-[1200px] border-x border-white/[0.06]">
-        <Crosshair dark position="tl" />
-        <Crosshair dark position="tr" />
-        <Crosshair dark position="bl" />
-        <Crosshair dark position="br" />
+      <div>
+        <p className="text-[13px] font-medium text-text-muted">{t("businessOS.eyebrow")}</p>
+        <h2 className="mt-2.5 max-w-[26ch] text-[28px] font-medium leading-[1.12] tracking-[-0.025em] text-text [text-wrap:balance] sm:text-[36px]">
+          {t("businessOS.title")}
+        </h2>
+        <p className="mt-3.5 max-w-[54ch] text-base leading-[1.6] text-text-secondary">
+          {t("businessOS.subtitle")}
+        </p>
+      </div>
 
-        {/* Header Row */}
-        <div className="border-b border-white/[0.08] p-8 lg:p-12">
-          <span className="font-mono text-xs text-brass">[03 / WORKSPACE]</span>
-          <h2 className="mt-3 max-w-2xl text-3xl font-semibold tracking-[-0.025em] text-obsidian-text sm:text-4xl">
-            {t("businessOS.title")}
-          </h2>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-obsidian-muted">
-            {t("businessOS.subtitle")}
-          </p>
-        </div>
-
-        {/* Flush 5-Tab Bar */}
-        <div
-          role="tablist"
-          aria-label={t("businessOS.eyebrow")}
-          className="grid grid-cols-2 border-b border-white/[0.08] sm:grid-cols-5"
-        >
-          {TABS.map((tab) => {
-            const isActive = active === tab.key;
-            return (
-              <button
-                key={tab.key}
-                id={`tab-${tab.key}`}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                aria-controls={`panel-${tab.key}`}
-                onClick={() => setActive(tab.key)}
-                className={`relative flex items-center gap-2.5 border-b border-r border-white/[0.06] px-4 py-3.5 text-left text-xs font-medium transition-colors last:border-r-0 sm:border-b-0 sm:px-5 sm:py-4 ${
-                  isActive
-                    ? "bg-obsidian-surface text-obsidian-text"
-                    : "bg-obsidian text-obsidian-muted hover:bg-obsidian-surface/50 hover:text-obsidian-text"
-                }`}
-              >
-                {isActive && (
-                  <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[2px] bg-brass" />
-                )}
-                <span
-                  className={`font-mono text-xs tabular-nums ${
-                    isActive ? "text-brass" : "text-obsidian-faint"
-                  }`}
-                >
-                  {tab.num}
-                </span>
+      {/* Compact Segmented Tab Bar */}
+      <div
+        role="tablist"
+        aria-label={t("businessOS.eyebrow")}
+        className="mt-10 inline-flex flex-wrap gap-1 rounded-xl border border-hairline bg-surface-1 p-1"
+      >
+        {TABS.map((tab) => {
+          const isActive = active === tab.key;
+          return (
+            <button
+              key={tab.key}
+              id={`tab-${tab.key}`}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`panel-${tab.key}`}
+              onClick={() => setActive(tab.key)}
+              className={`relative inline-flex min-h-[40px] items-center gap-2 rounded-[9px] px-3.5 py-2 text-sm font-medium transition-colors ${
+                isActive ? "text-text" : "text-text-muted hover:text-text-secondary"
+              }`}
+            >
+              {isActive && (
+                <motion.span
+                  layoutId="business-os-tab"
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-[9px] bg-surface-3"
+                  transition={
+                    reducedMotion
+                      ? { duration: 0 }
+                      : { type: "spring", stiffness: 400, damping: 32 }
+                  }
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
                 <tab.icon
                   size={15}
                   strokeWidth={1.6}
-                  className={`shrink-0 ${isActive ? "text-brass" : "text-obsidian-faint"}`}
+                  className="shrink-0 text-text-secondary"
                 />
-                <span className="leading-snug">{t(`businessOS.tabs.${tab.key}`)}</span>
-              </button>
-            );
-          })}
-        </div>
+                <span>{t(`businessOS.tabs.${tab.key}`)}</span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
 
-        {/* Workspace Panel */}
-        <div
-          id={`panel-${active}`}
-          role="tabpanel"
-          aria-labelledby={`tab-${active}`}
-          className="bg-obsidian-surface p-6 sm:p-8"
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={active}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <ActivePanel />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Bottom Action Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.08] px-6 py-5 sm:px-8">
-          <span className="font-mono text-xs text-obsidian-muted">
-            {t("businessOS.eyebrow")} · UZ · RU · EN
-          </span>
-          <button
-            type="button"
-            onClick={openPartnerModal}
-            className="btn-brass press-spring group inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium"
+      {/* Workspace Panel */}
+      <div
+        id={`panel-${active}`}
+        role="tabpanel"
+        aria-labelledby={`tab-${active}`}
+        className="surface-card mt-6 rounded-[20px] p-6 sm:p-8"
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            initial={reducedMotion ? { opacity: 1 } : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reducedMotion ? { opacity: 1 } : { opacity: 0, y: -6 }}
+            transition={
+              reducedMotion
+                ? { duration: 0 }
+                : { duration: 0.18, ease: [0.23, 1, 0.32, 1] }
+            }
           >
-            {t("businessOS.cta")}
-            <ArrowRight
-              size={15}
-              className="transition-transform duration-200 ease-out group-hover:translate-x-1"
-            />
-          </button>
-        </div>
+            <ActivePanel />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Subtle Bottom Action Row */}
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
+        <span className="text-xs text-text-muted">
+          {t("businessOS.eyebrow")} · UZ · RU · EN
+        </span>
+        <button
+          type="button"
+          onClick={openPartnerModal}
+          className="btn-secondary group inline-flex h-10 items-center gap-2 rounded-[10px] px-5 text-sm font-medium"
+        >
+          {t("businessOS.cta")}
+          <ArrowRight
+            size={15}
+            className="transition-transform duration-150 ease-out group-hover:translate-x-0.5"
+          />
+        </button>
       </div>
     </section>
   );

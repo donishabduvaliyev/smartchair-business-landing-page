@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Building2,
   CheckCircle2,
@@ -37,10 +37,10 @@ const CATEGORY_KEYS = [
 const STAFF_KEYS = ["1-2", "3-5", "6-10", "10+"] as const;
 
 const INPUT_CLASS =
-  "w-full rounded-lg border border-grid-strong bg-paper px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-ink focus:outline-none";
+  "w-full h-11 rounded-[10px] border border-hairline-strong bg-surface-2 px-3.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
 
 const INPUT_WITH_ICON_CLASS =
-  "w-full rounded-lg border border-grid-strong bg-paper py-2.5 pl-10 pr-3.5 text-sm text-ink placeholder:text-ink-faint focus:border-ink focus:outline-none";
+  "w-full h-11 rounded-[10px] border border-hairline-strong bg-surface-2 pl-10 pr-3.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
 
 export function PartnerFormBody({
   onClose,
@@ -50,6 +50,7 @@ export function PartnerFormBody({
   compact?: boolean;
 }) {
   const { t, i18n } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const [businessName, setBusinessName] = useState("");
   const [ownerName, setOwnerName] = useState("");
   const [phone, setPhone] = useState("+998 ");
@@ -123,38 +124,38 @@ export function PartnerFormBody({
   if (submitted) {
     return (
       <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
+        initial={reducedMotion ? false : { opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
         className="py-6 text-center"
       >
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-lg border border-grid bg-paper-subtle text-brass-ink">
-          <CheckCircle2 size={28} />
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-hairline bg-surface-2 text-ok">
+          <CheckCircle2 size={24} strokeWidth={1.5} />
         </div>
-        <h3 className="text-2xl font-semibold text-ink">{t("partnerForm.successTitle")}</h3>
-        <p className="mx-auto mt-2.5 max-w-md text-sm leading-relaxed text-ink-muted">
+        <h3 className="text-xl font-medium text-text">{t("partnerForm.successTitle")}</h3>
+        <p className="mx-auto mt-2.5 max-w-md text-sm leading-[1.6] text-text-secondary">
           {t("partnerForm.successDesc")}
         </p>
 
         <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a
             href={PHONE_HREF}
-            className="btn-obsidian press-spring inline-flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold sm:w-auto"
+            className="btn-primary inline-flex h-11 w-full items-center justify-center gap-2 rounded-[10px] px-6 text-sm font-medium sm:w-auto"
           >
-            <Phone size={16} />
+            <Phone size={15} strokeWidth={1.5} />
             {PHONE_NUMBER}
           </a>
           <a
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost-light press-spring inline-flex w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold sm:w-auto"
+            className="btn-secondary inline-flex h-11 w-full items-center justify-center gap-2 rounded-[10px] px-6 text-sm font-medium sm:w-auto"
           >
             {INSTAGRAM_HANDLE}
           </a>
         </div>
 
-        <div className="mt-6 flex items-center justify-center gap-4">
+        <div className="mt-6 flex items-center justify-center gap-5">
           <button
             type="button"
             onClick={() => {
@@ -162,7 +163,7 @@ export function PartnerFormBody({
               setBusinessName("");
               setMessage("");
             }}
-            className="text-xs font-medium text-ink-muted underline-offset-4 hover:text-ink hover:underline"
+            className="text-xs font-medium text-text-secondary underline-offset-4 transition-colors hover:text-text hover:underline"
           >
             {t("partnerForm.submitAnother")}
           </button>
@@ -170,7 +171,7 @@ export function PartnerFormBody({
             <button
               type="button"
               onClick={onClose}
-              className="text-xs font-medium text-brass-ink underline-offset-4 hover:underline"
+              className="text-xs font-medium text-text underline-offset-4 transition-colors hover:underline"
             >
               {t("partnerForm.closeModal")}
             </button>
@@ -183,31 +184,34 @@ export function PartnerFormBody({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Direct Call Banner inside Modal/Form */}
-      <div className="flex flex-col justify-between gap-3 rounded-lg border border-grid bg-paper-subtle p-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col justify-between gap-3 rounded-xl border border-hairline bg-surface-2 p-4 sm:flex-row sm:items-center">
         <div>
-          <p className="font-mono text-xs uppercase tracking-wider text-brass-ink">
+          <p className="text-xs font-medium text-text">
             {t("partnerForm.directContactTitle")}
           </p>
-          <p className="mt-0.5 text-xs text-ink-muted">{t("partnerForm.directContactDesc")}</p>
+          <p className="mt-0.5 text-xs text-text-secondary">
+            {t("partnerForm.directContactDesc")}
+          </p>
         </div>
         <a
           href={PHONE_HREF}
-          className="btn-ghost-light press-spring inline-flex shrink-0 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs font-semibold"
+          className="btn-secondary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[10px] px-3.5 text-xs font-medium whitespace-nowrap"
         >
-          <Phone size={14} className="text-brass-ink" />
+          <Phone size={14} strokeWidth={1.5} className="text-text-secondary" />
           {PHONE_NUMBER}
         </a>
       </div>
 
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
-            {t("partnerForm.fields.businessName")} <span className="text-brass-ink">*</span>
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+            {t("partnerForm.fields.businessName")} <span className="text-text-muted">*</span>
           </label>
           <div className="relative">
             <Building2
               size={15}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint"
+              strokeWidth={1.5}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
             />
             <input
               type="text"
@@ -221,13 +225,14 @@ export function PartnerFormBody({
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
-            {t("partnerForm.fields.ownerName")} <span className="text-brass-ink">*</span>
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+            {t("partnerForm.fields.ownerName")} <span className="text-text-muted">*</span>
           </label>
           <div className="relative">
             <User
               size={15}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint"
+              strokeWidth={1.5}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
             />
             <input
               type="text"
@@ -243,13 +248,14 @@ export function PartnerFormBody({
 
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
-            {t("partnerForm.fields.phone")} <span className="text-brass-ink">*</span>
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+            {t("partnerForm.fields.phone")} <span className="text-text-muted">*</span>
           </label>
           <div className="relative">
             <Phone
               size={15}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint"
+              strokeWidth={1.5}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
             />
             <input
               type="tel"
@@ -263,16 +269,16 @@ export function PartnerFormBody({
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
             {t("partnerForm.fields.category")}
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className={INPUT_CLASS}
+            className={`${INPUT_CLASS} appearance-none`}
           >
             {CATEGORY_KEYS.map((key) => (
-              <option key={key} value={key} className="bg-surface text-ink">
+              <option key={key} value={key} className="bg-surface-2 text-text">
                 {t(`categories.${key}`)}
               </option>
             ))}
@@ -282,7 +288,7 @@ export function PartnerFormBody({
 
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-3 sm:items-end">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
             {t("partnerForm.fields.city")}
           </label>
           <input
@@ -295,21 +301,22 @@ export function PartnerFormBody({
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
             {t("partnerForm.fields.staffCount")}
           </label>
           <div className="relative">
             <Users
               size={15}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-faint"
+              strokeWidth={1.5}
+              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
             />
             <select
               value={staffCount}
               onChange={(e) => setStaffCount(e.target.value)}
-              className={INPUT_WITH_ICON_CLASS}
+              className={`${INPUT_WITH_ICON_CLASS} appearance-none`}
             >
               {STAFF_KEYS.map((sk) => (
-                <option key={sk} value={sk} className="bg-surface text-ink">
+                <option key={sk} value={sk} className="bg-surface-2 text-text">
                   {t(`partnerForm.fields.staffOptions.${sk}`)}
                 </option>
               ))}
@@ -318,7 +325,7 @@ export function PartnerFormBody({
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
             {t("partnerForm.fields.social")}
           </label>
           <input
@@ -333,7 +340,7 @@ export function PartnerFormBody({
 
       {!compact && (
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-ink-muted">
+          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
             {t("partnerForm.fields.message")}
           </label>
           <textarea
@@ -341,25 +348,25 @@ export function PartnerFormBody({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={t("partnerForm.fields.messagePlaceholder")}
-            className={`${INPUT_CLASS} resize-none`}
+            className="w-full resize-none rounded-[10px] border border-hairline-strong bg-surface-2 px-3.5 py-2.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none"
           />
         </div>
       )}
 
       {/* Uzbekistan Law O‘RQ-547 Explicit Consent Checkbox */}
-      <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-grid bg-paper p-3 text-xs leading-relaxed text-ink-muted">
+      <label className="flex cursor-pointer items-start gap-3 rounded-[10px] border border-hairline bg-surface-2 p-3.5 text-xs leading-relaxed text-text-secondary">
         <input
           type="checkbox"
           checked={consentAccepted}
           onChange={(e) => setConsentAccepted(e.target.checked)}
-          className="mt-0.5 h-4 w-4 shrink-0 rounded border-grid-strong accent-ink"
+          className="mt-0.5 h-4 w-4 shrink-0 rounded border-hairline-strong accent-text"
         />
         <span>
           {t("partnerForm.consentPrefix")}
           <Link
             to="/privacy"
             onClick={onClose}
-            className="font-semibold text-ink underline decoration-grid-strong underline-offset-2 hover:text-brass-ink"
+            className="font-medium text-text underline decoration-white/25 underline-offset-2 transition-colors hover:decoration-white/60"
           >
             {t("partnerForm.consentPrivacyLink")}
           </Link>
@@ -367,7 +374,7 @@ export function PartnerFormBody({
           <Link
             to="/terms"
             onClick={onClose}
-            className="font-semibold text-ink underline decoration-grid-strong underline-offset-2 hover:text-brass-ink"
+            className="font-medium text-text underline decoration-white/25 underline-offset-2 transition-colors hover:decoration-white/60"
           >
             {t("partnerForm.consentTermsLink")}
           </Link>
@@ -376,7 +383,7 @@ export function PartnerFormBody({
       </label>
 
       {error && (
-        <p className="rounded-lg border border-[#b91c1c]/30 bg-[#b91c1c]/8 px-3.5 py-2 text-xs font-medium text-[#b91c1c]">
+        <p className="rounded-[10px] border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-xs font-medium text-danger">
           {error}
         </p>
       )}
@@ -384,9 +391,9 @@ export function PartnerFormBody({
       <button
         type="submit"
         disabled={submitting}
-        className="btn-obsidian press-spring flex w-full items-center justify-center gap-2 rounded-lg py-3.5 text-sm font-semibold disabled:opacity-60"
+        className="btn-primary flex h-11 w-full items-center justify-center gap-2 rounded-[10px] text-sm font-medium disabled:opacity-60"
       >
-        <Send size={15} />
+        <Send size={15} strokeWidth={1.5} />
         {submitting ? t("partnerForm.submitting") : t("partnerForm.submit")}
       </button>
     </form>
@@ -396,6 +403,7 @@ export function PartnerFormBody({
 export function PartnerApplicationModal() {
   const { isOpen, closePartnerModal } = usePartnerModal();
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
 
   return (
     <AnimatePresence>
@@ -405,29 +413,29 @@ export function PartnerApplicationModal() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.18 }}
             onClick={closePartnerModal}
-            className="fixed inset-0 bg-obsidian/60 backdrop-blur-sm"
+            className="fixed inset-0 bg-bg/75 backdrop-blur-sm"
           />
 
           <motion.div
             role="dialog"
             aria-modal="true"
-            initial={{ opacity: 0, scale: 0.96, y: 14 }}
+            initial={reducedMotion ? false : { opacity: 0, scale: 0.97, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.97, y: 10 }}
-            transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-grid bg-surface p-6 shadow-xl sm:p-8"
+            exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98, y: 8 }}
+            transition={{ duration: 0.24, ease: [0.23, 1, 0.32, 1] }}
+            className="surface-card relative z-10 max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-[20px] p-6 sm:p-8"
           >
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <span className="font-mono text-xs uppercase tracking-wider text-brass-ink">
+                <p className="text-[13px] font-medium text-text-muted">
                   {t("partnerForm.eyebrow")}
-                </span>
-                <h2 className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-ink">
+                </p>
+                <h2 className="mt-1.5 text-2xl font-medium tracking-[-0.02em] text-text">
                   {t("partnerForm.modalTitle")}
                 </h2>
-                <p className="mt-1 text-xs leading-relaxed text-ink-muted">
+                <p className="mt-1 text-xs leading-[1.6] text-text-secondary">
                   {t("partnerForm.modalSubtitle")}
                 </p>
               </div>
@@ -435,16 +443,16 @@ export function PartnerApplicationModal() {
                 type="button"
                 onClick={closePartnerModal}
                 aria-label="Close modal"
-                className="press-spring flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-grid bg-paper-subtle text-ink-muted transition-colors hover:text-ink"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border border-hairline-strong bg-surface-2 text-text-muted transition-colors hover:bg-surface-3 hover:text-text"
               >
-                <X size={16} />
+                <X size={16} strokeWidth={1.5} />
               </button>
             </div>
 
             <PartnerFormBody onClose={closePartnerModal} compact />
 
-            <div className="mt-4 flex items-center justify-center gap-1.5 font-mono text-xs text-ink-faint">
-              <ShieldCheck size={14} className="text-brass-ink" />
+            <div className="mt-4 flex items-center justify-center gap-1.5 font-mono text-xs text-text-muted">
+              <ShieldCheck size={14} strokeWidth={1.5} className="text-text-secondary" />
               <span>O‘RQ-547 Personal Data Protected</span>
             </div>
           </motion.div>

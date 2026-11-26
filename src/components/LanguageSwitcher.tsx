@@ -9,25 +9,21 @@ const LANGS = [
 
 export function LanguageSwitcher({
   className,
-  tone = "light",
+  tone: _tone,
 }: {
   className?: string;
   tone?: "dark" | "light";
 }) {
+  void _tone;
   const { i18n, t } = useTranslation();
   const current = LANGS.find((l) => i18n.language?.startsWith(l.code))?.code ?? "en";
-
-  const isDark = tone === "dark";
 
   return (
     <div
       role="group"
       aria-label="Language"
       className={cn(
-        "inline-flex items-center rounded-full border p-0.5 transition-colors",
-        isDark
-          ? "border-obsidian-border bg-obsidian-surface"
-          : "border-grid bg-paper-subtle",
+        "inline-flex items-center rounded-full border border-hairline bg-surface-1 p-0.5",
         className
       )}
     >
@@ -42,12 +38,8 @@ export function LanguageSwitcher({
             className={cn(
               "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
               isActive
-                ? isDark
-                  ? "border border-obsidian-border bg-obsidian-raised text-obsidian-text"
-                  : "border border-grid bg-surface text-ink"
-                : isDark
-                  ? "border border-transparent text-obsidian-muted hover:text-obsidian-text"
-                  : "border border-transparent text-ink-muted hover:text-ink"
+                ? "bg-surface-3 text-text"
+                : "text-text-secondary hover:text-text"
             )}
           >
             {t(`lang.${lang.code}`, lang.label)}

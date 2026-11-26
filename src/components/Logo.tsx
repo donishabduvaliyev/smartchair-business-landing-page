@@ -20,7 +20,7 @@ export function LogoMark({
       role={ariaLabel ? "img" : undefined}
     >
       <rect x="2" y="2" width="20" height="20" rx="7" stroke="currentColor" strokeWidth="4" />
-      <rect x="26" y="2" width="20" height="20" rx="7" fill="var(--color-brass)" />
+      <rect x="26" y="2" width="20" height="20" rx="7" fill="#d4af5a" />
       <rect x="2" y="26" width="20" height="20" rx="7" stroke="currentColor" strokeWidth="4" />
       <rect x="26" y="26" width="20" height="20" rx="7" stroke="currentColor" strokeWidth="4" />
     </svg>
@@ -29,19 +29,18 @@ export function LogoMark({
 
 export function Logo({
   className,
-  tone = "light",
+  tone: _tone,
 }: {
   className?: string;
   tone?: "dark" | "light";
 }) {
-  const textColor = tone === "dark" ? "text-obsidian-text" : "text-ink";
-
+  void _tone;
   return (
     <span className={cn("flex items-center gap-2.5", className)}>
-      <span className={cn("h-8 w-8 sm:h-9 sm:w-9", textColor)}>
+      <span className="h-7 w-7 text-text sm:h-8 sm:w-8">
         <LogoMark />
       </span>
-      <span className={cn("font-sans text-lg font-semibold tracking-tight sm:text-xl", textColor)}>
+      <span className="font-sans text-[17px] font-medium tracking-tight text-text sm:text-lg">
         SmartChair
       </span>
     </span>

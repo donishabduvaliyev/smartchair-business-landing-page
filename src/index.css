@@ -1,64 +1,70 @@
 @import "tailwindcss";
 
 @theme {
-  /* Unified Obsidian Architectural Studio Surfaces */
-  --color-paper: #0b0b0d;
-  --color-paper-subtle: #131317;
-  --color-surface: #131317;
-  --color-grid: #222229;
-  --color-grid-strong: #32323d;
+  /* 4-Step Neutral Graphite Surface Ladder (Linear / Raycast) */
+  --color-bg: #09090b;
+  --color-surface-1: #111215;
+  --color-surface-2: #18191e;
+  --color-surface-3: #22242b;
 
-  /* Unified Dark-Mode Ink */
-  --color-ink: #f4f4f5;
-  --color-ink-muted: #9c9ca6;
-  --color-ink-faint: #64646d;
+  /* Moonlight Hairlines */
+  --color-hairline: rgba(255, 255, 255, 0.06);
+  --color-hairline-strong: rgba(255, 255, 255, 0.11);
 
-  /* Native SmartChair Obsidian Studio Surfaces */
-  --color-obsidian: #0b0b0d;
-  --color-obsidian-surface: #131317;
-  --color-obsidian-raised: #1a1a20;
-  --color-obsidian-border: #26262e;
-  --color-obsidian-text: #f4f4f5;
-  --color-obsidian-muted: #9c9ca6;
-  --color-obsidian-faint: #64646d;
+  /* 3-Role WCAG AA Text Hierarchy */
+  --color-text: #ededef;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
 
-  /* Authentic SmartChair Champagne Brass Accent */
+  /* Isolated Brand Accent (< 3% of screen) */
+  --color-accent: #d4af5a;
+  --color-accent-soft: rgba(212, 175, 90, 0.12);
+
+  /* Toned Semantic Indicators */
+  --color-ok: #34d399;
+  --color-info: #60a5fa;
+  --color-warn: #fbbf24;
+  --color-danger: #f87171;
+
+  /* 2-Font Typography + Emil Kowalski Easing */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* Semantic compatibility aliases pointing to the dark ladder */
+  --color-paper: #09090b;
+  --color-paper-subtle: #111215;
+  --color-surface: #111215;
+  --color-grid: rgba(255, 255, 255, 0.06);
+  --color-grid-strong: rgba(255, 255, 255, 0.11);
+  --color-ink: #ededef;
+  --color-ink-muted: #a1a1aa;
+  --color-ink-faint: #71717a;
+  --color-obsidian: #09090b;
+  --color-obsidian-surface: #111215;
+  --color-obsidian-raised: #18191e;
+  --color-obsidian-border: rgba(255, 255, 255, 0.06);
+  --color-obsidian-text: #ededef;
+  --color-obsidian-muted: #a1a1aa;
+  --color-obsidian-faint: #71717a;
   --color-brass: #d4af5a;
   --color-brass-hover: #e2c176;
   --color-brass-ink: #d4af5a;
-  --color-brass-wash: #d4af5a1a;
-
-  /* Semantic Status (toned, non-neon) */
+  --color-brass-wash: rgba(212, 175, 90, 0.12);
+  --color-bg-soft: #111215;
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-strong: rgba(255, 255, 255, 0.11);
+  --color-border-soft: rgba(255, 255, 255, 0.06);
+  --color-text-faint: #71717a;
+  --color-ink-dark: #09090b;
+  --color-ink-panel: #111215;
+  --color-ink-border: rgba(255, 255, 255, 0.06);
+  --color-accent-on-dark: #d4af5a;
   --color-status-ok: #34d399;
   --color-status-ok-ink: #34d399;
   --color-status-warn: #fbbf24;
   --color-status-info: #60a5fa;
   --color-status-danger: #f87171;
-
-  /* Typography */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: "Fraunces", Georgia, serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-
-  /* Semantic compatibility aliases */
-  --color-bg: #0b0b0d;
-  --color-bg-soft: #131317;
-  --color-surface-2: #1a1a20;
-  --color-surface-3: #222229;
-  --color-border: #26262e;
-  --color-border-strong: #32323d;
-  --color-border-soft: #1d1d23;
-  --color-text: #f4f4f5;
-  --color-text-muted: #9c9ca6;
-  --color-text-faint: #64646d;
-  --color-accent: #d4af5a;
-  --color-accent-soft: #d4af5a1a;
-  --color-ink-dark: #0b0b0d;
-  --color-ink-panel: #131317;
-  --color-ink-border: #26262e;
-  --color-accent-on-dark: #d4af5a;
 }
 
 #top,
@@ -72,60 +78,106 @@
 
 html {
   scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: var(--color-paper);
 }
 
+html,
 body {
+  background: #09090b;
+  color: #ededef;
   font-family: var(--font-sans);
-  letter-spacing: 0;
-  background: var(--color-paper);
-  color: var(--color-ink);
   color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-sans);
-  letter-spacing: -0.02em;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-brass) 24%, transparent);
-  color: var(--color-ink);
+  background: rgba(212, 175, 90, 0.24);
+  color: #ededef;
+}
+
+.surface-card {
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.surface-floating {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 40px -12px rgba(0, 0, 0, 0.75),
+    0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .press-spring {
-  transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+  transition:
+    transform 100ms ease-out,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
 }
 .press-spring:active {
   transform: scale(0.978);
 }
 
-.btn-brass {
-  background: var(--color-brass);
-  color: var(--color-obsidian);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+.btn-primary {
+  background: #f4f4f5;
+  color: #09090b;
+  transition:
+    transform 100ms ease-out,
+    background-color 150ms ease;
 }
-.btn-brass:hover {
-  background: var(--color-brass-hover);
+.btn-primary:hover {
+  background: #ffffff;
+}
+.btn-primary:active {
+  transform: scale(0.97);
 }
 
-.btn-obsidian,
-.btn-primary {
-  background: var(--color-brass);
-  color: var(--color-obsidian);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+.btn-secondary {
+  background: var(--color-surface-2);
+  color: #ededef;
+  border: 1px solid var(--color-hairline-strong);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition:
+    transform 100ms ease-out,
+    background-color 150ms ease,
+    border-color 150ms ease;
 }
-.btn-obsidian:hover,
-.btn-primary:hover {
-  background: var(--color-brass-hover);
+.btn-secondary:hover {
+  background: var(--color-surface-3);
+}
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+/* Compatibility button classes until Agents 2-4 finish */
+.btn-brass,
+.btn-obsidian {
+  background: #f4f4f5;
+  color: #09090b;
+  transition:
+    transform 100ms ease-out,
+    background-color 150ms ease;
+}
+.btn-brass:hover,
+.btn-obsidian:hover {
+  background: #ffffff;
+}
+.btn-brass:active,
+.btn-obsidian:active {
+  transform: scale(0.97);
 }
 
 .btn-ghost-dark {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: var(--color-obsidian-text);
+  border: 1px solid var(--color-hairline-strong);
+  color: #ededef;
   background: transparent;
 }
 .btn-ghost-dark:hover {
@@ -134,25 +186,25 @@ h1, h2, h3, h4 {
 
 .btn-ghost-light,
 .btn-outline {
-  background: var(--color-obsidian-surface);
-  border: 1px solid var(--color-grid-strong);
-  color: var(--color-ink);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline-strong);
+  color: #ededef;
 }
 .btn-ghost-light:hover,
 .btn-outline:hover {
-  background: var(--color-obsidian-raised);
+  background: var(--color-surface-3);
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-paper);
+  background: #09090b;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-grid);
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-grid-strong);
+  background: rgba(255, 255, 255, 0.14);
 }

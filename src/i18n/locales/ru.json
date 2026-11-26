@@ -23,6 +23,20 @@
       "UZ · RU · EN"
     ]
   },
+  "heroMockup": {
+    "brand": "SmartChair Business",
+    "thisWeek": "На этой неделе",
+    "change": "+18%",
+    "revenueToday": "2.4 млн UZS сегодня",
+    "revenueDesc": "Выручка, +18% к прошлой неделе",
+    "newBooking": "Новая запись",
+    "newBookingDesc": "Подтверждено · напоминание отправлено",
+    "staffOnShift": "4 сотрудника на смене",
+    "live": "Онлайн",
+    "occupancy": "82% занято сегодня",
+    "occupancyDesc": "6 из 7 мест заняты",
+    "days": "Пн,Вт,Ср,Чт,Пт,Сб,Вс"
+  },
   "ecosystem": {
     "label": "Создано для салонов Узбекистана",
     "items": [

@@ -20,7 +20,7 @@ function InstagramIcon({ size = 14, className = "" }: { size?: number; className
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
@@ -52,27 +52,27 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-obsidian text-obsidian-text">
-      <div className="mx-auto max-w-[1200px] border-x border-white/[0.06] px-8 py-16 lg:px-12">
+    <footer className="border-t border-white/[0.06] bg-bg">
+      <div className="mx-auto max-w-[1160px] px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link to="/" aria-label="SmartChair Home" className="inline-flex items-center">
-              <Logo tone="dark" />
+              <Logo />
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-[#9c9ca6]">
+            <p className="mt-4 max-w-xs text-sm leading-[1.6] text-text-muted">
               {t("footer.tagline")}
             </p>
             <button
               type="button"
               onClick={openPartnerModal}
-              className="btn-brass press-spring mt-6 inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold"
+              className="btn-primary mt-6 inline-flex h-9 items-center gap-2 rounded-[10px] px-4 text-xs font-medium whitespace-nowrap"
             >
               {t("footer.cta")}
             </button>
           </div>
 
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-wider text-obsidian-text">
+            <h3 className="text-[13px] font-medium text-text">
               {t("footer.columns.product")}
             </h3>
             <ul className="mt-4 space-y-3">
@@ -80,7 +80,7 @@ export function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm text-[#9c9ca6] transition-colors hover:text-obsidian-text"
+                    className="text-sm text-text-muted transition-colors hover:text-text"
                   >
                     {link.label}
                   </a>
@@ -90,7 +90,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-wider text-obsidian-text">
+            <h3 className="text-[13px] font-medium text-text">
               {t("footer.columns.company")}
             </h3>
             <ul className="mt-4 space-y-3">
@@ -100,10 +100,10 @@ export function Footer() {
                     href={link.href}
                     target={link.external ? "_blank" : undefined}
                     rel={link.external ? "noopener noreferrer" : undefined}
-                    className="flex items-center gap-2 text-sm text-[#9c9ca6] transition-colors hover:text-obsidian-text"
+                    className="flex items-center gap-2 text-sm text-text-muted transition-colors hover:text-text"
                   >
-                    <link.icon size={14} className="shrink-0 text-[#9c9ca6]" />
-                    {link.label}
+                    <link.icon size={14} strokeWidth={1.5} className="shrink-0 text-text-muted" />
+                    <span>{link.label}</span>
                   </a>
                 </li>
               ))}
@@ -111,14 +111,14 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-wider text-obsidian-text">
+            <h3 className="text-[13px] font-medium text-text">
               {t("footer.columns.legal")}
             </h3>
             <ul className="mt-4 space-y-3">
               <li>
                 <Link
                   to="/privacy"
-                  className="text-sm text-[#9c9ca6] transition-colors hover:text-obsidian-text"
+                  className="text-sm text-text-muted transition-colors hover:text-text"
                 >
                   {t("footer.links.privacy")}
                 </Link>
@@ -126,7 +126,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/terms"
-                  className="text-sm text-[#9c9ca6] transition-colors hover:text-obsidian-text"
+                  className="text-sm text-text-muted transition-colors hover:text-text"
                 >
                   {t("footer.links.terms")}
                 </Link>
@@ -134,7 +134,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/refund"
-                  className="text-sm text-[#9c9ca6] transition-colors hover:text-obsidian-text"
+                  className="text-sm text-text-muted transition-colors hover:text-text"
                 >
                   {t("footer.links.refund")}
                 </Link>
@@ -142,7 +142,7 @@ export function Footer() {
               <li>
                 <Link
                   to="/delete-account"
-                  className="text-sm text-[#9c9ca6] transition-colors hover:text-obsidian-text"
+                  className="text-sm text-text-muted transition-colors hover:text-text"
                 >
                   {t("footer.links.deleteAccount")}
                 </Link>
@@ -151,7 +151,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/[0.08] pt-8 text-xs text-[#9c9ca6] sm:flex-row">
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/[0.06] pt-8 text-xs text-text-muted sm:flex-row">
           <p>
             &copy; {new Date().getFullYear()} SmartChair. {t("footer.rights")}
           </p>

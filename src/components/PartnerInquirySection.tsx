@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { CheckCircle2, Phone } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,75 +7,79 @@ import {
   PHONE_HREF,
   PHONE_NUMBER,
 } from "../lib/constants";
-import { BlueprintFrame } from "./BlueprintGrid";
 import { PartnerFormBody } from "./PartnerApplicationModal";
 
 export function PartnerInquirySection() {
   const { t } = useTranslation();
+  const reducedMotion = useReducedMotion();
   const benefits = t("partnerForm.benefits", { returnObjects: true }) as string[];
 
   return (
-    <section id="partner-apply" className="bg-paper border-b border-grid">
-      <BlueprintFrame>
-        <div className="grid grid-cols-1 lg:grid-cols-12">
-          {/* Left 5 cols: Obsidian Founder Direct SLA & Benefits */}
+    <section id="partner-apply" className="py-24 lg:py-32">
+      <div className="mx-auto max-w-[1160px] px-6 lg:px-8">
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12">
+          {/* Left 5 cols: Benefits & Founder Contact */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-5 bg-obsidian text-obsidian-text p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-obsidian-border flex flex-col justify-between"
+            transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
+            className="flex flex-col justify-between lg:col-span-5"
           >
             <div>
-              <span className="font-mono text-xs uppercase tracking-wider text-brass">
+              <p className="text-[13px] font-medium text-text-muted">
                 {t("partnerForm.eyebrow")}
-              </span>
+              </p>
 
-              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.025em] text-obsidian-text sm:text-4xl">
+              <h2 className="mt-2.5 max-w-[26ch] text-[28px] font-medium leading-[1.12] tracking-[-0.025em] text-text [text-wrap:balance] sm:text-[36px]">
                 {t("partnerForm.title")}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-obsidian-muted">
+              <p className="mt-3.5 text-sm leading-[1.6] tracking-[0.005em] text-text-secondary">
                 {t("partnerForm.subtitle")}
               </p>
 
-              <div className="mt-7 space-y-2.5">
-                <p className="font-mono text-xs uppercase tracking-wider text-obsidian-faint">
+              <div className="mt-7 space-y-3">
+                <p className="text-[13px] font-medium text-text-muted">
                   {t("partnerForm.benefitsTitle")}
                 </p>
                 {Array.isArray(benefits) &&
                   benefits.map((item, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-2.5 text-sm text-obsidian-text/90"
+                      className="flex items-start gap-2.5 text-sm leading-[1.55] text-text-secondary"
                     >
-                      <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-brass" />
+                      <CheckCircle2
+                        size={16}
+                        strokeWidth={1.5}
+                        className="mt-0.5 shrink-0 text-text-muted"
+                      />
                       <span>{item}</span>
                     </div>
                   ))}
               </div>
             </div>
 
-            {/* Founder Direct Line */}
-            <div className="mt-8 border-t border-obsidian-border pt-7">
-              <p className="font-mono text-xs uppercase tracking-wider text-brass">
+            {/* Founder Contact Card */}
+            <div className="surface-card mt-8 rounded-[20px] p-6">
+              <p className="text-sm font-medium text-text">
                 {t("partnerForm.directContactTitle")}
               </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-obsidian-muted">
+              <p className="mt-1.5 text-xs leading-[1.6] text-text-secondary">
                 {t("partnerForm.directContactDesc")}
               </p>
-              <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
+              <div className="mt-5 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap">
                 <a
                   href={PHONE_HREF}
-                  className="btn-brass press-spring inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-xs font-semibold"
+                  className="btn-primary inline-flex h-10 items-center justify-center gap-2 rounded-[10px] px-4 text-xs font-medium whitespace-nowrap"
                 >
-                  <Phone size={15} />
+                  <Phone size={14} strokeWidth={1.5} />
                   {PHONE_NUMBER}
                 </a>
                 <a
                   href={INSTAGRAM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-ghost-dark press-spring inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-xs font-medium"
+                  className="btn-secondary inline-flex h-10 items-center justify-center gap-2 rounded-[10px] px-4 text-xs font-medium whitespace-nowrap"
                 >
                   {INSTAGRAM_HANDLE}
                 </a>
@@ -85,16 +89,20 @@ export function PartnerInquirySection() {
 
           {/* Right 7 cols: Interactive B2B Partner Form */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={reducedMotion ? false : { opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.45, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-7 bg-surface p-8 lg:p-12"
+            transition={{
+              duration: 0.28,
+              delay: reducedMotion ? 0 : 0.05,
+              ease: [0.23, 1, 0.32, 1],
+            }}
+            className="surface-card rounded-[20px] p-6 sm:p-8 lg:col-span-7"
           >
             <PartnerFormBody />
           </motion.div>
         </div>
-      </BlueprintFrame>
+      </div>
     </section>
   );
 }

@@ -23,6 +23,20 @@
       "UZ · RU · EN"
     ]
   },
+  "heroMockup": {
+    "brand": "SmartChair Business",
+    "thisWeek": "Shu hafta",
+    "change": "+18%",
+    "revenueToday": "Bugun 2.4 mln UZS",
+    "revenueDesc": "Daromad, o'tgan haftaga nisbatan +18%",
+    "newBooking": "Yangi band",
+    "newBookingDesc": "Tasdiqlandi · eslatma yuborildi",
+    "staffOnShift": "4 xodim ishda",
+    "live": "Onlayn",
+    "occupancy": "Bugun 82% band",
+    "occupancyDesc": "7 tadan 6 joy band",
+    "days": "Du,Se,Cho,Pa,Ju,Sha,Ya"
+  },
   "ecosystem": {
     "label": "O'zbekiston salonlari uchun yaratilgan",
     "items": [

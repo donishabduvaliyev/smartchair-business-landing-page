@@ -23,6 +23,20 @@
       "UZ · RU · EN"
     ]
   },
+  "heroMockup": {
+    "brand": "SmartChair Business",
+    "thisWeek": "This week",
+    "change": "+18%",
+    "revenueToday": "2.4M UZS today",
+    "revenueDesc": "Revenue, +18% vs last week",
+    "newBooking": "New booking",
+    "newBookingDesc": "Confirmed · reminder sent",
+    "staffOnShift": "4 staff on shift",
+    "live": "Live",
+    "occupancy": "82% booked today",
+    "occupancyDesc": "6 of 7 chairs full",
+    "days": "Mo,Tu,We,Th,Fr,Sa,Su"
+  },
   "ecosystem": {
     "label": "Built for Uzbekistan salons",
     "items": [
