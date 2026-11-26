@@ -3,35 +3,35 @@
     "forBusiness": "Biznes uchun",
     "features": "Imkoniyatlar",
     "howItWorks": "Qanday ishlaydi",
-    "reviews": "Sharhlar",
+    "reviews": "Fikrlar",
     "faq": "Savol-javob",
-    "customerApp": "Mijoz ilovasi",
-    "listBusiness": "Biznesni qo'shish"
+    "customerApp": "Telegram ilova",
+    "listBusiness": "Salonni ulash"
   },
   "hero": {
-    "badge": "{{city}}da ishlaydi · EN / RU / UZ",
-    "titleLine1": "Keyingi navbatingiz",
-    "titleHighlight": "soniyalarda",
-    "titleLine2": "— qo'ng'iroqsiz.",
-    "subtitle": "SmartChair atrofingizdagi sartaroshxona, salon, spa va go'zallik mutaxassislarini topadi, haqiqiy narx va reytinglarni ko'rsatadi va aniq vaqtni zudlik bilan band qiladi — barchasi Telegram ichida. Ilova o'rnatish shart emas, navbatda kutish yo'q.",
-    "ctaBusiness": "Biznesni qo'shish",
-    "ctaCustomer": "Mijoz ilovasini ko'rish",
-    "rating": "o'rtacha reyting",
-    "businesses": "ta biznes ro'yxatda"
+    "badge": "{{city}}da ishlaydi · UZ · RU · EN",
+    "titleLine1": "Har bir kreslo band,",
+    "titleHighlight": "har bir so'm",
+    "titleLine2": "hisobda.",
+    "subtitle": "SmartChair 1-bosishda Telegram va veb orqali mijoz navbatini to'liq Salon OS bilan birlashtiradi: jonli QR-navbat, kassa Z-hisoboti, ustalar foizi va avtomatik eslatmalar.",
+    "ctaBusiness": "Salonni ulash",
+    "ctaCustomer": "Telegram ilovani ochish",
+    "trust": [
+      "Mijozlar uchun 0 so'm",
+      "24/7 Telegram va Veb",
+      "Walk-In QR + Kassa",
+      "UZ · RU · EN"
+    ]
   },
-  "heroMockup": {
-    "brand": "SmartChair Business",
-    "thisWeek": "Shu hafta",
-    "change": "+18%",
-    "revenueToday": "Bugun 2.4 mln UZS",
-    "revenueDesc": "Daromad, o'tgan haftaga nisbatan +18%",
-    "newBooking": "Yangi band",
-    "newBookingDesc": "Tasdiqlandi · eslatma yuborildi",
-    "staffOnShift": "4 xodim ishda",
-    "live": "Onlayn",
-    "occupancy": "Bugun 82% band",
-    "occupancyDesc": "7 tadan 6 joy band",
-    "days": "Du,Se,Cho,Pa,Ju,Sha,Ya"
+  "ecosystem": {
+    "label": "O'zbekiston salonlari uchun yaratilgan",
+    "items": [
+      "Telegram Mini App",
+      "Walk-In QR",
+      "Kassa Z-Report",
+      "Payme · Click · Naqd",
+      "UZ · RU · EN"
+    ]
   },
   "categories": {
     "barber": "Sartaroshxona",
@@ -44,16 +44,63 @@
     "browsLashes": "Qosh va kirpik",
     "other": "Boshqa go'zallik markazi"
   },
+  "features": {
+    "eyebrow": "Platforma imkoniyatlari",
+    "title": "Ko'chadagi belgidan kunlik kassa yopilishigacha yagona tizim",
+    "subtitle": "Mijozlar Telegramda soniyalarda yoziladi. Administrator, ustalar va kassir esa bitta jonli jadvalda ishlaydi.",
+    "rows": [
+      {
+        "eyebrow": "01 · Onlayn navbat va xarita",
+        "title": "Mijozlar sizni xaritadan topib bir tegishda yoziladi",
+        "desc": "Ilova yuklab olish yoki qo'ng'iroqlashish shart emas. Mijozlar yaqin salonlarni ko'radi, haqiqiy so'm narxlarini solishtiradi va Telegram yoki vebda vaqtni tasdiqlaydi.",
+        "bullets": [
+          "O'zbekiston bo'ylab jonli xarita va tumanlar bo'yicha qidiruv",
+          "Xizmat davomiyligi va aniq so'm narxlarining ko'rinishi",
+          "Har bir tashrifdan oldin avtomatik Telegram eslatmalari"
+        ]
+      },
+      {
+        "eyebrow": "02 · Jonli QR-navbat va jadval",
+        "title": "Ko'chadan kirgan mijozlarni tartibli jonli navbatga aylantiring",
+        "desc": "Resepshn peshtaxtasiga maxsus QR-stend qo'ying. Mehmon skanerlab usta yoki bo'sh kresloni tanlaydi va talon raqamini oladi — kalendar esa real vaqtda yangilanadi.",
+        "bullets": [
+          "Kutish vaqtini ko'rsatuvchi tezkor talon (#A-14)",
+          "Onlayn bandlar va jonli navbatni birlashtirgan yagona jadval",
+          "Qabul qilish, xizmatni boshlash va yakunlash bir tegishda"
+        ]
+      },
+      {
+        "eyebrow": "03 · Kassa va Z-hisobotlar",
+        "title": "Smenani Payme, Click va naqd pulning aniq hisobi bilan yoping",
+        "desc": "Har bir yakunlangan xizmat bo'yicha naqd, terminal, Click va Payme to'lovlarini alohida kiriting. Kun oxiridagi Z-hisobot kutilgan va haqiqiy kassani avtomatik solishtiradi.",
+        "bullets": [
+          "Naqd, karta, Click va Payme bo'yicha bo'lib to'lash cheklari",
+          "Avtomatik Z-hisobot smena yakuni va farqni tekshirish",
+          "Har bir ustaga bog'langan to'liq cheklar tarixi"
+        ]
+      },
+      {
+        "eyebrow": "04 · Ustalar smenasi, maosh va CRM",
+        "title": "Ustalar foizini hisoblang va doimiy mijozlarni qaytaring",
+        "desc": "Har bir usta uchun alohida ish vaqti, tanaffus va foiz stavkasini belgilang. Mijozlar tashrif oralig'ini kuzating va 30 kundan oshgan mijozlarga Telegram orqali eslatma yuboring.",
+        "bullets": [
+          "Usta kesimidagi foiz stavkalari va kunlik hisob-kitob",
+          "Alohida smena jadvali, tushlik tanaffusi va dam olish kunlari",
+          "30+ kun kelmagan mijozlar uchun avtomatik qaytarish xabari"
+        ]
+      }
+    ]
+  },
   "businessOS": {
-    "eyebrow": "Biznes egalari uchun",
-    "title": "Saloningiz to'liq nazorat ostida",
-    "subtitle": "Bandlar, xodimlar jadvali, xizmatlar, mijozlar tarixi va biznes qanday ketayotganini ko'rsatadigan raqamlar uchun yagona boshqaruv paneli.",
+    "eyebrow": "Salon boshqaruv tizimi",
+    "title": "SmartChair studiya ish maydoni ichidan ko'rinishi",
+    "subtitle": "Jonli jadval, walk-in navbat, kassa, ustalar maoshi va mijozlar CRM bo'limlari orasida almashing.",
     "tabs": {
-      "bookings": "Bandlar va kalendar",
-      "staff": "Xodimlar va jadval",
-      "services": "Xizmatlar va narxlar",
-      "crm": "Mijozlar CRM",
-      "analytics": "Statistika"
+      "bookings": "Navbatlar",
+      "queue": "Jonli navbat",
+      "register": "Kassa va Z-hisobot",
+      "staff": "Ustalar va foiz",
+      "crm": "Mijozlar CRM"
     },
     "bookings": {
       "today": "Bugungi jadval",
@@ -61,84 +108,113 @@
       "free": "Bo'sh",
       "booked": "Band"
     },
+    "queue": {
+      "title": "Resepshn QR-navbat",
+      "waiting": "Kutmoqda",
+      "inChair": "Kresloda",
+      "avgWait": "O'rtacha kutish",
+      "scanHint": "Resepshn QR faol"
+    },
+    "register": {
+      "title": "Kassa smenasi #01",
+      "open": "Smena ochiq",
+      "total": "Smena tushumi",
+      "cash": "Naqd pul",
+      "card": "Terminal",
+      "digital": "Payme / Click",
+      "zReport": "Z-hisobot ko'rinishi",
+      "variance": "0 so'm farq"
+    },
+    "staff": {
+      "title": "Ustalar va foiz hisobi",
+      "commission": "Ulush",
+      "payout": "Bugungi daromad"
+    },
     "status": {
       "onShift": "Ishda",
       "onBreak": "Tanaffusda",
-      "offToday": "Bugun dam olishda"
+      "offToday": "Dam olishda"
     },
     "tags": {
       "vip": "VIP",
       "new": "Yangi",
       "regular": "Doimiy"
     },
-    "services": {
-      "header": { "service": "Xizmat", "category": "Toifa", "duration": "Davomiyligi", "price": "Narxi" }
+    "crm": {
+      "title": "Mijozlarni saqlab qolish va qaytarish",
+      "visits": "tashrif",
+      "last": "oxirgi",
+      "overdue": "32 kun o'tdi",
+      "winBackSent": "Eslatma yuborildi"
     },
-    "crm": { "visits": "tashrif", "last": "oxirgi" },
-    "analytics": {
-      "revenue": "Daromad",
-      "bookings": "Bandlar",
-      "noShows": "Kelmaganlar",
-      "rating": "Reyting",
-      "thisMonth": "shu oyda",
-      "down": "2% pasaydi",
-      "avg": "o'rtacha"
-    },
-    "cta": "Biznesni bepul ro'yxatga oling"
-  },
-  "features": {
-    "eyebrow": "Nega aynan SmartChair",
-    "title": "Navbatda kutmaslik uchun kerak bo'lgan hamma narsa",
-    "subtitle": "Sifatli xizmatni ortiqcha yugur-yugursiz xohlaydigan odamlar va o'z joylarini to'ldirishni xohlaydigan bizneslar uchun yaratilgan.",
-    "items": {
-      "map": { "title": "Yaqin atrofdagi bizneslarni toping", "desc": "Interaktiv xarita atrofingizdagi barcha sartaroshxona, salon va spalarni masofasi va real vaqtdagi bandligi bilan ko'rsatadi." },
-      "filter": { "title": "Filtrlang va solishtiring", "desc": "Eng yuqori reytingli, eng arzon yoki tahririyat tanlovi bo'yicha saralab, kerakli mutaxassisni soniyalarda toping." },
-      "instant": { "title": "Zudlik bilan band qiling", "desc": "Xizmat, mutaxassis, sana va vaqtni tanlang — so'rovingiz darhol yuboriladi, ortiqcha yozishmasiz." },
-      "reminders": { "title": "Avtomatik eslatmalar", "desc": "SmartChair navbatdan oldin Telegramda sizga xabar yuboradi, shunda hech qachon tashrifni o'tkazib yubormaysiz." },
-      "favorites": { "title": "Sevimlilaringizni saqlang", "desc": "Doimiy mutaxassis va salonlaringizni qo'l ostida saqlang va oxirgi tashrifni bir tegishda qayta band qiling." },
-      "language": { "title": "Sizning tilingizda gaplashadi", "desc": "Ingliz, rus va o'zbek tillarida to'liq mavjud — istalgan vaqtda profilingizdan almashtiring." }
-    }
+    "cta": "Salonni ulash"
   },
   "howItWorks": {
-    "eyebrow": "Qanday ishlaydi",
-    "title": "Chatni ochishdan bandlashgacha",
-    "subtitle": "To'rt qadam. Bir daqiqadan kamroq.",
-    "steps": {
-      "open": { "title": "Botni oching", "desc": "Havolani bosing — SmartChair Telegram ichida darhol ochiladi, hech narsa yuklab olish shart emas." },
-      "browse": { "title": "Ko'rib chiqing yoki qidiring", "desc": "Xaritada yaqin atrofdagi joylarni ko'ring yoki xizmat, reyting yoki narx bo'yicha qidiring." },
-      "book": { "title": "Vaqtni tanlang va band qiling", "desc": "Mutaxassis, xizmat, sana va vaqtni tanlang, so'ng so'rovingizni bir tegishda yuboring." },
-      "confirm": { "title": "Tasdiqni oling", "desc": "Zudlik bilan tasdiqlash va navbatdan oldin eslatma xabari." }
+    "eyebrow": "Ishga tushirish",
+    "title": "Saloningiz 24 soat ichida tizimda ishlaydi",
+    "subtitle": "Ariza topshirishdan birinchi onlayn band va yopilgan kassa smenasigacha uchta aniq qadam.",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Salon ma'lumotlarini yuboring",
+        "desc": "1 daqiqalik hamkorlik formasini to'ldiring yoki +998 94 982 70 70 raqamiga qo'ng'iroq qilib salon nomi, shahar va kreslolar sonini ayting."
+      },
+      {
+        "num": "02",
+        "title": "Ish maydoningizni sozlaymiz",
+        "desc": "Jamoamiz xizmatlar menyusini so'mda kiritadi, ustalar smenasi va foizlarini sozlaydi hamda resepshn uchun QR-stendni tayyorlaydi."
+      },
+      {
+        "num": "03",
+        "title": "Navbat qabul qiling va kassani yoping",
+        "desc": "24/7 Telegram bandlarini oling, walk-in mijozlarni bitta ekranda boshqaring va birinchi kundanoq aniq Z-hisobot yoping."
+      }
+    ],
+    "freeBanner": {
+      "badge": "Bepul",
+      "title": "24 soat ichida to'liq sozlash va ulash — 0 so'm",
+      "subtitle": "Mijozlar doimo 0 so'm komissiyasiz yoziladi. Saloningiz ishga tushishidan oldin tayyor holda topshiriladi.",
+      "items": [
+        "Telegram va vebda mijozlar uchun 0 so'm band qilish",
+        "Xizmatlar katalogi va so'mdagi narxnomani tayyor kiritish",
+        "Peshtaxta uchun maxsus Walk-In QR stend dizayni",
+        "O'zbek, rus va ingliz tillarida bevosita qo'llab-quvvatlash"
+      ]
     }
   },
-  "stats": {
-    "panelLabel": "SmartChair Platformasi",
-    "businesses": "Ro'yxatdagi bizneslar",
-    "bookings": "Amalga oshirilgan bandlar",
-    "categories": "Xizmat toifalari",
-    "rating": "O'rtacha reyting"
-  },
   "testimonials": {
-    "eyebrow": "Ikki tomon ham yaxshi ko'radi",
-    "title": "Odamlar nima deyishyapti",
+    "eyebrow": "Hamkorlar va mijozlar fikri",
+    "title": "O'zbekiston salonlari va mijozlari tajribasi",
     "quotes": [
-      { "name": "Aziz", "role": "Mijoz, Namangan", "quote": "Ofisim yaqinidan sartaroshni topdim va bir daqiqadan kamroq vaqtda band qildim. Qo'ng'iroq yo'q, navbatda kutish yo'q." },
-      { "name": "Malika", "role": "Manikyur studiyasi egasi", "quote": "Peshtaxtamizdagi QR-kod tasodifiy mijozlarni doimiy mijozlarga aylantiradi. Kelmay qolishlar deyarli darhol kamaydi." },
-      { "name": "Sardor", "role": "Mijoz, Namangan", "quote": "Eslatmalar to'g'ridan-to'g'ri Telegramga kelishi yoqadi — navbatlarni umuman unutmay qo'ydim." },
-      { "name": "Dilnoza", "role": "Spa va go'zallik saloni menejeri", "quote": "Qo'ng'iroqlar daftari o'rniga real vaqtda so'rovlarni boshqarish shanba kunlarimizni ancha osonlashtirdi." }
+      {
+        "name": "Aziz",
+        "role": "Sartaroshxona egasi, Namangan",
+        "quote": "Jonli navbat va Telegram bandlarini bitta ekranga o'tkazish shanba kunlaridagi chalkashliklarni yo'qotdi. Kechki Z-hisobot ikki daqiqa oladi."
+      },
+      {
+        "name": "Malika",
+        "role": "Manikyur studiyasi asoschisi",
+        "quote": "Resepshndagi QR-stend tasodifiy mehmonlarni doimiy mijozga aylantiradi, avtomatik Telegram eslatmalari esa kelmay qolishlarni darhol kamaytirdi."
+      },
+      {
+        "name": "Sardor",
+        "role": "Doimiy mijoz, Namangan",
+        "quote": "Telegram ichida yigirma soniyada ustamni va bo'sh vaqtni tanlayman va salonda ko'rsatilgan aniq narxni to'layman."
+      }
     ]
   },
   "faq": {
-    "eyebrow": "Ko'p beriladigan savollar (FAQ)",
-    "title": "Barcha savollaringizga aniq javoblar",
-    "subtitle": "Navbat band qiluvchi mijozlar hamda SmartChair orqali o'z biznesini rivojlantirmoqchi bo'lgan salon egalari uchun muhim ma'lumotlar.",
+    "eyebrow": "Ko'p beriladigan savollar",
+    "title": "Boshlashdan oldin aniq javoblar",
+    "subtitle": "Navbat band qiluvchi mijozlar hamda SmartChair orqali kundalik ishini yuritadigan salon egalari uchun amaliy ma'lumotlar.",
     "tabs": {
       "customers": "Mijozlar uchun",
-      "businesses": "Biznes egalari uchun"
+      "businesses": "Salon egalari uchun"
     },
     "customers": [
       {
         "q": "SmartChair orqali qanday qilib navbat band qilaman?",
-        "a": "Telegram botimiz (@SmartChairNamanganbot) yoki mobil ilovamizni oching, ro'yxat yoki xaritadan o'zingizga yaqin sartaroshxona yoki go'zallik salonini tanlang, xizmat turi va ustani belgilab, bo'sh vaqt tugmasini bosing. So'rovingiz bir soniyada yuboriladi."
+        "a": "Telegram botimiz (@SmartChairNamanganbot) yoki veb-ilovamizni oching, ro'yxat yoki xaritadan o'zingizga yaqin sartaroshxona yoki go'zallik salonini tanlang, xizmat turi va ustani belgilab, bo'sh vaqt tugmasini bosing. So'rovingiz bir soniyada yuboriladi."
       },
       {
         "q": "SmartChair orqali navbat olish mijozlar uchun pullikmi?",
@@ -164,37 +240,37 @@
     "businesses": [
       {
         "q": "Sartaroshxonam yoki go'zallik salonimni SmartChairga qanday qo'shaman?",
-        "a": "Saytdagi 'Biznesni qo'shish' tugmasini bosib, qisqa so'rovnomani to'ldiring yoki to'g'ridan-to'g'ri +998 94 982 70 70 raqamiga qo'ng'iroq qiling. Jamoamiz 24 soat ichida saloningiz profilini, xizmatlar narxnomasi va ustalar jadvalini sozlab beradi."
+        "a": "Saytdagi 'Salonni ulash' tugmasini bosib, qisqa so'rovnomani to'ldiring yoki to'g'ridan-to'g'ri +998 94 982 70 70 raqamiga qo'ng'iroq qiling. Jamoamiz 24 soat ichida saloningiz profilini, xizmatlar narxnomasi va ustalar jadvalini sozlab beradi."
       },
       {
-        "q": "Nega biznes qo'shish tugmasi oddiy mijoz botiga emas, hamkorlik anketasiga olib o'tadi?",
-        "a": "Har bir sartaroshxona va salon uchun maxsus boshqaruv paneli (Admin Dashboard), ustalar ish grafigi va Telegram-nazorat boti individual tarzda ulab beriladi. Anketani to'ldirishingiz bilan mutaxassisimiz siz bilan bog'lanib, barchasini tayyorlab beradi."
+        "q": "Nega 'Salonni ulash' tugmasi oddiy mijoz botiga emas, hamkorlik anketasiga olib o'tadi?",
+        "a": "Har bir sartaroshxona va salon uchun maxsus boshqaruv paneli, kassa sozlamalari, ustalar ish grafigi va Telegram-nazorat boti individual tarzda ulab beriladi. Anketani to'ldirishingiz bilan mutaxassisimiz siz bilan bog'lanib, barchasini tayyorlab beradi."
       },
       {
         "q": "Ustalar yangi mijoz yozilganini qanday ko'rishadi?",
-        "a": "Mijoz vaqt band qilishi bilan saloningizning Telegram boshqaruv botiga hamda SmartChair Business paneliga ovozli xabar keladi. Usta birgina tugma bilan navbatni tasdiqlashi yoki joyida kelgan (walk-in) mijozni jadvalga kiritishi mumkin."
+        "a": "Mijoz vaqt band qilishi bilan saloningizning Telegram boshqaruv botiga hamda SmartChair Business paneliga xabar keladi. Usta birgina tugma bilan navbatni tasdiqlashi yoki joyida kelgan (walk-in) mijozni jadvalga kiritishi mumkin."
       },
       {
         "q": "SmartChair kelmay qoladigan mijozlar (no-show) sonini qanday kamaytiradi?",
-        "a": "Tizim har bir mijozga navbatidan oldin Telegram orqali avtomatik eslatma yuboradi hamda CRM bo'limida mijozning oldingi tashriflari tarixini ko'rsatadi. Bu band qilingan o'rinlar bo'sh qolishini 60% gacha qisqartiradi."
+        "a": "Tizim har bir mijozga navbatidan oldin Telegram orqali avtomatik eslatma yuboradi hamda CRM bo'limida mijozning oldingi tashriflari tarixini ko'rsatadi. Bu band qilingan o'rinlar bo'sh qolishini sezilarli darajada kamaytiradi."
       },
       {
         "q": "Salonda kompyuter bo'lishi shartmi?",
-        "a": "Mutlaqo shart emas. SmartChair Business boshqaruv paneli istalgan smartfon, planshet yoki kompyuterda mukammal ishlaydi."
+        "a": "Mutlaqo shart emas. SmartChair Business boshqaruv paneli, jonli navbat, kassa va foiz hisoboti istalgan smartfon, planshet yoki kompyuterda ishlaydi."
       },
       {
-        "q": "Har bir usta uchun alohida ish vaqti va dam olish kunlarini belgilasa bo'ladimi?",
-        "a": "Ha! Har bir mutaxassis uchun alohida xizmatlar, ish soatlari, tushlik tanaffusi va dam olish kunlarini kiritish mumkin. Mijozlarga faqat haqiqiy bo'sh vaqtlar ko'rinadi."
+        "q": "Har bir usta uchun alohida ish vaqti va foiz stavkasini belgilasa bo'ladimi?",
+        "a": "Ha. Har bir mutaxassis uchun alohida xizmatlar, ish soatlari, tushlik tanaffusi, dam olish kunlari va komissiya foizini kiritish mumkin. Mijozlarga faqat haqiqiy bo'sh vaqtlar ko'rinadi."
       }
     ],
-    "stillHaveQuestions": "Qo'shimcha savolingiz bormi yoki saloningiz uchun jonli taqdimot xohlaysizmi?",
+    "stillHaveQuestions": "Saloningiz uchun jonli taqdimot ko'rmoqchimisiz?",
     "callDirectly": "Qo'ng'iroq: +998 94 982 70 70",
     "applyPartner": "Hamkorlik so'rovini yuborish"
   },
   "partnerForm": {
-    "eyebrow": "Biznes Hamkorlik · B2B",
+    "eyebrow": "Biznes hamkorlik · B2B",
     "title": "Sartaroshxona yoki saloningizni SmartChairga qo'shing",
-    "subtitle": "Quyidagi qisqa anketani to'ldiring — mutaxassisimiz siz bilan bog'lanib, saloningiz sahifasi, ustalar jadvali va boshqaruv panelini sozlab beradi. Yoki hoziroq bizga qo'ng'iroq qiling!",
+    "subtitle": "Quyidagi qisqa anketani to'ldiring — mutaxassisimiz siz bilan bog'lanib, saloningiz sahifasi, ustalar jadvali va boshqaruv panelini sozlab beradi. Yoki hoziroq qo'ng'iroq qiling.",
     "modalTitle": "SmartChair bilan hamkor bo'ling",
     "modalSubtitle": "Biznesingiz ma'lumotlarini qoldiring — tez orada siz bilan bog'lanamiz yoki quyidagi raqamga to'g'ridan-to'g'ri qo'ng'iroq qiling.",
     "directContactTitle": "Hoziroq bog'lanmoqchimisiz?",
@@ -204,10 +280,10 @@
     "benefitsTitle": "SmartChair Business sizga nima beradi:",
     "benefits": [
       "24/7 onlayn navbat qabul qilish va Telegram bot integratsiyasi",
-      "Ustalar ish grafigi, tanaffuslar va jonli navbatni oson boshqarish",
-      "Mijozlarga avtomatik eslatmalar yuborish orqali bo'sh qolishlarni kamaytirish",
-      "Xarita va qidiruvda O'zbek, Rus va Ingliz tillarida ko'rinish",
-      "Bepul texnik sozlash va peshtaxtangiz uchun maxsus QR-kod stendi"
+      "Resepshn QR-navbati va yagona jonli kreslo jadvali",
+      "Payme, Click, terminal, naqd va Z-hisobotli kassa tizimi",
+      "Ustalar smenasi, foiz maosh hisobi va qaytaruvchi CRM",
+      "24 soatda bepul sozlash va peshtaxtangiz uchun QR-stend"
     ],
     "fields": {
       "businessName": "Biznes / Salon nomi",
@@ -240,20 +316,20 @@
     "submitting": "Yuborilmoqda...",
     "errorRequired": "Iltimos, biznes nomi, ismingiz va to'g'ri telefon raqamingizni kiriting.",
     "errorConsent": "Davom etish uchun shaxsiy ma'lumotlarni qayta ishlashga rozilik belgisini qo'ying.",
-    "successTitle": "So'rovingiz qabul qilindi!",
-    "successDesc": "Rahmat! Biznesingiz bo'yicha so'rov adminga yetkazildi. Tez orada ko'rsatilgan telefon raqamingizga bog'lanamiz. Hoziroq gaplashish uchun quyidagi raqamga qo'ng'iroq qilishingiz mumkin:",
+    "successTitle": "So'rovingiz qabul qilindi",
+    "successDesc": "Rahmat. Biznesingiz bo'yicha so'rov adminga yetkazildi. Tez orada ko'rsatilgan telefon raqamingizga bog'lanamiz. Hoziroq gaplashish uchun quyidagi raqamga qo'ng'iroq qilishingiz mumkin:",
     "submitAnother": "Yana so'rov yuborish",
     "closeModal": "Yopish"
   },
   "cta": {
-    "title": "Jadvalingizni to'ldirishga tayyormisiz?",
-    "subtitle": "Biznesingizni SmartChairga bepul qo'shing va bugundan Telegram orqali bandlar qabul qilishni boshlang.",
-    "ctaBusiness": "Biznesni qo'shish",
-    "ctaCustomer": "Men mijozman"
+    "title": "Tartibli va to'la salon boshqaruviga tayyormisiz?",
+    "subtitle": "Sartaroshxona yoki saloningizni 24 soatda bepul ulang, yoki navbat olish uchun Telegram ilovani oching.",
+    "ctaBusiness": "Salonni ulash",
+    "ctaCustomer": "Telegram ilovani ochish"
   },
   "footer": {
-    "tagline": "Sartaroshxona, salon, spa va go'zallik mutaxassislarini soniyalarda toping va band qiling — to'g'ridan-to'g'ri Telegramda. Ingliz, rus va o'zbek tillarida mavjud.",
-    "cta": "Biznesni qo'shish",
+    "tagline": "O'zbekiston sartaroshxona, go'zallik salonlari va spalari uchun Salon OS va 1-bosishda Telegram navbat olish platformasi.",
+    "cta": "Salonni ulash",
     "columns": {
       "product": "Mahsulot",
       "company": "Kompaniya",
@@ -262,8 +338,8 @@
     "links": {
       "features": "Imkoniyatlar",
       "howItWorks": "Qanday ishlaydi",
-      "forBusiness": "Biznes uchun",
-      "reviews": "Sharhlar",
+      "forBusiness": "Salon OS",
+      "reviews": "Fikrlar",
       "faq": "Ko'p beriladigan savollar",
       "about": "Biz haqimizda",
       "contact": "Hamkor bo'lish",
@@ -274,11 +350,11 @@
       "deleteAccount": "Hisob va ma'lumotlarni o'chirish"
     },
     "rights": "Barcha huquqlar himoyalangan.",
-    "madeFor": "O'zbekiston go'zallik va o'z-o'ziga g'amxo'rlik bizneslari uchun yaratilgan."
+    "madeFor": "O'zbekiston go'zallik va parvarish bizneslari uchun yaratilgan."
   },
   "lang": {
-    "en": "English",
-    "ru": "Русский",
-    "uz": "O'zbekcha"
+    "en": "EN",
+    "ru": "RU",
+    "uz": "UZ"
   }
 }
