@@ -3,7 +3,12 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { FOCUS_KEYS, SCENES } from "../content/scenes";
 import type { ScrollState } from "../lib/useScroll";
-import { projectAnchors, type SpatialWorldState } from "../lib/spatialWorld";
+import {
+  NICHE_LOOK_TARGETS,
+  OPS_LOOK_TARGETS,
+  projectAnchors,
+  type SpatialWorldState,
+} from "../lib/spatialWorld";
 
 /**
  * Piecewise-choreographed camera rig:
@@ -76,6 +81,8 @@ export function Rig({
   );
   const pos = useRef(new THREE.Vector3());
   const look = useRef(new THREE.Vector3());
+  const gazeLook = useRef(new THREE.Vector3());
+  const gazeAlpha = useRef(0);
   const fov = useRef(46);
   const focus = useRef(20);
 
@@ -125,6 +132,23 @@ export function Rig({
       const t2 = Math.min(1, (p - 0.40) / 0.60);
       curves.w2.getPointAt(t2, pos.current);
       curves.aim2.getPointAt(t2, look.current);
+
+      if (world?.current && !reduced) {
+        let targetArr: readonly [number, number, number] | null = null;
+        let desiredAlpha = 0;
+        if (p >= 0.41 && p <= 0.62) {
+          targetArr = NICHE_LOOK_TARGETS[world.current.selectedCategory] ?? null;
+          desiredAlpha = 0.28;
+        } else if (p >= 0.63 && p <= 0.84) {
+          targetArr = OPS_LOOK_TARGETS[world.current.selectedOpsModule] ?? null;
+          desiredAlpha = 0.30;
+        }
+        gazeAlpha.current += (desiredAlpha - gazeAlpha.current) * 0.05;
+        if (targetArr) {
+          gazeLook.current.set(targetArr[0], targetArr[1], targetArr[2]);
+          look.current.lerp(gazeLook.current, gazeAlpha.current);
+        }
+      }
     }
 
     const t = state.clock.elapsedTime;

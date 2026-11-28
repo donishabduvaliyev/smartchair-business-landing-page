@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { normalizeLang, STORY_CONTENT, type LangCode } from "../content/storyContent";
 
 export interface SEOOptions {
   title?: string;
@@ -8,21 +9,24 @@ export interface SEOOptions {
   ogImage?: string;
 }
 
-const DEFAULT_HOME_METADATA = {
+const DEFAULT_HOME_METADATA: Record<LangCode, { title: string; description: string; ogLocale: string }> = {
   uz: {
-    title: "SmartChair — Sartaroshxona va Go'zallik Salonlariga Online Navbat | smartchair.uz",
+    title: "SmartChair — Sartaroshxona va Salonlarga Online Navbat",
     description:
-      "SmartChair (smartchair.uz) — Namangan va O'zbekistondagi sartaroshxona, go'zallik salonlari, manikyur va spa markazlariga online navbat olish platformasi. 24/7 navbatsiz yozilish.",
+      "O'zbekiston va Namangandagi barbershop, sartaroshxona, go'zallik saloni va spa markazlariga 24/7 online navbat va salon boshqaruv tizimi.",
+    ogLocale: "uz_UZ",
   },
   ru: {
-    title: "SmartChair — Онлайн запись в барбершопы и салоны красоты в Намангане | smartchair.uz",
+    title: "SmartChair — Онлайн-запись в барбершопы и салоны",
     description:
-      "SmartChair — современная платформа для онлайн записи в барбершопы, парикмахерские и салоны красоты в Намангане и Узбекистане. Записывайтесь 24/7 без очередей.",
+      "Платформа онлайн-записи и управления для барбершопов, парикмахерских, нейл-студий и спа-салонов в Намангане и по всему Узбекистану.",
+    ogLocale: "ru_RU",
   },
   en: {
-    title: "SmartChair — Barbershop & Beauty Salon Online Booking in Uzbekistan | smartchair.uz",
+    title: "SmartChair — Barbershop & Salon Booking in Uzbekistan",
     description:
-      "SmartChair (smartchair.uz) — Book appointments 24/7 at top-rated barbershops, salons, spas, and wellness masters in Namangan and across Uzbekistan.",
+      "Online appointment booking and salon operations platform for barbershops, beauty salons, nail studios, and spas in Namangan and across Uzbekistan.",
+    ogLocale: "en_US",
   },
 };
 
@@ -36,25 +40,35 @@ function setMetaTag(selector: string, attrName: string, attrValue: string, conte
   el.setAttribute("content", content);
 }
 
+function setHreflangLink(hreflang: string, href: string) {
+  let link = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`);
+  if (!link) {
+    link = document.createElement("link");
+    link.setAttribute("rel", "alternate");
+    link.setAttribute("hreflang", hreflang);
+    document.head.appendChild(link);
+  }
+  link.setAttribute("href", href);
+}
+
 export function useSEO(options?: SEOOptions) {
   const { i18n } = useTranslation();
-  const lang = (i18n.language?.slice(0, 2) as "uz" | "ru" | "en") || "uz";
+  const lang = normalizeLang(i18n.language);
   const defaultMeta = DEFAULT_HOME_METADATA[lang] || DEFAULT_HOME_METADATA.uz;
 
   const title = options?.title || defaultMeta.title;
   const description = options?.description || defaultMeta.description;
   const canonicalPath = options?.canonicalPath ?? window.location.pathname;
-  const canonicalUrl = `https://smartchair.uz${canonicalPath === "/" ? "/" : canonicalPath}`;
+  const normalizedPath = canonicalPath === "/" ? "/" : canonicalPath;
+  const canonicalUrl = `https://smartchair.uz${normalizedPath}`;
   const ogImage = options?.ogImage || "https://smartchair.uz/og-image.png";
 
   useEffect(() => {
-    // 1. Title
     document.title = title;
+    document.documentElement.lang = lang;
 
-    // 2. Meta description
     setMetaTag('meta[name="description"]', "name", "description", description);
 
-    // 3. Canonical tag
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement("link");
@@ -63,19 +77,97 @@ export function useSEO(options?: SEOOptions) {
     }
     canonicalLink.setAttribute("href", canonicalUrl);
 
-    // 4. OpenGraph tags
+    // Sync hreflang alternates with sitemap.xml
+    setHreflangLink("x-default", canonicalUrl);
+    setHreflangLink("uz", `${canonicalUrl}?lang=uz`);
+    setHreflangLink("ru", `${canonicalUrl}?lang=ru`);
+    setHreflangLink("en", `${canonicalUrl}?lang=en`);
+
+    // Open Graph & Twitter
     setMetaTag('meta[property="og:title"]', "property", "og:title", title);
     setMetaTag('meta[property="og:description"]', "property", "og:description", description);
     setMetaTag('meta[property="og:url"]', "property", "og:url", canonicalUrl);
     setMetaTag('meta[property="og:image"]', "property", "og:image", ogImage);
+    setMetaTag('meta[property="og:locale"]', "property", "og:locale", defaultMeta.ogLocale);
 
-    // 5. Twitter Card tags
     setMetaTag('meta[name="twitter:title"]', "name", "twitter:title", title);
     setMetaTag('meta[name="twitter:description"]', "name", "twitter:description", description);
     setMetaTag('meta[name="twitter:url"]', "name", "twitter:url", canonicalUrl);
     setMetaTag('meta[name="twitter:image"]', "name", "twitter:image", ogImage);
 
-    // 6. html lang attribute
-    document.documentElement.lang = lang;
-  }, [title, description, canonicalUrl, ogImage, lang]);
+    // Sync structured JSON-LD @graph (truthful & matching rendered FAQ)
+    const jsonLdEl = document.getElementById("smartchair-jsonld");
+    if (jsonLdEl) {
+      const faqs = STORY_CONTENT[lang].act5.faqs;
+      const graph = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://smartchair.uz/#app",
+            name: "SmartChair",
+            alternateName: [
+              "smartchair.uz",
+              "Smart Chair Uzbekistan",
+              "SmartChair Sartaroshxona",
+              "SmartChair Барбершоп",
+            ],
+            applicationCategory: "LifestyleApplication",
+            operatingSystem: "Web, Telegram, iOS, Android",
+            url: "https://smartchair.uz",
+            description,
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "UZS",
+            },
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://smartchair.uz/#org",
+            name: "SmartChair",
+            url: "https://smartchair.uz",
+            logo: "https://smartchair.uz/favicon-512x512.png",
+            telephone: "+998949827070",
+            contactPoint: {
+              "@type": "ContactPoint",
+              telephone: "+998949827070",
+              contactType: "customer service",
+              areaServed: "UZ",
+              availableLanguage: ["Uzbek", "Russian", "English"],
+            },
+            sameAs: [
+              "https://t.me/SmartChairNamanganbot",
+              "https://instagram.com/_smartchair",
+            ],
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Namangan",
+              addressCountry: "UZ",
+            },
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://smartchair.uz/#website",
+            url: "https://smartchair.uz",
+            name: "SmartChair",
+            publisher: { "@id": "https://smartchair.uz/#org" },
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://smartchair.uz/#faq",
+            mainEntity: faqs.map((item) => ({
+              "@type": "Question",
+              name: item.q,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.a,
+              },
+            })),
+          },
+        ],
+      };
+      jsonLdEl.textContent = JSON.stringify(graph);
+    }
+  }, [title, description, canonicalUrl, ogImage, lang, defaultMeta.ogLocale]);
 }

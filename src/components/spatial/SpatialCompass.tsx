@@ -103,7 +103,7 @@ export function SpatialCompass({
           <span className="hidden sm:inline-flex">
             <SoundToggle tone={isClassical ? "light" : "dark"} />
           </span>
-          <LanguageSwitcher />
+          <LanguageSwitcher tone={isClassical ? "light" : "dark"} />
           <a
             href={TELEGRAM_URL}
             target="_blank"

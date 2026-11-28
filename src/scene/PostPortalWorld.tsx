@@ -6,7 +6,7 @@ import { FOG_FN, VERT_WORLD } from "./glsl";
 import { ClassicalMaleBust } from "./ClassicalBust";
 import { MuseumModel } from "./MuseumModel";
 import type { ScrollState } from "../lib/useScroll";
-import type { SpatialWorldState } from "../lib/spatialWorld";
+import type { OpsModuleId, SpatialWorldState } from "../lib/spatialWorld";
 
 const NICHES = [
   { key: "barber", label: "I · BARBER", pos: [-14.4, FLOOR_Y, -158] as [number, number, number], ry: Math.PI / 2, side: -1 },
@@ -148,9 +148,17 @@ function NicheSculpture({ kind }: { kind: (typeof NICHES)[number]["key"] }) {
     return <MuseumModel name="brass_vase_01" finish="bronze" position={[0, 3.25, 0.2]} height={2.85} />;
   }
   if (kind === "nails") {
-    return <MuseumModel name="ornate_mirror_01" finish="marble" position={[0, 3.25, 0.2]} height={2.95} />;
+    return <MuseumModel name="brass_goblets" finish="bronze" position={[0, 3.25, 0.2]} height={2.15} />;
   }
-  return <ClassicalMaleBust position={[0, 3.25, 0.25]} height={2.9} />;
+  return (
+    <MuseumModel
+      name="seadogs_compass"
+      finish="bronze"
+      position={[0, 3.35, 0.25]}
+      rotation={[0.45, 0, 0]}
+      height={1.85}
+    />
+  );
 }
 
 /**
@@ -172,6 +180,7 @@ export function PostPortalWorld({
   const hourHandRef = useRef<THREE.Mesh>(null);
   const minuteHandRef = useRef<THREE.Mesh>(null);
   const nicheMatRefs = useRef<(THREE.Group | null)[]>([]);
+  const opsMatRefs = useRef<(THREE.Group | null)[]>([]);
 
   const {
     floorMat,
@@ -184,7 +193,9 @@ export function PostPortalWorld({
     clockTex,
     friezeTex,
     watchPlaqueTex,
+    qrPlaqueTex,
     registerPlaqueTex,
+    codexPlaqueTex,
     pilasterZ,
   } = useMemo(() => {
     const fMat = new THREE.ShaderMaterial({
@@ -328,7 +339,9 @@ export function PostPortalWorld({
       clockTex: makeFloorClockTexture(maxAniso),
       friezeTex: makePlaqueTexture("ANNO MMXXVI // UZBEKISTAN", "SMARTCHAIR ATELIER", maxAniso),
       watchPlaqueTex: makePlaqueTexture("HOROLOGIUM", "Live Scheduling", maxAniso),
+      qrPlaqueTex: makePlaqueTexture("PORTA QR", "Walk-In Queue", maxAniso),
       registerPlaqueTex: makePlaqueTexture("THESAURUS", "Checkout & Z-Reports", maxAniso),
+      codexPlaqueTex: makePlaqueTexture("ARCHIVUM", "Client Codex", maxAniso),
       pilasterZ: pZ,
     };
   }, [maxAniso]);
@@ -339,9 +352,11 @@ export function PostPortalWorld({
       clockTex.dispose();
       friezeTex.dispose();
       watchPlaqueTex.dispose();
+      qrPlaqueTex.dispose();
       registerPlaqueTex.dispose();
+      codexPlaqueTex.dispose();
     };
-  }, [plaqueTextures, clockTex, friezeTex, watchPlaqueTex, registerPlaqueTex]);
+  }, [plaqueTextures, clockTex, friezeTex, watchPlaqueTex, qrPlaqueTex, registerPlaqueTex, codexPlaqueTex]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -352,6 +367,14 @@ export function PostPortalWorld({
       if (!grp) return;
       const isSelected = world.current?.selectedCategory === NICHES[idx].key;
       const targetS = isSelected ? 1.05 : 1.0;
+      grp.scale.lerp(new THREE.Vector3(targetS, targetS, targetS), 0.1);
+    });
+
+    const opsKeys: OpsModuleId[] = ["requests", "queue", "register", "crm"];
+    opsMatRefs.current.forEach((grp, idx) => {
+      if (!grp) return;
+      const isSelected = world.current?.selectedOpsModule === opsKeys[idx];
+      const targetS = isSelected ? 1.06 : 1.0;
       grp.scale.lerp(new THREE.Vector3(targetS, targetS, targetS), 0.1);
     });
 
@@ -534,8 +557,15 @@ export function PostPortalWorld({
         {/* Centerpiece Real 3D BarberShopChair_01 Beneath the Pantheon Oculus */}
         <MuseumModel name="BarberShopChair_01" finish="marble" position={[0, 0.72, 0]} height={4.4} />
 
-        {/* Flanking Platform Monuments: Vintage Pocket Watch (Scheduling) & Cash Register (Checkout) */}
-        <group position={[-6.4, 0, 2.4]} rotation={[0, 0.36, 0]}>
+        {/* 4 Purposeful Platform Monuments around the Master Barber Chair */}
+        <group
+          ref={(el) => { opsMatRefs.current[0] = el; }}
+          position={[-6.6, 0, 3.0]}
+          rotation={[0, 0.42, 0]}
+          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "requests"; }}
+          onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
+          onPointerOut={() => { document.body.style.cursor = ""; }}
+        >
           <mesh material={travertineMat} position={[0, 0.3, 0]}>
             <boxGeometry args={[2.2, 0.6, 2.0]} />
           </mesh>
@@ -549,7 +579,48 @@ export function PostPortalWorld({
           <MuseumModel name="vintage_pocket_watch" finish="bronze" position={[0, 2.72, 0]} rotation={[0.4, 0, 0]} height={2.05} />
         </group>
 
-        <group position={[6.4, 0, 2.4]} rotation={[0, -0.36, 0]}>
+        <group
+          ref={(el) => { opsMatRefs.current[1] = el; }}
+          position={[-6.6, 0, -3.4]}
+          rotation={[0, 0.72, 0]}
+          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "queue"; }}
+          onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
+          onPointerOut={() => { document.body.style.cursor = ""; }}
+        >
+          <mesh material={travertineMat} position={[0, 0.3, 0]}>
+            <boxGeometry args={[2.2, 0.6, 2.0]} />
+          </mesh>
+          <mesh material={carraraMat} position={[0, 1.65, 0]}>
+            <boxGeometry args={[1.7, 2.1, 1.5]} />
+          </mesh>
+          <mesh position={[0, 1.65, 0.77]}>
+            <planeGeometry args={[1.45, 0.54]} />
+            <meshBasicMaterial map={qrPlaqueTex} />
+          </mesh>
+          {/* Marble & Bronze Walk-In QR Obelisk */}
+          <mesh material={carraraMat} position={[0, 3.8, 0]}>
+            <boxGeometry args={[1.1, 2.2, 0.24]} />
+          </mesh>
+          {[-0.26, 0, 0.26].map((qx, xi) =>
+            [-0.26, 0, 0.26].map((qy, yi) => {
+              if ((xi + yi) % 2 === 1 && !(xi === 0 && yi === 2)) return null;
+              return (
+                <mesh key={`${xi}_${yi}`} material={bronzeMat} position={[qx, 3.85 + qy, 0.14]}>
+                  <boxGeometry args={[0.16, 0.16, 0.05]} />
+                </mesh>
+              );
+            })
+          )}
+        </group>
+
+        <group
+          ref={(el) => { opsMatRefs.current[2] = el; }}
+          position={[6.6, 0, 3.0]}
+          rotation={[0, -0.42, 0]}
+          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "register"; }}
+          onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
+          onPointerOut={() => { document.body.style.cursor = ""; }}
+        >
           <mesh material={travertineMat} position={[0, 0.3, 0]}>
             <boxGeometry args={[2.2, 0.6, 2.0]} />
           </mesh>
@@ -561,6 +632,27 @@ export function PostPortalWorld({
             <meshBasicMaterial map={registerPlaqueTex} />
           </mesh>
           <MuseumModel name="CashRegister_01" finish="bronze" position={[0, 2.72, 0]} height={2.15} />
+        </group>
+
+        <group
+          ref={(el) => { opsMatRefs.current[3] = el; }}
+          position={[6.6, 0, -3.4]}
+          rotation={[0, -0.72, 0]}
+          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "crm"; }}
+          onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
+          onPointerOut={() => { document.body.style.cursor = ""; }}
+        >
+          <mesh material={travertineMat} position={[0, 0.3, 0]}>
+            <boxGeometry args={[2.2, 0.6, 2.0]} />
+          </mesh>
+          <mesh material={carraraMat} position={[0, 1.65, 0]}>
+            <boxGeometry args={[1.7, 2.1, 1.5]} />
+          </mesh>
+          <mesh position={[0, 1.65, 0.77]}>
+            <planeGeometry args={[1.45, 0.54]} />
+            <meshBasicMaterial map={codexPlaqueTex} />
+          </mesh>
+          <MuseumModel name="binder_notebook" finish="marble" position={[0, 2.75, 0]} rotation={[0.35, 0, 0]} height={1.65} />
         </group>
       </group>
 

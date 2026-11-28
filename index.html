@@ -15,15 +15,19 @@
     <link rel="manifest" href="/site.webmanifest" />
     <meta
       name="description"
-      content="SmartChair (smartchair.uz) — Namangan va O'zbekistondagi sartaroshxona, go'zallik salonlari, manikyur va spa markazlariga online navbat olish platformasi. Онлайн запись в барбершопы, парикмахерские и салоны красоты в Намангане и Узбекистане. Discover and book barbershops & beauty salons."
+      content="O'zbekiston va Namangandagi barbershop, sartaroshxona, go'zallik saloni va spa markazlariga 24/7 online navbat va salon boshqaruv tizimi."
     />
     <meta
       name="keywords"
-      content="smartchair, smartchair uz, smartchair.uz, smart chair, sartaroshxona namangan, go'zallik saloni namangan, salon bron qilish, navbat olish, online navbat, sartarosh, sartaroshxona, ayollar saloni namangan, erkaklar sartaroshxonasi, барбершоп наманган, парикмахерская наманган, салон красоты наманган, онлайн запись барбершоп узбекистан, запись в салон, сартарошхона, сартарош, barbershop booking uzbekistan, telegram booking bot"
+      content="smartchair, smartchair.uz, sartaroshxona namangan, go'zallik saloni namangan, online navbat, барбершоп наманган, онлайн запись салон красоты узбекистан, barbershop booking uzbekistan"
     />
     <meta name="author" content="SmartChair" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://smartchair.uz/" />
+    <link rel="alternate" hreflang="x-default" href="https://smartchair.uz/" />
+    <link rel="alternate" hreflang="uz" href="https://smartchair.uz/?lang=uz" />
+    <link rel="alternate" hreflang="ru" href="https://smartchair.uz/?lang=ru" />
+    <link rel="alternate" hreflang="en" href="https://smartchair.uz/?lang=en" />
 
     <!-- Google Search Console Verification Token Hook (Replace with your actual GSC token) -->
     <meta name="google-site-verification" content="GOOGLE_VERIFICATION_CODE_PLACEHOLDER" />
@@ -59,7 +63,7 @@
     <meta name="twitter:image:alt" content="SmartChair — Sartaroshxona va Go'zallik Salonlariga Online Navbat" />
 
     <!-- Structured Data (JSON-LD) for Search Engines -->
-    <script type="application/ld+json">
+    <script id="smartchair-jsonld" type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
@@ -68,19 +72,15 @@
           "@id": "https://smartchair.uz/#app",
           "name": "SmartChair",
           "alternateName": [
-            "smartchair uz",
             "smartchair.uz",
-            "Smart Chair",
             "Smart Chair Uzbekistan",
             "SmartChair Sartaroshxona",
-            "SmartChair Барбершоп",
-            "Смартчеир",
-            "Смарт Чейр"
+            "SmartChair Барбершоп"
           ],
           "applicationCategory": "LifestyleApplication",
           "operatingSystem": "Web, Telegram, iOS, Android",
           "url": "https://smartchair.uz",
-          "description": "SmartChair (smartchair.uz) — O'zbekistondagi sartaroshxona, go'zallik salonlari va spa markazlariga online navbat olish platformasi. Онлайн запись в барбершопы, парикмахерские и салоны красоты в Намангане и Узбекистане.",
+          "description": "O'zbekiston va Namangandagi barbershop, sartaroshxona, go'zallik saloni va spa markazlariga 24/7 online navbat va salon boshqaruv tizimi.",
           "offers": {
             "@type": "Offer",
             "price": "0",
@@ -116,11 +116,6 @@
           "@id": "https://smartchair.uz/#website",
           "url": "https://smartchair.uz",
           "name": "SmartChair",
-          "alternateName": [
-            "smartchair uz",
-            "SmartChair Sartaroshxona",
-            "SmartChair Онлайн Запись"
-          ],
           "publisher": {
             "@id": "https://smartchair.uz/#org"
           }
@@ -134,31 +129,31 @@
               "name": "SmartChair orqali qanday qilib navbat band qilaman?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Telegram botimiz (@SmartChairNamanganbot) yoki saytimiz orqali yaqin sartaroshxona yoki go'zallik salonini tanlang, usta va vaqtni belgilab, tugmani bosing. So'rovingiz bir soniyada yuboriladi."
+                "text": "Telegram botimiz (@SmartChairNamanganbot) yoki veb-sayt orqali yaqin sartaroshxona yoxud go'zallik salonini tanlang, usta va bo'sh soatni belgilab so'rov yuboring."
               }
             },
             {
               "@type": "Question",
-              "name": "SmartChair orqali navbat olish mijozlar uchun pullikmi?",
+              "name": "Mijozlar uchun navbat olish pullikmi?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yo'q, mijozlar uchun SmartChair platformasidan foydalanish va navbat band qilish 100% bepul. Siz faqat ko'rsatilgan xizmat haqini bevosita salonda to'laysiz."
+                "text": "Yo'q. Mijozlar uchun SmartChair platformasi orqali qidirish va vaqt band qilish 100% bepul (0 so'm). To'lov faqat salonda ko'rsatilgan xizmat uchun amalga oshiriladi."
               }
             },
             {
               "@type": "Question",
-              "name": "Sartaroshxonam yoki go'zallik salonimni SmartChairga qanday qo'shaman?",
+              "name": "Sartaroshxonam yoki salonimni qanday ulayman?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Saytdagi 'Biznesni qo'shish' tugmasini bosib anketani to'ldiring yoki to'g'ridan-to'g'ri +998 94 982 70 70 raqamiga qo'ng'iroq qiling. Jamoamiz 24 soat ichida saloningiz profilini sozlab beradi."
+                "text": "Shu bo'limdagi ro'yxat formasini to'ldiring yoki +998 94 982 70 70 raqamiga qo'ng'iroq qiling. Jamoamiz 24 soat ichida saloningizni sozlab beradi."
               }
             },
             {
               "@type": "Question",
-              "name": "SmartChair kelmay qoladigan mijozlar (no-show) sonini qanday kamaytiradi?",
+              "name": "SmartChair tashriflarni eslatish va boshqarishda qanday yordam beradi?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Tizim har bir mijozga navbatidan oldin Telegram orqali avtomatik eslatma yuboradi hamda CRM bo'limida mijoz tashriflari tarixini ko'rsatadi. Bu band qilingan o'rinlar bo'sh qolishini 60% gacha qisqartiradi."
+                "text": "Platforma kelgan bronlarni bitta jadvalga yig'adi, walk-in QR navbat bilan sinxronlaydi hamda mijozlarga tashrifdan oldin avtomatik Telegram eslatmalarini yuboradi."
               }
             }
           ]
@@ -174,7 +169,7 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400;1,500;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <title>SmartChair — Sartaroshxona va Go'zallik Salonlariga Online Navbat | smartchair.uz</title>
+    <title>SmartChair — Sartaroshxona va Salonlarga Online Navbat</title>
   </head>
   <body>
     <!-- Crawlable semantic fallback for Search Engine Bots (Google, Yandex, Bing) -->

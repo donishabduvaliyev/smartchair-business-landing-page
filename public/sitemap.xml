@@ -4,7 +4,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://smartchair.uz/</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/" />
@@ -16,7 +16,7 @@
   <!-- Privacy Policy -->
   <url>
     <loc>https://smartchair.uz/privacy</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/privacy" />
@@ -28,7 +28,7 @@
   <!-- Terms of Service -->
   <url>
     <loc>https://smartchair.uz/terms</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/terms" />
@@ -40,7 +40,7 @@
   <!-- Refund Policy -->
   <url>
     <loc>https://smartchair.uz/refund</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/refund" />
@@ -52,7 +52,7 @@
   <!-- Account Deletion Request -->
   <url>
     <loc>https://smartchair.uz/delete-account</loc>
-    <lastmod>2026-10-27</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://smartchair.uz/delete-account" />
