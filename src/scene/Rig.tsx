@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { FOCUS_KEYS, SCENES } from "../content/scenes";
 import type { ScrollState } from "../lib/useScroll";
+import { projectAnchors, type SpatialWorldState } from "../lib/spatialWorld";
 
 /**
  * One unbroken take. The camera walks a curve at eye height while a
@@ -18,10 +19,10 @@ const FLIGHT = [
 ] as const;
 
 const AIM = [
-  [-3.6, -2.4, -12],   // the appointment book under the lamp
-  [-4.4, -2.8, -15],
-  [4.0, -2.0, -44],    // across to the waiting bench
-  [7.4, -3.4, -64],    // and the street window
+  [-3.2, -2.0, -12],   // the reception terminal & diary under the lamp
+  [-2.6, -1.6, -24],
+  [-1.6, -0.6, -68],   // lock onto the Hero Barber Chair pedestal
+  [-1.6, 0.8, -72],    // follow the levitating chair & particle burst
   [-4.0, 1.0, -116],   // the hall opens: mirrors down the left
   [-11.0, 1.4, -142],
   [-8.0, 0.2, -170],
@@ -31,8 +32,8 @@ const AIM = [
   [-7.0, -2.6, -292],
   [-5.6, 1.2, -334],   // one mirror, close
   [-5.8, 1.4, -352],
-  [0.0, -0.8, -394],   // the back room and its bare bulb
-  [-3.4, -1.2, -430],  // the pole
+  [0.0, -0.8, -394],   // the back room
+  [-3.4, -1.2, -430],  // reception dock & pole
   [-1.4, -1.6, -450],
   [0.0, -1.9, -466],   // the door
 ] as const;
@@ -54,14 +55,15 @@ const wob = (t: number, a: number, b: number, c: number) =>
   Math.sin(t * a) * 0.6 + Math.sin(t * b + 1.7) * 0.3 + Math.sin(t * c + 4.1) * 0.1;
 
 export function Rig({
-  scroll, pointer, reduced, focusRef,
+  scroll, pointer, reduced, focusRef, world,
 }: {
   scroll: React.RefObject<ScrollState>;
   pointer: React.RefObject<{ x: number; y: number; sx: number; sy: number }>;
   reduced: boolean;
   focusRef: React.RefObject<number>;
+  world?: React.RefObject<SpatialWorldState>;
 }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const curves = useMemo(
     () => ({
       flight: new THREE.CatmullRomCurve3(FLIGHT.map((p) => new THREE.Vector3(...p)), false, "catmullrom", 0.28),
@@ -116,6 +118,12 @@ export function Rig({
 
     focus.current += (focusAt(p) - focus.current) * 0.035;
     (focusRef as React.MutableRefObject<number>).current = focus.current;
+
+    if (world?.current) {
+      world.current.activeAct =
+        p < 0.16 ? 0 : p < 0.34 ? 1 : p < 0.58 ? 2 : p < 0.82 ? 3 : 4;
+      projectAnchors(camera, world.current, size.width, size.height);
+    }
   }, 0);
 
   return null;

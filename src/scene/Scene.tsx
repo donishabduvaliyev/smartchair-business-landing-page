@@ -4,11 +4,14 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Architecture } from "./Architecture";
 import { Furniture } from "./Furniture";
 import { Practicals, Mirrors, Pole, Door, Fan, Dust } from "./Fixtures";
+import { HeroChairPortal } from "./HeroChairPortal";
+import { SpatialTypography } from "./SpatialTypography";
 import { Rig } from "./Rig";
 import { Post } from "./Post";
 import { buildShop } from "./shop";
 import { FOG_COLOR, FOG_DENSITY } from "./constants";
 import type { ScrollState } from "../lib/useScroll";
+import type { SpatialWorldState } from "../lib/spatialWorld";
 
 // The look was authored before three enabled colour management by
 // default. Leaving it on re-interprets every literal colour and the
@@ -74,18 +77,20 @@ function dustBudget(base: number, tier: number) {
 }
 
 export function Scene({
-  scroll, pointer, reduced, onCriticalPerf, focusRef: externalFocusRef,
+  scroll, pointer, reduced, onCriticalPerf, focusRef: externalFocusRef, world, compact = false,
 }: {
   scroll: React.RefObject<ScrollState>;
   pointer: React.RefObject<{ x: number; y: number; sx: number; sy: number }>;
   reduced: boolean;
   onCriticalPerf: () => void;
   focusRef?: React.RefObject<number>;
+  world: React.RefObject<SpatialWorldState>;
+  compact?: boolean;
 }) {
   const shop = useMemo(() => buildShop(), []);
   const internalFocusRef = useRef(16);
   const focusRef = externalFocusRef ?? internalFocusRef;
-  const baseCount = useRef(window.innerWidth < 900 ? 2200 : 7000).current;
+  const baseCount = useRef(compact || window.innerWidth < 900 ? 1200 : 5200).current;
   const [tier, setTier] = useState(0);
   const count = dustBudget(baseCount, tier);
 
@@ -93,9 +98,9 @@ export function Scene({
     <Canvas
       id="stage"
       flat
-      dpr={[1, Math.min(window.devicePixelRatio || 1, 1.75)]}
+      dpr={[1, compact ? 1.25 : Math.min(window.devicePixelRatio || 1, 1.75)]}
       gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }}
-      camera={{ fov: 46, near: 0.5, far: 700, position: [0, 0.2, 14] }}
+      camera={{ fov: compact ? 54 : 46, near: 0.5, far: 700, position: [0, 0.2, 14] }}
       onCreated={({ gl, scene }) => {
         gl.setClearColor(0x05070a, 1);
         scene.fog = new THREE.FogExp2(FOG_COLOR.getHex(), FOG_DENSITY);
@@ -103,6 +108,8 @@ export function Scene({
     >
       <Architecture />
       <Furniture boxes={shop.boxes} cyls={shop.cyls} taps={shop.taps} />
+      <HeroChairPortal scroll={scroll} world={world} reduced={reduced} compact={compact} />
+      <SpatialTypography scroll={scroll} />
       <Mirrors items={shop.mirrors} />
       <Practicals items={shop.practicals} />
       <Fan at={shop.fanAt} />
@@ -110,7 +117,7 @@ export function Scene({
       <Door />
       <Dust count={count} />
 
-      <Rig scroll={scroll} pointer={pointer} reduced={reduced} focusRef={focusRef} />
+      <Rig scroll={scroll} pointer={pointer} reduced={reduced} focusRef={focusRef} world={world} />
       <Post focusRef={focusRef} reduced={reduced} />
       <PerfGuard onTierChange={setTier} onCritical={onCriticalPerf} />
     </Canvas>

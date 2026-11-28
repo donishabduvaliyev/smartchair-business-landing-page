@@ -29,7 +29,7 @@ export function SoundToggle() {
           <span className="w-[2px] h-1.5 bg-champagne rounded-full animate-[pulse_0.7s_ease-in-out_infinite_0.1s]" />
         </div>
       )}
-      <span className="text-[11px] font-mono tracking-wider uppercase text-white/60 group-hover:text-white/90">
+      <span className="hidden sm:inline text-[11px] font-mono tracking-wider uppercase text-white/60 group-hover:text-white/90">
         {muted ? "MUTE" : "AUDIO"}
       </span>
     </button>

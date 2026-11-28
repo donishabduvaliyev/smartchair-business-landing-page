@@ -9,15 +9,10 @@ import {
   usePointer,
   useScrollState,
 } from "../lib/useScroll";
-import { Hero } from "../components/Hero";
-import { CategoryStrip } from "../components/CategoryStrip";
-import { Features } from "../components/Features";
-import { BusinessOS } from "../components/BusinessOS";
-import { HowItWorks } from "../components/HowItWorks";
-import { Testimonials } from "../components/Testimonials";
-import { PartnerInquirySection } from "../components/PartnerInquirySection";
-import { FAQ } from "../components/FAQ";
-import { CTA } from "../components/CTA";
+import { createSpatialWorld, scrollToProgress } from "../lib/spatialWorld";
+import { SpatialCompass } from "../components/spatial/SpatialCompass";
+import { SpatialStageOverlay } from "../components/spatial/SpatialStageOverlay";
+import { MobileFilm } from "../components/ui/MobileFilm";
 
 export function Home() {
   useSEO({ canonicalPath: "/" });
@@ -25,13 +20,14 @@ export function Home() {
   const scroll = useScrollState();
   const pointer = usePointer();
   const focusRef = useRef(16);
+  const world = useRef(createSpatialWorld());
 
   const [reduced] = useState(prefersReducedMotion);
   const [handheld] = useState(isHandheld);
   const [tooWeak, setTooWeak] = useState(false);
   const audio = useAudio();
 
-  // Sync Navbar SoundToggle with 3D spatial salon audio
+  // Sync Navbar/Compass SoundToggle with 3D spatial salon audio
   useEffect(() => {
     return SoundController.subscribe((muted) => {
       const wantOn = !muted;
@@ -57,38 +53,40 @@ export function Home() {
     return () => cancelAnimationFrame(id);
   }, [scroll, audio]);
 
-  const show3DStage = !handheld && !reduced && !tooWeak;
+  if (reduced || tooWeak) {
+    return <MobileFilm />;
+  }
 
   return (
-    <>
-      {show3DStage && (
-        <div
-          aria-hidden="true"
-          className="pointer-events-none fixed inset-0 z-0 h-screen w-screen overflow-hidden"
-        >
-          <Scene
-            scroll={scroll}
-            pointer={pointer}
-            reduced={reduced}
-            focusRef={focusRef}
-            onCriticalPerf={() => setTooWeak(true)}
-          />
-          {/* Subtle atmospheric readability veil so foreground copy & cards pop */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#060608]/45 via-[#060608]/25 to-[#060608]/65" />
-        </div>
-      )}
-
-      <div className="relative z-10">
-        <Hero />
-        <CategoryStrip />
-        <Features />
-        <BusinessOS />
-        <HowItWorks />
-        <Testimonials />
-        <PartnerInquirySection />
-        <FAQ />
-        <CTA />
+    <div className="relative bg-[#060608] text-text">
+      {/* Full-Screen 3D World Stage */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 h-screen w-screen overflow-hidden"
+      >
+        <Scene
+          scroll={scroll}
+          pointer={pointer}
+          reduced={reduced}
+          focusRef={focusRef}
+          world={world}
+          compact={handheld}
+          onCriticalPerf={() => setTooWeak(true)}
+        />
       </div>
-    </>
+
+      {/* Minimal Persistent Spatial Compass */}
+      <SpatialCompass world={world} onConnectClick={() => scrollToProgress(0.96)} />
+
+      {/* Spatial World-Tethered Stage Overlays */}
+      <SpatialStageOverlay
+        scroll={scroll}
+        world={world}
+        onOpenConnect={() => scrollToProgress(0.96)}
+      />
+
+      {/* Scroll Runway driving the unbroken 3D journey */}
+      <div aria-hidden="true" className="relative z-10 h-[560vh] pointer-events-none" />
+    </div>
   );
 }

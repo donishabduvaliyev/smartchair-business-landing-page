@@ -214,10 +214,15 @@ export function buildShop(): Shop {
   cyl(C.WOOD2, 0, 2.2, -400, 0.05, 1.4);
   light(0, 1.0, -400, 0.8, 0.8, 0, 0xffd8a8, 9, 9);
 
-  /* ================= 08 THE WAY OUT ================================== */
-  cyl(0x22262a, -4.4, 1.9, -448, 0.78, 0.5);
-  cyl(0x22262a, -4.4, -3.9, -448, 0.78, 0.5);
-  light(-4.4, -1.0, -446.8, 1.3, 5.4, 0, 0xff9e4a, 7, 9);
+  /* ================= 08 RECEPTION FINALE & THE WAY OUT ================ */
+  cyl(C.DARK, -4.4, 1.9, -448, 0.78, 0.5);
+  cyl(C.DARK, -4.4, -3.9, -448, 0.78, 0.5);
+  light(-4.4, -1.0, -446.8, 1.3, 5.4, 0, 0xd4af5a, 7, 9);
+  // Illuminated walnut & champagne-brass reception desk at the finale dock
+  box(C.WOOD, 0.0, -5.1, -450, 6.2, 2.2, 2.4, 0);
+  box(C.WOOD2, 0.0, -3.95, -450, 6.5, 0.24, 2.7, 0);
+  box(C.CHROME, 0.0, -4.12, -448.72, 6.3, 0.08, 0.08, 0);
+  light(0.0, -4.18, -448.65, 5.8, 0.35, 0, 0xd4af5a, 8, 5);
   light(0, -1.9, END_Z + 1.4, 4.4, 8.6, 0, 0x86b6c4, 15, 14);   // daylight behind the door
 
   return {

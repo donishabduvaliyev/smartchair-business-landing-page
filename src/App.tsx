@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { PartnerApplicationModal } from "./components/PartnerApplicationModal";
 import { PartnerModalProvider } from "./context/PartnerModalContext";
 import { Home } from "./pages/Home";
 
@@ -21,8 +22,8 @@ function App() {
   return (
     <PartnerModalProvider>
       <Routes>
+        <Route path="/" element={<Home />} />
         <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
           <Route
             path="/privacy"
             element={
@@ -57,6 +58,7 @@ function App() {
           />
         </Route>
       </Routes>
+      <PartnerApplicationModal />
     </PartnerModalProvider>
   );
 }

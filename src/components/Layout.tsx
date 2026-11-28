@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
-import { PartnerApplicationModal } from "./PartnerApplicationModal";
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation();
@@ -38,7 +37,6 @@ export function Layout() {
       <div className="relative z-10">
         <Footer />
       </div>
-      <PartnerApplicationModal />
     </div>
   );
 }
