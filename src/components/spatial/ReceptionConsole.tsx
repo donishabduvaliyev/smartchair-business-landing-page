@@ -38,18 +38,18 @@ export function ReceptionConsole() {
 
   return (
     <div className="mx-auto flex w-full max-w-[1320px] flex-col justify-between gap-8 px-5 lg:flex-row lg:items-center lg:px-8">
-      {/* Left: Reception Desk Invitation, Direct Contact & Legal Links */}
-      <div className="max-w-md border-l border-t border-white/15 bg-black/45 p-6 backdrop-blur-md">
-        <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-[#d4af5a]">
+      {/* Left: Classical Concierge Invitation, Direct Contact & Legal Links */}
+      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto max-w-md border-l border-t border-[#8C6D46]/35 bg-[#FAF6EE]/88 p-6 backdrop-blur-md shadow-[0_20px_50px_rgba(44,34,20,0.08)]">
+        <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-[#7A5B34]">
           <Sparkles size={11} />
           <span>{c.eyebrow}</span>
         </p>
 
-        <h3 className="mt-2 font-editorial text-3xl italic text-[#f2efe9] sm:text-4xl drop-shadow-[0_2px_16px_rgba(0,0,0,0.9)]">
+        <h3 className="mt-2 font-editorial text-3xl italic text-[#1C1917] sm:text-4xl">
           {c.headline}
         </h3>
 
-        <p className="mt-3 text-sm leading-relaxed text-white/75 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+        <p className="mt-3 text-sm leading-relaxed text-[#4B433B]">
           {c.sub}
         </p>
 
@@ -57,7 +57,7 @@ export function ReceptionConsole() {
         <div className="mt-6 flex flex-wrap items-center gap-4 text-xs">
           <a
             href={PHONE_HREF}
-            className="inline-flex items-center gap-2 rounded-full border border-[#d4af5a]/40 bg-[#d4af5a]/10 px-3.5 py-1.5 font-mono text-[#d4af5a] transition-colors hover:bg-[#d4af5a]/20"
+            className="inline-flex items-center gap-2 rounded-full border border-[#8C6D46]/40 bg-[#8C6D46]/10 px-3.5 py-1.5 font-mono text-[#6E502B] transition-colors hover:bg-[#8C6D46]/20"
           >
             <Phone size={12} />
             <span>{PHONE_NUMBER}</span>
@@ -66,7 +66,7 @@ export function ReceptionConsole() {
             href={TELEGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-white/75 transition-colors hover:text-white"
+            className="font-mono text-[#4B433B] transition-colors hover:text-[#1C1917]"
           >
             {TELEGRAM_HANDLE}
           </a>
@@ -74,34 +74,34 @@ export function ReceptionConsole() {
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-white/75 transition-colors hover:text-white"
+            className="font-mono text-[#4B433B] transition-colors hover:text-[#1C1917]"
           >
             {INSTAGRAM_HANDLE}
           </a>
         </div>
 
         {/* Preserved Legal Navigation */}
-        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-white/10 pt-4 font-mono text-[10px] uppercase tracking-wider text-white/45">
-          <Link to="/privacy" className="transition-colors hover:text-white/85">
+        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[#1C1917]/12 pt-4 font-mono text-[10px] uppercase tracking-wider text-[#5C5349]">
+          <Link to="/privacy" className="transition-colors hover:text-[#1C1917]">
             {t("footer.privacy", "Privacy Policy")}
           </Link>
-          <Link to="/terms" className="transition-colors hover:text-white/85">
+          <Link to="/terms" className="transition-colors hover:text-[#1C1917]">
             {t("footer.terms", "Terms")}
           </Link>
-          <Link to="/refund" className="transition-colors hover:text-white/85">
+          <Link to="/refund" className="transition-colors hover:text-[#1C1917]">
             {t("footer.refund", "Refund")}
           </Link>
-          <Link to="/delete-account" className="transition-colors hover:text-white/85">
+          <Link to="/delete-account" className="transition-colors hover:text-[#1C1917]">
             {t("footer.deleteAccount", "Delete Account")}
           </Link>
         </div>
       </div>
 
-      {/* Right: Diegetic Architectural Reception Ledger */}
-      <div className="relative w-full max-w-[490px] shrink-0 border-l border-t border-[#d4af5a]/40 bg-black/55 p-5 sm:p-6 backdrop-blur-md max-h-[calc(100vh-112px)] overflow-y-auto">
+      {/* Right: Vellum & Bronze Architectural Partnership Ledger */}
+      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto relative w-full max-w-[490px] shrink-0 border-l border-t border-[#8C6D46]/45 bg-[#FAF6EE]/94 p-5 sm:p-6 backdrop-blur-md shadow-[0_24px_60px_rgba(44,34,20,0.12)] max-h-[calc(100vh-112px)] overflow-y-auto">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-[#d4af5a]/80 via-[#d4af5a]/30 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-[#8C6D46]/80 via-[#8C6D46]/30 to-transparent"
         />
         <PartnerFormBody compact variant="architectural" />
       </div>

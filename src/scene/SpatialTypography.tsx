@@ -9,12 +9,18 @@ interface InscriptionSpec {
   id: string;
   eyebrow: string;
   title: string;
+  tone: "salon" | "classical";
   position: [number, number, number];
   rotation: [number, number, number];
   scale: [number, number];
 }
 
-function makeSurfaceInscription(eyebrow: string, title: string, anisotropy: number) {
+function makeSurfaceInscription(
+  eyebrow: string,
+  title: string,
+  tone: "salon" | "classical",
+  anisotropy: number
+) {
   const canvas = document.createElement("canvas");
   canvas.width = 2048;
   canvas.height = 512;
@@ -24,16 +30,17 @@ function makeSurfaceInscription(eyebrow: string, title: string, anisotropy: numb
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.textAlign = "center";
 
-    // Thin brass architectural rule
-    ctx.fillStyle = "rgba(212, 175, 90, 0.55)";
+    const isClassical = tone === "classical";
+    // Thin architectural rule
+    ctx.fillStyle = isClassical ? "rgba(140, 109, 70, 0.72)" : "rgba(212, 175, 90, 0.55)";
     ctx.fillRect(724, 110, 600, 2);
 
     ctx.font = '500 32px "JetBrains Mono", monospace';
-    ctx.fillStyle = "rgba(212, 175, 90, 0.85)";
+    ctx.fillStyle = isClassical ? "rgba(122, 91, 52, 0.92)" : "rgba(212, 175, 90, 0.85)";
     ctx.fillText(eyebrow.toUpperCase(), 1024, 165);
 
     ctx.font = 'italic 400 124px "Cormorant Garamond", Georgia, serif';
-    ctx.fillStyle = "rgba(242, 239, 233, 0.82)";
+    ctx.fillStyle = isClassical ? "rgba(28, 25, 23, 0.86)" : "rgba(242, 239, 233, 0.82)";
     ctx.fillText(title, 1024, 325);
   }
 
@@ -53,8 +60,8 @@ function SurfacePlate({
   anisotropy: number;
 }) {
   const tex = useMemo(
-    () => makeSurfaceInscription(spec.eyebrow, spec.title, anisotropy),
-    [spec.eyebrow, spec.title, anisotropy]
+    () => makeSurfaceInscription(spec.eyebrow, spec.title, spec.tone, anisotropy),
+    [spec.eyebrow, spec.title, spec.tone, anisotropy]
   );
 
   useEffect(() => () => tex.dispose(), [tex]);
@@ -107,7 +114,8 @@ export function SpatialTypography(_props: {
         id: "floor-threshold",
         eyebrow: labels.floor1[0],
         title: labels.floor1[1],
-        position: [0, FLOOR_Y + 0.04, -36],
+        tone: "salon",
+        position: [0, FLOOR_Y + 0.04, -26],
         rotation: [-Math.PI / 2, 0, 0],
         scale: [12, 3.0],
       },
@@ -115,7 +123,8 @@ export function SpatialTypography(_props: {
         id: "floor-horizon",
         eyebrow: labels.floor2[0],
         title: labels.floor2[1],
-        position: [0, FLOOR_Y + 0.04, -126],
+        tone: "classical",
+        position: [0, FLOOR_Y + 0.04, -128],
         rotation: [-Math.PI / 2, 0, 0],
         scale: [18, 4.5],
       },

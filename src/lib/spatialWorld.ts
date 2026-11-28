@@ -9,6 +9,7 @@ export interface ProjectedAnchor {
 
 export interface SpatialWorldState {
   activeAct: number; // 0..4
+  dimension: "salon" | "classical";
   chairMorph: number; // 0..1 during Act II metamorphosis
   hoveredAnchor: string | null;
   selectedCategory: string;
@@ -18,8 +19,8 @@ export interface SpatialWorldState {
 export const WORLD_ANCHOR_POSITIONS: Record<string, [number, number, number]> = {
   threshold: [-3.2, -0.6, -12],
   chair: [0.0, 1.4, -74],
-  discovery: [-5.5, 2.2, -225],
-  operations: [-5.5, 1.2, -292],
+  discovery: [-6.5, 2.2, -210],
+  operations: [0.0, 2.8, -296],
   reception: [0.0, -0.8, -438],
 };
 
@@ -30,6 +31,7 @@ export function createSpatialWorld(): SpatialWorldState {
   });
   return {
     activeAct: 0,
+    dimension: "salon",
     chairMorph: 0,
     hoveredAnchor: null,
     selectedCategory: "barber",

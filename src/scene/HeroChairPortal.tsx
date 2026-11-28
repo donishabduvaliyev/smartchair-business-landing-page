@@ -123,7 +123,7 @@ export function HeroChairPortal({
 
   const count = compact ? PARTICLE_COUNT_MOBILE : PARTICLE_COUNT_DESKTOP;
 
-  const { geos, mats, particleGeo, particleMat } = useMemo(() => {
+  const { geos, mats, particleGeo, particleMat, mirrorMat } = useMemo(() => {
     const g = {
       baseTap: shade(new THREE.CylinderGeometry(1, 0.42, 1, 24)),
       cyl: shade(new THREE.CylinderGeometry(1, 1, 1, 18)),
@@ -260,14 +260,14 @@ export function HeroChairPortal({
             sin(angle) * radial - e * (3.0 + r1 * 6.0)
           );
 
-          // Phase 2: Converge into a centered rotating 3D Toroidal Portal Tunnel at z = -14 local (-88 world)
+          // Phase 2: Stream eroded chair particles forward into the Grand Barber Mirror at z = -22.6 local (-96.6 world)
           float pEase = uPortal * uPortal * (3.0 - 2.0 * uPortal);
-          float ringAng = r1 * 6.28318 + uTime * (0.55 + r3 * 0.45);
-          float ringRad = 3.1 + r2 * 2.1;
+          float ringAng = r1 * 6.28318 + uTime * (0.65 + r3 * 0.45);
+          float ringRad = 1.6 + r2 * 2.4;
           vec3 portalPos = vec3(
             cos(ringAng) * ringRad,
-            3.8 + sin(ringAng) * (ringRad * 0.78),
-            -14.0 + (r3 - 0.5) * 14.0
+            4.0 + sin(ringAng) * (ringRad * 1.15),
+            -22.6 + (1.0 - pEase) * 6.5 + (r3 - 0.5) * 3.0
           );
 
           vec3 finalPos = mix(burstPos, portalPos, pEase);
@@ -278,9 +278,9 @@ export function HeroChairPortal({
           gl_PointSize = clamp(size / max(-mv.z, 1.0), 1.5, 11.0);
 
           float fadeIn = smoothstep(0.01, 0.14, wave);
-          float fadeOut = 1.0 - smoothstep(0.85, 1.0, uPortal);
+          float fadeOut = 1.0 - smoothstep(0.84, 1.0, uPortal);
           vAlpha = fadeIn * fadeOut * (0.42 + 0.58 * r2);
-          vCol = mix(aColor, vec3(1.0, 0.90, 0.62), 0.45 * e + 0.35 * pEase);
+          vCol = mix(aColor, vec3(1.0, 0.94, 0.80), 0.42 * e + 0.45 * pEase);
         }
       `,
       fragmentShader: /* glsl */ `
@@ -295,11 +295,64 @@ export function HeroChairPortal({
       `,
     });
 
+    const mirrorMat = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      uniforms: {
+        uAwaken: { value: 0 },
+        uTime: { value: 0 },
+        uFogCol: { value: FOG_COLOR },
+        uFogDen: { value: FOG_DENSITY },
+      },
+      vertexShader: /* glsl */ `
+        varying vec2 vUv;
+        varying float vViewZ;
+        void main() {
+          vUv = uv;
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          vViewZ = -mv.z;
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: /* glsl */ `
+        uniform float uAwaken;
+        uniform float uTime;
+        uniform vec3 uFogCol;
+        uniform float uFogDen;
+        varying vec2 vUv;
+        varying float vViewZ;
+        void main() {
+          vec2 c = vUv - 0.5;
+          float d = length(c * vec2(1.0, 1.35));
+          float edge = min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y));
+          float bezel = smoothstep(0.055, 0.0, edge);
+
+          // Rest state: beveled barbershop mirror reflecting warm indoor highlights
+          vec3 glassCol = vec3(0.11, 0.13, 0.16)
+                        + vec3(0.32, 0.24, 0.14) * pow(max(1.0 - abs(vUv.y - 0.82) / 0.22, 0.0), 2.0)
+                        + vec3(0.83, 0.69, 0.35) * bezel * 1.1;
+
+          // Awakened state: concentric liquid-glass ripples & bright alabaster-gold daylight portal
+          float ripple = sin(d * 26.0 - uTime * 4.2) * 0.5 + 0.5;
+          float core = smoothstep(0.58 * (0.2 + uAwaken * 1.15), 0.02, d);
+          vec3 daylightCol = mix(vec3(0.92, 0.82, 0.62), vec3(0.99, 0.96, 0.90), core);
+          daylightCol += vec3(0.98, 0.88, 0.68) * ripple * 0.18 * uAwaken;
+
+          vec3 col = mix(glassCol, daylightCol, smoothstep(0.04, 0.82, uAwaken * (1.2 - d * 0.65)));
+          float f = 1.0 - exp(-uFogDen * uFogDen * vViewZ * vViewZ);
+          col = mix(col, uFogCol, clamp(f, 0.0, 1.0));
+          gl_FragColor = vec4(col, 0.98);
+        }
+      `,
+    });
+
     return {
       geos: g,
       mats: { chrome: mChrome, hide: mHide, dark: mDark },
       particleGeo: pGeo,
       particleMat: pMat,
+      mirrorMat,
     };
   }, [count]);
 
@@ -350,37 +403,48 @@ export function HeroChairPortal({
     particleMat.uniforms.uDissolve.value = dissolve;
     particleMat.uniforms.uPortal.value = portal;
     particleMat.uniforms.uTime.value = t;
+
+    const awaken = reduced ? 0 : smoothstep(0.18, 0.36, p);
+    mirrorMat.uniforms.uAwaken.value = awaken;
+    mirrorMat.uniforms.uTime.value = t;
   });
 
   return (
-    <group ref={groupRef} position={[0, FLOOR_Y, -74]}>
-      <group ref={baseRef}>
-        <mesh geometry={geos.baseTap} material={mats.chrome} position={[0, 0.3, 0]} scale={[2.0, 0.6, 2.0]} />
-        <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 0.75, 0]} scale={[1.15, 0.4, 1.15]} />
-        <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 1.7, 0]} scale={[0.48, 2.0, 0.48]} />
-        <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 1.1, -1.0]} rotation={[1.15, 0, 0]} scale={[0.1, 1.5, 0.1]} />
+    <group>
+      <group ref={groupRef} position={[0, FLOOR_Y, -74]}>
+        <group ref={baseRef}>
+          <mesh geometry={geos.baseTap} material={mats.chrome} position={[0, 0.3, 0]} scale={[2.0, 0.6, 2.0]} />
+          <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 0.75, 0]} scale={[1.15, 0.4, 1.15]} />
+          <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 1.7, 0]} scale={[0.48, 2.0, 0.48]} />
+          <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 1.1, -1.0]} rotation={[1.15, 0, 0]} scale={[0.1, 1.5, 0.1]} />
+        </group>
+
+        <group ref={seatRef}>
+          <mesh geometry={geos.box} material={mats.hide} position={[0, 2.95, 0]} scale={[3.0, 0.85, 3.0]} />
+          <mesh geometry={geos.box} material={mats.dark} position={[0, 2.45, 0]} scale={[3.2, 0.28, 3.2]} />
+          <mesh ref={armLRef} geometry={geos.box} material={mats.dark} position={[-1.6, 3.75, 0]} scale={[0.55, 0.38, 2.9]} />
+          <mesh ref={armRRef} geometry={geos.box} material={mats.dark} position={[1.6, 3.75, 0]} scale={[0.55, 0.38, 2.9]} />
+        </group>
+
+        <group ref={backRef}>
+          <mesh geometry={geos.box} material={mats.hide} position={[0, 4.75, -1.25]} rotation={[-0.16, 0, 0]} scale={[3.0, 3.5, 0.8]} />
+          <mesh geometry={geos.box} material={mats.dark} position={[0, 4.75, -1.42]} rotation={[-0.16, 0, 0]} scale={[3.2, 3.7, 0.22]} />
+          <mesh ref={headRef} geometry={geos.box} material={mats.hide} position={[0, 6.6, -1.62]} rotation={[-0.16, 0, 0]} scale={[1.7, 1.0, 0.7]} />
+        </group>
+
+        <group ref={footRef}>
+          <mesh geometry={geos.box} material={mats.chrome} position={[0, 1.45, 1.9]} rotation={[0.42, 0, 0]} scale={[1.7, 0.16, 1.1]} />
+          <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 1.05, 1.35]} rotation={[0.5, 0, 0]} scale={[0.09, 1.0, 0.09]} />
+        </group>
+
+        {/* 24,000 Surface-Sampled Erosion & Looking-Glass Particles */}
+        <points geometry={particleGeo} material={particleMat} frustumCulled={false} />
       </group>
 
-      <group ref={seatRef}>
-        <mesh geometry={geos.box} material={mats.hide} position={[0, 2.95, 0]} scale={[3.0, 0.85, 3.0]} />
-        <mesh geometry={geos.box} material={mats.dark} position={[0, 2.45, 0]} scale={[3.2, 0.28, 3.2]} />
-        <mesh ref={armLRef} geometry={geos.box} material={mats.dark} position={[-1.6, 3.75, 0]} scale={[0.55, 0.38, 2.9]} />
-        <mesh ref={armRRef} geometry={geos.box} material={mats.dark} position={[1.6, 3.75, 0]} scale={[0.55, 0.38, 2.9]} />
-      </group>
-
-      <group ref={backRef}>
-        <mesh geometry={geos.box} material={mats.hide} position={[0, 4.75, -1.25]} rotation={[-0.16, 0, 0]} scale={[3.0, 3.5, 0.8]} />
-        <mesh geometry={geos.box} material={mats.dark} position={[0, 4.75, -1.42]} rotation={[-0.16, 0, 0]} scale={[3.2, 3.7, 0.22]} />
-        <mesh ref={headRef} geometry={geos.box} material={mats.hide} position={[0, 6.6, -1.62]} rotation={[-0.16, 0, 0]} scale={[1.7, 1.0, 0.7]} />
-      </group>
-
-      <group ref={footRef}>
-        <mesh geometry={geos.box} material={mats.chrome} position={[0, 1.45, 1.9]} rotation={[0.42, 0, 0]} scale={[1.7, 0.16, 1.1]} />
-        <mesh geometry={geos.cyl} material={mats.chrome} position={[0, 1.05, 1.35]} rotation={[0.5, 0, 0]} scale={[0.09, 1.0, 0.09]} />
-      </group>
-
-      {/* 24,000 Surface-Sampled Erosion & Toroidal Portal Particles */}
-      <points geometry={particleGeo} material={particleMat} frustumCulled={false} />
+      {/* Grand Barber Looking-Glass Mirror Barrier at z = -96.6 */}
+      <mesh material={mirrorMat} position={[0, -0.4, -96.6]}>
+        <planeGeometry args={[7.8, 10.4]} />
+      </mesh>
     </group>
   );
 }

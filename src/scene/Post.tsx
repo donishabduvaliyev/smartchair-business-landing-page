@@ -2,19 +2,25 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { VERT_QUAD } from "./glsl";
+import type { ScrollState } from "../lib/useScroll";
+
+function smoothstep(e0: number, e1: number, x: number) {
+  const t = Math.min(Math.max((x - e0) / (e1 - e0), 0), 1);
+  return t * t * (3 - 2 * t);
+}
 
 /**
- * The film look. Four passes:
- *   1  scene  -> a render target that also keeps depth
- *   2  quarter-res horizontal blur, deliberately 2.6x wider than tall
- *   3  vertical blur, tighter — that ratio IS the anamorphic look
- *   4  composite: depth-of-field, bloom streaks, halation, grade,
- *      lens falloff, gate weave and 24fps grain
- *
- * This component takes over rendering: because it registers useFrame at
- * priority 1, react-three-fiber stops rendering the scene automatically.
+ * The film look + Looking-Glass Teleport Veil & Daylight Calibration.
  */
-export function Post({ focusRef, reduced }: { focusRef: React.RefObject<number>; reduced: boolean }) {
+export function Post({
+  focusRef,
+  reduced,
+  scroll,
+}: {
+  focusRef: React.RefObject<number>;
+  reduced: boolean;
+  scroll: React.RefObject<ScrollState>;
+}) {
   const { gl, scene, camera, size, viewport } = useThree();
   const dpr = viewport.dpr;
 
@@ -76,12 +82,14 @@ export function Post({ focusRef, reduced }: { focusRef: React.RefObject<number>;
         uFar: { value: (camera as THREE.PerspectiveCamera).far },
         uHasDepth: { value: hasDepth ? 1 : 0 },
         uExposure: { value: 1.38 },
+        uDaylight: { value: 0 },
+        uPortalVeil: { value: 0 },
         uWeave: { value: new THREE.Vector2(0, 0) },
       },
       vertexShader: VERT_QUAD,
       fragmentShader: /* glsl */ `
         uniform sampler2D tScene, tBlur, tDepth;
-        uniform float uTime, uFocus, uRange, uNear, uFar, uHasDepth, uExposure;
+        uniform float uTime, uFocus, uRange, uNear, uFar, uHasDepth, uExposure, uDaylight, uPortalVeil;
         uniform vec2 uRes, uWeave;
         varying vec2 vUv;
 
@@ -96,55 +104,63 @@ export function Post({ focusRef, reduced }: { focusRef: React.RefObject<number>;
           // the negative never sat perfectly still in the gate
           vec2 uv = vUv + uWeave;
 
-          // barrel + chromatic aberration, both growing from frame centre
+          // barrel + chromatic aberration + Looking-Glass radial liquid ripple during teleport
           vec2 c = uv - 0.5;
           float r2 = dot(c, c);
-          uv = 0.5 + c*(1.0 + r2*0.030);
-          float ca = 0.0016 + r2*0.0090;
+          float r = sqrt(r2);
+          float ripple = sin(r * 28.0 - uTime * 8.0) * 0.016 * uPortalVeil;
+          uv = 0.5 + c * (1.0 + r2 * 0.030 - ripple);
+          float ca = 0.0016 + r2 * 0.0090 + uPortalVeil * 0.010;
           vec3 col;
-          col.r = texture2D(tScene, 0.5 + (uv-0.5)*(1.0+ca)).r;
+          col.r = texture2D(tScene, 0.5 + (uv - 0.5) * (1.0 + ca)).r;
           col.g = texture2D(tScene, uv).g;
-          col.b = texture2D(tScene, 0.5 + (uv-0.5)*(1.0-ca)).b;
+          col.b = texture2D(tScene, 0.5 + (uv - 0.5) * (1.0 - ca)).b;
 
-          // subtle depth of field so the salon stays sharp and recognizable
+          // subtle depth of field
           vec3 blurred = texture2D(tBlur, uv).rgb;
           if(uHasDepth > 0.5){
             float ld  = linDepth(uv);
             float coc = clamp(abs(ld - uFocus)/uRange, 0.0, 1.0);
             coc = pow(coc, 1.35);
-            col = mix(col, blurred, coc*0.22);
+            col = mix(col, blurred, coc * mix(0.22, 0.12, uDaylight));
           }
 
-          // anamorphic bloom: clean champagne-ivory streak off bright practicals
+          // Adaptive bloom: strong warm streaks in dark barbershop, restrained highlights in daylight marble
+          float bloomThresh = mix(0.42, 0.92, uDaylight);
           vec3 bl = vec3(0.0);
           for(int i=-4; i<=4; i++){
             float o = float(i)*0.011;
             vec3 s = texture2D(tBlur, vec2(uv.x + o, uv.y)).rgb;
-            bl += max(s - 0.42, 0.0) * (1.0 - abs(float(i))*0.16);
+            bl += max(s - bloomThresh, 0.0) * (1.0 - abs(float(i))*0.16);
           }
           bl /= 6.0;
-          col += bl * vec3(1.10,0.92,0.62) * 1.1;
+          col += bl * vec3(1.10,0.92,0.62) * mix(1.1, 0.25, uDaylight);
 
-          // halation: warm champagne glow around fixtures
-          vec3 hot = max(texture2D(tBlur, uv).rgb - 0.56, 0.0);
-          col += hot * vec3(1.15,0.88,0.48) * 0.65;
+          vec3 hot = max(texture2D(tBlur, uv).rgb - mix(0.56, 0.95, uDaylight), 0.0);
+          col += hot * vec3(1.15,0.88,0.48) * mix(0.65, 0.14, uDaylight);
 
           col *= uExposure;
 
-          // clean luxury obsidian-champagne grade (no muddy green tint)
+          // Adaptive grade: salon obsidian-champagne vs sunlit Mediterranean marble
           float l = dot(col, vec3(0.2126,0.7152,0.0722));
-          col = col*vec3(1.04,1.00,0.95) + vec3(0.025,0.024,0.028)*(1.0 - smoothstep(0.0,0.55,l));
-          col = mix(vec3(l), col, 0.94);
-          col = (col*(2.51*col + 0.03))/(col*(2.43*col + 0.59) + 0.14);   // filmic
+          vec3 salonCol = col*vec3(1.04,1.00,0.95) + vec3(0.025,0.024,0.028)*(1.0 - smoothstep(0.0,0.55,l));
+          vec3 dayCol = col*vec3(1.01,0.99,0.96);
+          col = mix(salonCol, dayCol, uDaylight);
+          col = mix(vec3(l), col, mix(0.94, 1.0, uDaylight));
+          col = mix((col*(2.51*col + 0.03))/(col*(2.43*col + 0.59) + 0.14), col / (1.0 + col * 0.22), uDaylight);
 
-          // soft edge vignette so corners stay bright and clear
+          // soft edge vignette (brighter edges in Classical Atelier)
           vec2 v = (vUv - 0.5) * vec2(0.95, 1.10);
-          col *= mix(0.72, 1.0, smoothstep(0.92, 0.25, length(v)));
+          col *= mix(mix(0.72, 0.92, uDaylight), 1.0, smoothstep(0.92, 0.25, length(v)));
 
-          // grain lives in the midtones and dies in the blacks
+          // Looking-Glass alabaster-gold veil during mirror crossing
+          vec3 veilCol = vec3(0.98, 0.95, 0.89);
+          col = mix(col, veilCol, uPortalVeil * 0.88);
+
+          // grain lives in midtones and softens in daylight
           float lg = dot(col, vec3(0.2126,0.7152,0.0722));
           float g = hash(vUv*uRes + uTime*141.0) - 0.5;
-          col += g * 0.055 * smoothstep(0.0,0.32,lg) * (1.0 - smoothstep(0.55,1.0,lg));
+          col += g * mix(0.055, 0.022, uDaylight) * smoothstep(0.0,0.32,lg) * (1.0 - smoothstep(0.55,1.0,lg));
 
           gl_FragColor = vec4(max(col, 0.0), 1.0);
         }`,
@@ -181,17 +197,26 @@ export function Post({ focusRef, reduced }: { focusRef: React.RefObject<number>;
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
+    const p = scroll.current?.smooth ?? 0;
+    const daylight = smoothstep(0.35, 0.39, p);
+    const veilIn = smoothstep(0.32, 0.365, p);
+    const veilOut = 1.0 - smoothstep(0.365, 0.41, p);
+    const portalVeil = reduced ? 0 : Math.min(veilIn, veilOut);
+
     // gate weave and exposure flicker, quantised to 24fps so they read as film
     const ft = Math.floor(t * 24) / 24;
     postMat.uniforms.uTime.value = ft;
     postMat.uniforms.uFocus.value = focusRef.current ?? 16;
+    postMat.uniforms.uDaylight.value = daylight;
+    postMat.uniforms.uPortalVeil.value = portalVeil;
     postMat.uniforms.uWeave.value.set(
-      reduced ? 0 : (Math.sin(ft * 13.1) + Math.sin(ft * 7.7)) * 0.00035,
-      reduced ? 0 : (Math.sin(ft * 11.3) + Math.sin(ft * 5.9)) * 0.00028
+      reduced ? 0 : (Math.sin(ft * 13.1) + Math.sin(ft * 7.7)) * 0.00035 * (1 - daylight * 0.6),
+      reduced ? 0 : (Math.sin(ft * 11.3) + Math.sin(ft * 5.9)) * 0.00028 * (1 - daylight * 0.6)
     );
+    const baseExp = 1.38 + (1.02 - 1.38) * daylight;
     postMat.uniforms.uExposure.value = reduced
-      ? 1
-      : 1 + Math.sin(ft * 17.0) * 0.012 + Math.sin(ft * 3.1) * 0.008;
+      ? baseExp
+      : baseExp + Math.sin(ft * 17.0) * 0.010 + Math.sin(ft * 3.1) * 0.006;
 
     // 1 — scene, with depth
     gl.setRenderTarget(rtScene);

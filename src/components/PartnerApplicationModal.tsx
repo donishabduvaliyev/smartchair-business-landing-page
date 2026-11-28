@@ -43,10 +43,10 @@ const INPUT_WITH_ICON_CLASS =
   "w-full h-11 rounded-[10px] border border-hairline-strong bg-surface-2 pl-10 pr-3.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
 
 const ARCH_INPUT_CLASS =
-  "w-full h-10 border-b border-white/20 bg-transparent px-0 text-sm text-[#f2efe9] placeholder:text-white/35 transition-colors focus:border-[#d4af5a] focus:outline-none";
+  "w-full h-10 border-b border-[#1C1917]/20 bg-transparent px-0 text-sm text-[#1C1917] placeholder:text-[#1C1917]/40 transition-colors focus:border-[#8C6D46] focus:outline-none";
 
 const ARCH_INPUT_WITH_ICON_CLASS =
-  "w-full h-10 border-b border-white/20 bg-transparent pl-6 pr-0 text-sm text-[#f2efe9] placeholder:text-white/35 transition-colors focus:border-[#d4af5a] focus:outline-none";
+  "w-full h-10 border-b border-[#1C1917]/20 bg-transparent pl-6 pr-0 text-sm text-[#1C1917] placeholder:text-[#1C1917]/40 transition-colors focus:border-[#8C6D46] focus:outline-none";
 
 export function PartnerFormBody({
   onClose,
@@ -60,9 +60,9 @@ export function PartnerFormBody({
   const isArch = variant === "architectural";
   const inputCls = isArch ? ARCH_INPUT_CLASS : INPUT_CLASS;
   const inputWithIconCls = isArch ? ARCH_INPUT_WITH_ICON_CLASS : INPUT_WITH_ICON_CLASS;
-  const iconLeftCls = isArch ? "left-0.5 text-[#d4af5a]/70" : "left-3.5 text-text-muted";
+  const iconLeftCls = isArch ? "left-0.5 text-[#7A5B34]" : "left-3.5 text-text-muted";
   const labelCls = isArch
-    ? "mb-1 block font-mono text-[10px] uppercase tracking-[0.18em] text-[#d4af5a]/80"
+    ? "mb-1 block font-mono text-[10px] uppercase tracking-[0.18em] text-[#7A5B34]"
     : "mb-1.5 block text-xs font-medium text-text-secondary";
   const { t, i18n } = useTranslation();
   const reducedMotion = useReducedMotion();
@@ -202,15 +202,15 @@ export function PartnerFormBody({
       <div
         className={
           isArch
-            ? "flex flex-col justify-between gap-3 border-b border-white/15 pb-3.5 sm:flex-row sm:items-center"
+            ? "flex flex-col justify-between gap-3 border-b border-[#1C1917]/15 pb-3.5 sm:flex-row sm:items-center"
             : "flex flex-col justify-between gap-3 rounded-xl border border-hairline bg-surface-2 p-4 sm:flex-row sm:items-center"
         }
       >
         <div>
-          <p className={isArch ? "font-mono text-[11px] uppercase tracking-[0.14em] text-[#f2efe9]" : "text-xs font-medium text-text"}>
+          <p className={isArch ? "font-mono text-[11px] uppercase tracking-[0.14em] text-[#1C1917]" : "text-xs font-medium text-text"}>
             {t("partnerForm.directContactTitle")}
           </p>
-          <p className={isArch ? "mt-0.5 text-xs text-white/55" : "mt-0.5 text-xs text-text-secondary"}>
+          <p className={isArch ? "mt-0.5 text-xs text-[#4B433B]" : "mt-0.5 text-xs text-text-secondary"}>
             {t("partnerForm.directContactDesc")}
           </p>
         </div>
@@ -218,11 +218,11 @@ export function PartnerFormBody({
           href={PHONE_HREF}
           className={
             isArch
-              ? "inline-flex h-8 shrink-0 items-center justify-center gap-2 border border-[#d4af5a]/45 bg-[#d4af5a]/10 px-3 font-mono text-xs text-[#f3dca2] whitespace-nowrap transition-colors hover:border-[#d4af5a] hover:bg-[#d4af5a]/20"
+              ? "inline-flex h-8 shrink-0 items-center justify-center gap-2 border border-[#8C6D46]/50 bg-[#8C6D46]/10 px-3 font-mono text-xs text-[#5C4324] whitespace-nowrap transition-colors hover:border-[#8C6D46] hover:bg-[#8C6D46]/20"
               : "btn-secondary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[10px] px-3.5 text-xs font-medium whitespace-nowrap"
           }
         >
-          <Phone size={13} strokeWidth={1.5} className={isArch ? "text-[#d4af5a]" : "text-text-secondary"} />
+          <Phone size={13} strokeWidth={1.5} className={isArch ? "text-[#7A5B34]" : "text-text-secondary"} />
           {PHONE_NUMBER}
         </a>
       </div>
@@ -386,7 +386,7 @@ export function PartnerFormBody({
       <label
         className={
           isArch
-            ? "flex cursor-pointer items-start gap-3 border-l border-[#d4af5a]/35 bg-white/[0.02] px-3.5 py-2.5 text-xs leading-relaxed text-white/70"
+            ? "flex cursor-pointer items-start gap-3 border-l border-[#8C6D46]/45 bg-[#8C6D46]/[0.06] px-3.5 py-2.5 text-xs leading-relaxed text-[#4B433B]"
             : "flex cursor-pointer items-start gap-3 rounded-[10px] border border-hairline bg-surface-2 p-3.5 text-xs leading-relaxed text-text-secondary"
         }
       >
@@ -394,14 +394,18 @@ export function PartnerFormBody({
           type="checkbox"
           checked={consentAccepted}
           onChange={(e) => setConsentAccepted(e.target.checked)}
-          className="mt-0.5 h-4 w-4 shrink-0 rounded border-hairline-strong accent-text"
+          className="mt-0.5 h-4 w-4 shrink-0 rounded border-hairline-strong accent-[#7A5B34]"
         />
         <span>
           {t("partnerForm.consentPrefix")}
           <Link
             to="/privacy"
             onClick={onClose}
-            className="font-medium text-text underline decoration-white/25 underline-offset-2 transition-colors hover:decoration-white/60"
+            className={
+              isArch
+                ? "font-medium text-[#1C1917] underline decoration-[#8C6D46]/40 underline-offset-2 transition-colors hover:decoration-[#7A5B34]"
+                : "font-medium text-text underline decoration-white/25 underline-offset-2 transition-colors hover:decoration-white/60"
+            }
           >
             {t("partnerForm.consentPrivacyLink")}
           </Link>
@@ -409,7 +413,11 @@ export function PartnerFormBody({
           <Link
             to="/terms"
             onClick={onClose}
-            className="font-medium text-text underline decoration-white/25 underline-offset-2 transition-colors hover:decoration-white/60"
+            className={
+              isArch
+                ? "font-medium text-[#1C1917] underline decoration-[#8C6D46]/40 underline-offset-2 transition-colors hover:decoration-[#7A5B34]"
+                : "font-medium text-text underline decoration-white/25 underline-offset-2 transition-colors hover:decoration-white/60"
+            }
           >
             {t("partnerForm.consentTermsLink")}
           </Link>
@@ -428,7 +436,7 @@ export function PartnerFormBody({
         disabled={submitting}
         className={
           isArch
-            ? "flex h-11 w-full items-center justify-center gap-2 border border-[#d4af5a]/65 bg-[#d4af5a]/15 font-mono text-xs uppercase tracking-[0.2em] text-[#f3dca2] transition-all hover:border-[#d4af5a] hover:bg-[#d4af5a]/25 disabled:opacity-60"
+            ? "flex h-11 w-full items-center justify-center gap-2 border border-[#1C1917] bg-[#1C1917] font-mono text-xs uppercase tracking-[0.2em] text-[#F5EFE6] transition-all hover:bg-[#332D29] disabled:opacity-60"
             : "btn-primary flex h-11 w-full items-center justify-center gap-2 rounded-[10px] text-sm font-medium disabled:opacity-60"
         }
       >

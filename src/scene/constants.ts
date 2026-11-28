@@ -4,15 +4,17 @@ export const FLOOR_Y = -7;
 export const END_Z = -466;
 
 export const FOG_COLOR = new THREE.Color(0x0b0c10);
+export const ALABASTER_FOG = new THREE.Color(0xf5efe6);
 export const FOG_DENSITY = 0.006;
+export const ALABASTER_FOG_DENSITY = 0.0022;
 export const SODIUM = new THREE.Color(0xd4af5a);
 
 /** name, zStart, zEnd, halfWidth, ceilingY, floorKind, wallKind */
 export type Zone = [string, number, number, number, number, number, number];
 
 export const ZONES: Zone[] = [
-  ["reception", 14, -32, 7.0, 4.0, 0, 0],
-  ["waiting", -32, -102, 9.0, 6.0, 0, 0],
+  ["reception", 14, -30, 7.5, 4.6, 0, 0],
+  ["cutting", -30, -98, 12.5, 8.6, 1, 1],
   ["floor", -102, -178, 14.0, 11.0, 1, 1],
   ["capacity", -178, -252, 14.0, 11.0, 1, 1],
   ["wash", -252, -322, 8.0, 5.0, 2, 2],
@@ -50,4 +52,7 @@ export const C = {
   CLOTH: 0xcbd5e1,   // Crisp linen towels & appointment book
   CAB: 0x1f242d,     // Matte charcoal cabinetry
   BLOCK: 0x12141a,   // Architectural partition walls
+  CARRARA: 0xf3eee6, // Classical sunlit Carrara marble
+  TRAVERTINE: 0xe6dccb, // Warm Roman travertine
+  BRONZE: 0x8c6d46,  // Antique Renaissance bronze
 };

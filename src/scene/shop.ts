@@ -27,8 +27,38 @@ export function buildShop(): Shop {
     taps.push({ c, p: [x, y, z], r, h, ry, rx });
   const light = (x: number, y: number, z: number, w: number, h: number, ry: number, color: number, sw: number, sh: number) =>
     practicals.push({ p: [x, y, z], w, h, ry, color, sw, sh });
+  const mirror = (x: number, y: number, z: number, w: number, h: number, ry = 0) =>
+    mirrors.push({ p: [x, y, z], s: [w, h], ry });
 
-  /* ---- World 1 Threshold Portal Frame (z = -32) ---- */
+  /* ---- Barber chair & wall station helpers for the Hair-Cutting Floor ---- */
+  const chair = (x: number, z: number, yaw: number, recline = -0.16) => {
+    const cs = Math.cos(yaw), sn = Math.sin(yaw);
+    tap(C.CHROME, x, FLOOR_Y + 0.3, z, 2.0, 0.6);
+    cyl(C.CHROME, x, FLOOR_Y + 0.75, z, 1.15, 0.4);
+    cyl(C.CHROME, x, FLOOR_Y + 1.7, z, 0.48, 2.0);
+    cyl(C.CHROME, x + 1.0 * sn, FLOOR_Y + 1.1, z - 1.0 * cs, 0.1, 1.5, yaw, 1.15);
+    box(C.HIDE, x, FLOOR_Y + 2.95, z, 3.0, 0.85, 3.0, yaw);
+    box(C.DARK, x, FLOOR_Y + 2.45, z, 3.2, 0.28, 3.2, yaw);
+    box(C.HIDE, x - 1.25 * cs, FLOOR_Y + 4.75, z - 1.25 * sn, 3.0, 3.5, 0.8, yaw, recline);
+    box(C.DARK, x - 1.42 * cs, FLOOR_Y + 4.75, z - 1.42 * sn, 3.2, 3.7, 0.22, yaw, recline);
+    box(C.HIDE, x - 1.62 * cs, FLOOR_Y + 6.6, z - 1.62 * sn, 1.7, 1.0, 0.7, yaw, recline);
+    box(C.DARK, x - 1.6 * sn, FLOOR_Y + 3.75, z + 1.6 * cs, 0.55, 0.38, 2.9, yaw);
+    box(C.DARK, x + 1.6 * sn, FLOOR_Y + 3.75, z - 1.6 * cs, 0.55, 0.38, 2.9, yaw);
+    box(C.CHROME, x + 1.9 * cs, FLOOR_Y + 1.45, z + 1.9 * sn, 1.7, 0.16, 1.1, yaw, 0.42);
+    cyl(C.CHROME, x + 1.35 * cs, FLOOR_Y + 1.05, z + 1.35 * sn, 0.09, 1.0, yaw, 0.5);
+  };
+
+  const station = (z: number, wallX: number, side: number) => {
+    mirror(wallX + side * 0.22, 1.0, z, 4.2, 5.4, (side * Math.PI) / 2);
+    box(C.WOOD, wallX + side * 1.05, -2.7, z, 2.1, 0.28, 5.2);
+    box(C.WOOD2, wallX + side * 0.25, -4.4, z, 0.4, 3.2, 5.0);
+    for (let k = 0; k < 4; k++) {
+      cyl(C.GLASS, wallX + side * (1.05 + (k % 2) * 0.45), -2.1, z - 1.6 + k * 1.05, 0.16, 0.85 + (k % 3) * 0.3);
+    }
+    light(wallX + side * 0.5, 4.4, z, 0.5, 4.4, (side * Math.PI) / 2, 0xffd098, 9, 12);
+  };
+
+  /* ---- World 1 Threshold Portal Frame (z = -30) ---- */
   {
     const [, , z1, hw, cy] = ZONES[0];
     const [, , , nhw, ncy] = ZONES[1];
@@ -59,22 +89,27 @@ export function buildShop(): Shop {
   light(0, 3.2, -22, 1.6, 1.6, 0, 0xffe4b5, 16, 14);
   box(C.WOOD, 6.4, 0.6, -26, 0.4, 3.0, 1.6);
 
-  /* ================= 02 WAITING & PORTAL THRESHOLD ================= */
-  for (let i = 0; i < 3; i++) {
-    const z = -46 - i * 18;
-    box(C.WOOD, 7.6, -5.1, z, 2.2, 0.4, 9);
-    box(C.WOOD, 8.7, -3.9, z, 0.4, 2.4, 9);
-    cyl(C.WOOD, 7.6, -6.2, z - 3.6, 0.16, 1.6);
-    cyl(C.WOOD, 7.6, -6.2, z + 3.6, 0.16, 1.6);
-  }
-  box(C.WOOD, 5.0, -5.6, -70, 2.0, 0.25, 3.0);
-  box(C.CLOTH, 5.0, -5.4, -70, 1.1, 0.06, 1.5, 0.4);
-  box(C.CLOTH, 5.0, -5.3, -70.6, 1.0, 0.06, 1.4, -0.2);
-  cyl(C.WOOD2, -8.6, 2.6, -60, 1.5, 0.24, 0, Math.PI / 2);
-  light(8.9, 0.6, -52, 0.4, 8.0, -Math.PI / 2, 0x9fd0dc, 22, 20);
-  light(8.9, 0.6, -86, 0.4, 8.0, -Math.PI / 2, 0x9fd0dc, 22, 20);
-  light(0, 5.2, -66, 1.4, 1.4, 0, 0xffb066, 15, 15);
-  for (let f = 0; f < 5; f++) box(C.WOOD2, -8.85, 1.4 + (f % 3) * 0.7, -40 - f * 13, 0.16, 1.9, 1.4);
+  /* ================= 02 HAIR-CUTTING SALON FLOOR (z: -30 -> -98) ================= */
+  // Left & Right wall barber stations with illuminated mirrors, walnut counters & flanking chairs
+  [-46, -66, -84].forEach((z, i) => {
+    station(z, -12.5, 1);
+    chair(-8.4, z, -Math.PI / 2 + (i % 2 ? 0.14 : -0.10));
+
+    station(z, 12.5, -1);
+    chair(8.4, z, Math.PI / 2 + (i % 2 ? -0.12 : 0.14));
+  });
+
+  // Warm overhead salon pendant pools along the cutting aisle
+  [-44, -64, -84].forEach((z) => {
+    light(0, 7.6, z, 1.8, 1.8, 0, 0xffe0a3, 18, 18);
+  });
+
+  // Framed Classical Barber Mirror Pediment on the solid end-wall (z = -97.2)
+  box(C.WOOD, -4.3, 0.2, -97.2, 0.75, 14.4, 0.9);
+  box(C.WOOD, 4.3, 0.2, -97.2, 0.75, 14.4, 0.9);
+  box(C.WOOD2, 0, 5.2, -97.1, 9.6, 0.95, 1.0);
+  box(C.WOOD, 0, -5.8, -97.0, 9.4, 2.2, 1.1);
+  light(0, 4.4, -96.4, 6.8, 0.32, 0, 0xffe4b5, 14, 12);
 
   void tap;
 

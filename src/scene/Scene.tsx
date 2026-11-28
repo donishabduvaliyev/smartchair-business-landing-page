@@ -10,9 +10,44 @@ import { SpatialTypography } from "./SpatialTypography";
 import { Rig } from "./Rig";
 import { Post } from "./Post";
 import { buildShop } from "./shop";
-import { FOG_COLOR, FOG_DENSITY } from "./constants";
+import { ALABASTER_FOG, ALABASTER_FOG_DENSITY, FOG_COLOR, FOG_DENSITY } from "./constants";
 import type { ScrollState } from "../lib/useScroll";
 import type { SpatialWorldState } from "../lib/spatialWorld";
+
+const SALON_CLEAR = new THREE.Color(0x05070a);
+const DAY_CLEAR = new THREE.Color(0xf5efe6);
+
+function DimensionDirector({
+  scroll,
+  world1Ref,
+  world2Ref,
+}: {
+  scroll: React.RefObject<ScrollState>;
+  world1Ref: React.RefObject<THREE.Group | null>;
+  world2Ref: React.RefObject<THREE.Group | null>;
+}) {
+  const { gl, scene } = useThree();
+  const tmpColor = useMemo(() => new THREE.Color(), []);
+
+  useFrame(() => {
+    const p = scroll.current?.smooth ?? 0;
+    if (world1Ref.current) world1Ref.current.visible = p < 0.385;
+    if (world2Ref.current) world2Ref.current.visible = p > 0.345;
+
+    const t = Math.min(Math.max((p - 0.35) / 0.04, 0), 1);
+    const daylight = t * t * (3 - 2 * t);
+
+    tmpColor.copy(SALON_CLEAR).lerp(DAY_CLEAR, daylight);
+    gl.setClearColor(tmpColor, 1);
+
+    if (scene.fog && scene.fog instanceof THREE.FogExp2) {
+      scene.fog.color.copy(FOG_COLOR).lerp(ALABASTER_FOG, daylight);
+      scene.fog.density = FOG_DENSITY + (ALABASTER_FOG_DENSITY - FOG_DENSITY) * daylight;
+    }
+  });
+
+  return null;
+}
 
 // The look was authored before three enabled colour management by
 // default. Leaving it on re-interprets every literal colour and the
@@ -91,6 +126,8 @@ export function Scene({
   const shop = useMemo(() => buildShop(), []);
   const internalFocusRef = useRef(16);
   const focusRef = externalFocusRef ?? internalFocusRef;
+  const world1Ref = useRef<THREE.Group>(null);
+  const world2Ref = useRef<THREE.Group>(null);
   const baseCount = useRef(compact || window.innerWidth < 900 ? 1200 : 5200).current;
   const [tier, setTier] = useState(0);
   const count = dustBudget(baseCount, tier);
@@ -107,18 +144,26 @@ export function Scene({
         scene.fog = new THREE.FogExp2(FOG_COLOR.getHex(), FOG_DENSITY);
       }}
     >
-      <Architecture />
-      <Furniture boxes={shop.boxes} cyls={shop.cyls} taps={shop.taps} />
-      <HeroChairPortal scroll={scroll} world={world} reduced={reduced} compact={compact} />
-      <PostPortalWorld scroll={scroll} world={world} />
+      <DimensionDirector scroll={scroll} world1Ref={world1Ref} world2Ref={world2Ref} />
+
+      <group ref={world1Ref}>
+        <Architecture />
+        <Furniture boxes={shop.boxes} cyls={shop.cyls} taps={shop.taps} />
+        <HeroChairPortal scroll={scroll} world={world} reduced={reduced} compact={compact} />
+        <Mirrors items={shop.mirrors} />
+        <Practicals items={shop.practicals} />
+        <Fan at={shop.fanAt} />
+      </group>
+
+      <group ref={world2Ref} visible={false}>
+        <PostPortalWorld scroll={scroll} world={world} />
+      </group>
+
       <SpatialTypography scroll={scroll} />
-      <Mirrors items={shop.mirrors} />
-      <Practicals items={shop.practicals} />
-      <Fan at={shop.fanAt} />
       <Dust count={count} />
 
       <Rig scroll={scroll} pointer={pointer} reduced={reduced} focusRef={focusRef} world={world} />
-      <Post focusRef={focusRef} reduced={reduced} />
+      <Post focusRef={focusRef} reduced={reduced} scroll={scroll} />
       <PerfGuard onTierChange={setTier} onCritical={onCriticalPerf} />
     </Canvas>
   );

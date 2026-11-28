@@ -29,18 +29,18 @@ export function LogoMark({
 
 export function Logo({
   className,
-  tone: _tone,
+  tone = "dark",
 }: {
   className?: string;
   tone?: "dark" | "light";
 }) {
-  void _tone;
+  const ink = tone === "light" ? "text-[#1C1917]" : "text-text";
   return (
     <span className={cn("inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap", className)}>
-      <span className="h-7 w-7 shrink-0 text-text sm:h-8 sm:w-8">
+      <span className={cn("h-7 w-7 shrink-0 sm:h-8 sm:w-8", ink)}>
         <LogoMark />
       </span>
-      <span className="font-sans text-[17px] font-medium tracking-[-0.02em] text-text sm:text-lg">
+      <span className={cn("font-sans text-[17px] font-medium tracking-[-0.02em] sm:text-lg", ink)}>
         SmartChair
       </span>
     </span>

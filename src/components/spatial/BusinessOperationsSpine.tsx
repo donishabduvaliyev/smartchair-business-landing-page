@@ -172,25 +172,25 @@ export function BusinessOperationsSpine() {
 
   return (
     <div className="mx-auto flex w-full max-w-[1340px] flex-col justify-between gap-8 px-5 lg:flex-row lg:items-end lg:px-10">
-      {/* Left: Open Hairline Operations Index (no rounded card grid) */}
-      <div className="max-w-xl">
-        <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.24em] uppercase text-[#d4af5a]">
-          <span className="h-px w-6 bg-[#d4af5a]" />
+      {/* Left: Sunlit Vellum Hairline Operations Index */}
+      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto max-w-xl bg-[#FAF6EE]/84 p-5 sm:p-6 backdrop-blur-md border-l border-[#8C6D46]/35 shadow-[0_18px_45px_rgba(44,34,20,0.08)]">
+        <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.24em] uppercase text-[#7A5B34]">
+          <span className="h-px w-6 bg-[#8C6D46]" />
           <span>{c.eyebrow}</span>
         </div>
 
-        <h3 className="mt-2 font-sans text-3xl font-medium tracking-[-0.03em] text-[#f2efe9] sm:text-5xl drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
+        <h3 className="mt-2 font-sans text-3xl font-medium tracking-[-0.03em] text-[#1C1917] sm:text-5xl">
           {c.headline}{" "}
-          <span className="font-editorial italic font-normal text-[#d4af5a]">
+          <span className="font-editorial italic font-normal text-[#7A5B34]">
             {c.headlineAccent}
           </span>
         </h3>
 
-        <p className="mt-2.5 max-w-md text-sm leading-relaxed text-white/75 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+        <p className="mt-2.5 max-w-md text-sm leading-relaxed text-[#4B433B]">
           {c.sub}
         </p>
 
-        <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 border-t border-white/10 pt-4 sm:grid-cols-2">
+        <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-3 border-t border-[#1C1917]/12 pt-4 sm:grid-cols-2">
           {c.modules.map((mod) => {
             const active = activeKey === mod.key;
             return (
@@ -200,18 +200,18 @@ export function BusinessOperationsSpine() {
                 onClick={() => setActiveKey(mod.key)}
                 className={`border-l pl-3 text-left transition-all ${
                   active
-                    ? "border-[#d4af5a] opacity-100"
-                    : "border-white/15 opacity-55 hover:opacity-90"
+                    ? "border-[#7A5B34] opacity-100"
+                    : "border-[#1C1917]/15 opacity-60 hover:opacity-95"
                 }`}
               >
-                <div className="font-mono text-[10px] uppercase tracking-wider text-[#d4af5a]">
+                <div className="font-mono text-[10px] uppercase tracking-wider text-[#7A5B34]">
                   {mod.num} · {mod.anchor}
                 </div>
-                <div className="mt-0.5 text-xs font-medium text-white">
+                <div className="mt-0.5 text-xs font-medium text-[#1C1917]">
                   {mod.title}
                 </div>
                 {active && (
-                  <p className="mt-1 text-[11px] leading-relaxed text-white/65">
+                  <p className="mt-1 text-[11px] leading-relaxed text-[#4B433B]">
                     {mod.desc}
                   </p>
                 )}
@@ -221,26 +221,26 @@ export function BusinessOperationsSpine() {
         </div>
       </div>
 
-      {/* Right: Frameless Architectural Hairline Console */}
-      <div className="w-full max-w-[380px] shrink-0 border-l border-t border-[#d4af5a]/35 bg-black/45 p-4 backdrop-blur-md">
+      {/* Right: Frameless Vellum & Bronze Operations Console */}
+      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto w-full max-w-[380px] shrink-0 border-l border-t border-[#8C6D46]/40 bg-[#FAF6EE]/92 p-4 backdrop-blur-md shadow-[0_20px_50px_rgba(44,34,20,0.10)]">
         {activeKey === "requests" && (
           <div>
-            <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
-              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#d4af5a]">
+            <div className="flex items-center justify-between border-b border-[#1C1917]/12 pb-2.5">
+              <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-[#7A5B34]">
                 <CalendarClock size={13} />
                 <span>{c.demo.requestsTitle}</span>
               </div>
-              <span className="font-mono text-[10px] text-white/70">
+              <span className="font-mono text-[10px] text-[#4B433B]">
                 {requestState.toUpperCase()}
               </span>
             </div>
 
-            <div className="mt-3 border-b border-white/10 pb-3 text-xs">
-              <div className="flex justify-between font-medium text-white">
+            <div className="mt-3 border-b border-[#1C1917]/12 pb-3 text-xs">
+              <div className="flex justify-between font-medium text-[#1C1917]">
                 <span>15:00 · Barber Chair #2</span>
-                <span className="font-mono text-[#d4af5a]">Telegram</span>
+                <span className="font-mono text-[#7A5B34]">Telegram</span>
               </div>
-              <div className="mt-1 text-white/55">45 min slot · Shift verified</div>
+              <div className="mt-1 text-[#4B433B]">45 min slot · Shift verified</div>
             </div>
 
             {requestState === "pending" ? (
@@ -248,7 +248,7 @@ export function BusinessOperationsSpine() {
                 <button
                   type="button"
                   onClick={() => setRequestState("accepted")}
-                  className="inline-flex h-9 items-center justify-center gap-1.5 border border-[#d4af5a] bg-[#d4af5a]/15 font-mono text-[11px] uppercase tracking-wider text-[#d4af5a] hover:bg-[#d4af5a]/25"
+                  className="inline-flex h-9 items-center justify-center gap-1.5 border border-[#7A5B34] bg-[#8C6D46]/12 font-mono text-[11px] uppercase tracking-wider text-[#5C4324] hover:bg-[#8C6D46]/22"
                 >
                   <Check size={13} />
                   <span>{c.demo.accept}</span>
@@ -256,14 +256,14 @@ export function BusinessOperationsSpine() {
                 <button
                   type="button"
                   onClick={() => setRequestState("declined")}
-                  className="inline-flex h-9 items-center justify-center gap-1.5 border border-white/20 font-mono text-[11px] uppercase tracking-wider text-white/75 hover:border-white/40"
+                  className="inline-flex h-9 items-center justify-center gap-1.5 border border-[#1C1917]/20 font-mono text-[11px] uppercase tracking-wider text-[#4B433B] hover:border-[#1C1917]/40"
                 >
                   <X size={13} />
                   <span>{c.demo.decline}</span>
                 </button>
               </div>
             ) : (
-              <div className="mt-3 flex items-center justify-between border-l-2 border-[#d4af5a] pl-3 text-xs text-[#d4af5a]">
+              <div className="mt-3 flex items-center justify-between border-l-2 border-[#7A5B34] pl-3 text-xs text-[#5C4324]">
                 <span>{requestState === "accepted" ? c.demo.accepted : c.demo.declined}</span>
                 <button
                   type="button"
@@ -279,18 +279,18 @@ export function BusinessOperationsSpine() {
 
         {activeKey === "queue" && (
           <div>
-            <div className="flex items-center gap-2 border-b border-white/10 pb-2.5 font-mono text-[10px] uppercase tracking-wider text-[#d4af5a]">
+            <div className="flex items-center gap-2 border-b border-[#1C1917]/12 pb-2.5 font-mono text-[10px] uppercase tracking-wider text-[#7A5B34]">
               <QrCode size={13} />
               <span>{c.demo.queueTitle}</span>
             </div>
             <div className="mt-3 space-y-2 text-xs">
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-white">Online Booking · Schedule</span>
-                <span className="font-mono text-emerald-400">Synced</span>
+              <div className="flex justify-between border-b border-[#1C1917]/12 pb-2">
+                <span className="text-[#1C1917]">Online Booking · Schedule</span>
+                <span className="font-mono text-emerald-700">Synced</span>
               </div>
               <div className="flex justify-between pb-1">
-                <span className="text-white">Walk-In QR (`/waitlist/:shopId`)</span>
-                <span className="font-mono text-[#d4af5a]">Live Queue</span>
+                <span className="text-[#1C1917]">Walk-In QR (`/waitlist/:shopId`)</span>
+                <span className="font-mono text-[#7A5B34]">Live Queue</span>
               </div>
             </div>
           </div>
@@ -298,7 +298,7 @@ export function BusinessOperationsSpine() {
 
         {activeKey === "register" && (
           <div>
-            <div className="flex items-center gap-2 border-b border-white/10 pb-2.5 font-mono text-[10px] uppercase tracking-wider text-[#d4af5a]">
+            <div className="flex items-center gap-2 border-b border-[#1C1917]/12 pb-2.5 font-mono text-[10px] uppercase tracking-wider text-[#7A5B34]">
               <Receipt size={13} />
               <span>{c.demo.registerTitle}</span>
             </div>
@@ -306,7 +306,7 @@ export function BusinessOperationsSpine() {
               {["Cash (Naqd)", "Terminal", "Click", "Payme"].map((method) => (
                 <div
                   key={method}
-                  className="border-b border-white/15 py-1.5 font-mono text-[11px] text-white/85"
+                  className="border-b border-[#1C1917]/15 py-1.5 font-mono text-[11px] text-[#1C1917]"
                 >
                   {method}
                 </div>
@@ -317,18 +317,18 @@ export function BusinessOperationsSpine() {
 
         {activeKey === "crm" && (
           <div>
-            <div className="flex items-center gap-2 border-b border-white/10 pb-2.5 font-mono text-[10px] uppercase tracking-wider text-[#d4af5a]">
+            <div className="flex items-center gap-2 border-b border-[#1C1917]/12 pb-2.5 font-mono text-[10px] uppercase tracking-wider text-[#7A5B34]">
               <Users2 size={13} />
               <span>{c.demo.crmTitle}</span>
             </div>
             <div className="mt-3 space-y-2 text-xs">
-              <div className="flex justify-between border-b border-white/10 pb-2">
-                <span className="text-white">Pre-visit Telegram reminder</span>
-                <span className="font-mono text-[#d4af5a]">Automated</span>
+              <div className="flex justify-between border-b border-[#1C1917]/12 pb-2">
+                <span className="text-[#1C1917]">Pre-visit Telegram reminder</span>
+                <span className="font-mono text-[#7A5B34]">Automated</span>
               </div>
               <div className="flex justify-between pb-1">
-                <span className="text-white">Customer notes &amp; win-back</span>
-                <span className="font-mono text-emerald-400">Active</span>
+                <span className="text-[#1C1917]">Customer notes &amp; win-back</span>
+                <span className="font-mono text-emerald-700">Active</span>
               </div>
             </div>
           </div>
@@ -337,10 +337,10 @@ export function BusinessOperationsSpine() {
         <button
           type="button"
           onClick={() => scrollToProgress(0.97)}
-          className="mt-4 inline-flex w-full items-center justify-between border-t border-white/15 pt-3 font-mono text-[11px] uppercase tracking-wider text-white transition-colors hover:text-[#d4af5a]"
+          className="mt-4 inline-flex w-full items-center justify-between border-t border-[#1C1917]/15 pt-3 font-mono text-[11px] uppercase tracking-wider text-[#1C1917] transition-colors hover:text-[#7A5B34]"
         >
           <span>{c.cta}</span>
-          <ArrowRight size={14} className="text-[#d4af5a]" />
+          <ArrowRight size={14} className="text-[#7A5B34]" />
         </button>
       </div>
     </div>

@@ -71,7 +71,7 @@ export function SpatialStageOverlay({
         const outV = Math.min(1, Math.max(0, (0.63 - p) / 0.05));
         const v3 = Math.min(inV, outV);
         act3Ref.current.style.opacity = v3.toFixed(3);
-        act3Ref.current.style.pointerEvents = v3 > 0.35 ? "auto" : "none";
+        act3Ref.current.dataset.interactive = v3 > 0.35 ? "true" : "false";
         act3Ref.current.style.transform = `translate3d(0, ${((1 - v3) * 18).toFixed(1)}px, 0)`;
       }
 
@@ -93,7 +93,7 @@ export function SpatialStageOverlay({
         const outV = Math.min(1, Math.max(0, (0.86 - p) / 0.05));
         const v4 = Math.min(inV, outV);
         act4Ref.current.style.opacity = v4.toFixed(3);
-        act4Ref.current.style.pointerEvents = v4 > 0.35 ? "auto" : "none";
+        act4Ref.current.dataset.interactive = v4 > 0.35 ? "true" : "false";
         act4Ref.current.style.transform = `translate3d(0, ${((1 - v4) * 18).toFixed(1)}px, 0)`;
       }
 
@@ -113,7 +113,7 @@ export function SpatialStageOverlay({
       if (act5Ref.current) {
         const v5 = p > 0.83 ? Math.min(1, Math.max(0, (p - 0.83) / 0.06)) : 0;
         act5Ref.current.style.opacity = v5.toFixed(3);
-        act5Ref.current.style.pointerEvents = v5 > 0.35 ? "auto" : "none";
+        act5Ref.current.dataset.interactive = v5 > 0.35 ? "true" : "false";
         act5Ref.current.style.transform = `translate3d(0, ${((1 - v5) * 18).toFixed(1)}px, 0)`;
       }
 
@@ -218,24 +218,25 @@ export function SpatialStageOverlay({
         </div>
       </div>
 
-      {/* World-Projected Tether Tag on the Salon Mirror (Act III) */}
+      {/* World-Projected Tether Tag on the Grooming Art Plinth (Act III) */}
       <div
         ref={mirrorTagRef}
         style={{ opacity: 0 }}
         className="pointer-events-none absolute left-0 top-0 -translate-x-1/2 -translate-y-full pb-3 hidden md:block"
       >
-        <div className="flex items-center gap-2 rounded-full border border-[#d4af5a]/45 bg-[#08090c]/80 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#d4af5a] backdrop-blur-md">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#d4af5a]" />
-          <span>Salon Mirror · Specialist &amp; Slots</span>
+        <div className="flex items-center gap-2 rounded-full border border-[#8C6D46]/45 bg-[#FAF6EE]/92 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#6E502B] backdrop-blur-md shadow-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#8C6D46]" />
+          <span>Atelier Plinth · Specialist &amp; Slots</span>
         </div>
-        <div className="mx-auto h-6 w-px bg-gradient-to-b from-[#d4af5a]/70 to-transparent" />
+        <div className="mx-auto h-6 w-px bg-gradient-to-b from-[#8C6D46]/70 to-transparent" />
       </div>
 
       {/* Act III — Customer Discovery Atelier */}
       <div
         ref={act3Ref}
+        data-interactive="false"
         style={{ opacity: 0 }}
-        className="absolute inset-x-0 bottom-4 max-h-[calc(100vh-112px)] overflow-y-auto sm:bottom-10 lg:overflow-visible"
+        className="group pointer-events-none absolute inset-x-0 bottom-4 max-h-[calc(100vh-112px)] overflow-y-auto sm:bottom-10 lg:overflow-visible"
       >
         <DiscoveryAtelier world={world} />
       </div>
@@ -246,40 +247,42 @@ export function SpatialStageOverlay({
         style={{ opacity: 0 }}
         className="pointer-events-none absolute left-0 top-0 -translate-x-1/2 -translate-y-full pb-3 hidden md:block"
       >
-        <div className="flex items-center gap-2 rounded-full border border-[#d4af5a]/45 bg-[#08090c]/80 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#d4af5a] backdrop-blur-md">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#d4af5a]" />
-          <span>Operations · Schedule &amp; Register</span>
+        <div className="flex items-center gap-2 rounded-full border border-[#8C6D46]/45 bg-[#FAF6EE]/92 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#6E502B] backdrop-blur-md shadow-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#8C6D46]" />
+          <span>Vitruvian Horologium · Schedule &amp; Register</span>
         </div>
-        <div className="mx-auto h-6 w-px bg-gradient-to-b from-[#d4af5a]/70 to-transparent" />
+        <div className="mx-auto h-6 w-px bg-gradient-to-b from-[#8C6D46]/70 to-transparent" />
       </div>
 
       {/* Act IV — Business Operations Spine */}
       <div
         ref={act4Ref}
+        data-interactive="false"
         style={{ opacity: 0 }}
-        className="absolute inset-x-0 bottom-4 max-h-[calc(100vh-112px)] overflow-y-auto sm:bottom-10 lg:overflow-visible"
+        className="group pointer-events-none absolute inset-x-0 bottom-4 max-h-[calc(100vh-112px)] overflow-y-auto sm:bottom-10 lg:overflow-visible"
       >
         <BusinessOperationsSpine />
       </div>
 
-      {/* World-Projected Tether Tag at Reception Desk (Act V) */}
+      {/* World-Projected Tether Tag at Concierge Rostrum (Act V) */}
       <div
         ref={receptionTagRef}
         style={{ opacity: 0 }}
         className="pointer-events-none absolute left-0 top-0 -translate-x-1/2 -translate-y-full pb-3 hidden md:block"
       >
-        <div className="flex items-center gap-2 rounded-full border border-[#d4af5a]/45 bg-[#08090c]/80 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#d4af5a] backdrop-blur-md">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#d4af5a]" />
-          <span>Reception Desk · Partner Application</span>
+        <div className="flex items-center gap-2 rounded-full border border-[#8C6D46]/45 bg-[#FAF6EE]/92 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#6E502B] backdrop-blur-md shadow-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#8C6D46]" />
+          <span>Concierge Rostrum · Partner Ledger</span>
         </div>
-        <div className="mx-auto h-6 w-px bg-gradient-to-b from-[#d4af5a]/70 to-transparent" />
+        <div className="mx-auto h-6 w-px bg-gradient-to-b from-[#8C6D46]/70 to-transparent" />
       </div>
 
       {/* Act V — Illuminated Reception Desk Enquiry Console */}
       <div
         ref={act5Ref}
+        data-interactive="false"
         style={{ opacity: 0 }}
-        className="absolute inset-x-0 bottom-4 max-h-[calc(100vh-112px)] overflow-y-auto sm:bottom-6 lg:overflow-visible"
+        className="group pointer-events-none absolute inset-x-0 bottom-4 max-h-[calc(100vh-112px)] overflow-y-auto sm:bottom-6 lg:overflow-visible"
       >
         <ReceptionConsole />
       </div>

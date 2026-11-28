@@ -95,24 +95,24 @@ export function DiscoveryAtelier({
   return (
     <div className="mx-auto flex w-full max-w-[1340px] flex-col justify-between gap-8 px-5 lg:flex-row lg:items-end lg:px-10">
       {/* Left: Open Asymmetric Editorial Typography & Hairline 3-Beat Strip */}
-      <div className="max-w-xl">
-        <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.24em] uppercase text-[#d4af5a]">
-          <span className="h-px w-6 bg-[#d4af5a]" />
+      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto max-w-xl bg-[#FAF6EE]/82 p-5 sm:p-6 backdrop-blur-md border-l border-[#8C6D46]/35 shadow-[0_18px_45px_rgba(44,34,20,0.08)]">
+        <div className="flex items-center gap-3 font-mono text-[10px] tracking-[0.24em] uppercase text-[#7A5B34]">
+          <span className="h-px w-6 bg-[#8C6D46]" />
           <span>{c.eyebrow}</span>
         </div>
 
-        <h3 className="mt-2 font-sans text-3xl font-medium tracking-[-0.03em] text-[#f2efe9] sm:text-5xl drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
+        <h3 className="mt-2 font-sans text-3xl font-medium tracking-[-0.03em] text-[#1C1917] sm:text-5xl">
           {c.headline}{" "}
-          <span className="font-editorial italic font-normal text-[#d4af5a]">
+          <span className="font-editorial italic font-normal text-[#7A5B34]">
             {c.headlineAccent}
           </span>
         </h3>
 
-        <p className="mt-3 max-w-md text-sm leading-relaxed text-white/75 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+        <p className="mt-3 max-w-md text-sm leading-relaxed text-[#4B433B]">
           {c.sub}
         </p>
 
-        <div className="mt-5 space-y-2 border-l border-[#d4af5a]/35 pl-4">
+        <div className="mt-5 space-y-2 border-l border-[#8C6D46]/40 pl-4">
           {c.scenes.map((scene, idx) => {
             const active = activeBeat === idx;
             return (
@@ -121,15 +121,15 @@ export function DiscoveryAtelier({
                 type="button"
                 onClick={() => setActiveBeat(idx)}
                 className={`block w-full text-left transition-opacity ${
-                  active ? "opacity-100" : "opacity-50 hover:opacity-85"
+                  active ? "opacity-100" : "opacity-55 hover:opacity-90"
                 }`}
               >
                 <div className="flex items-baseline gap-3">
-                  <span className="font-mono text-[10px] text-[#d4af5a]">{scene.step}</span>
-                  <span className="text-sm font-medium text-white">{scene.title}</span>
+                  <span className="font-mono text-[10px] text-[#7A5B34]">{scene.step}</span>
+                  <span className="text-sm font-medium text-[#1C1917]">{scene.title}</span>
                 </div>
                 {active && (
-                  <p className="mt-0.5 pl-5 text-xs leading-relaxed text-white/70">
+                  <p className="mt-0.5 pl-5 text-xs leading-relaxed text-[#4B433B]">
                     {scene.desc}
                   </p>
                 )}
@@ -139,7 +139,7 @@ export function DiscoveryAtelier({
         </div>
 
         {/* Hairline Vertical Selector (zero pill bubbles) */}
-        <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-white/10 pt-3.5">
+        <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-[#1C1917]/12 pt-3.5">
           {DISCOVERY_VERTICALS.map((v) => {
             const active = selectedKey === v.key;
             return (
@@ -149,8 +149,8 @@ export function DiscoveryAtelier({
                 onClick={() => handleSelectCategory(v.key)}
                 className={`border-b pb-0.5 font-mono text-[10px] tracking-wider uppercase transition-all ${
                   active
-                    ? "border-[#d4af5a] text-[#d4af5a]"
-                    : "border-transparent text-white/50 hover:text-white"
+                    ? "border-[#7A5B34] text-[#7A5B34]"
+                    : "border-transparent text-[#1C1917]/55 hover:text-[#1C1917]"
                 }`}
               >
                 {t(`categories.${v.key}`)}
@@ -160,25 +160,25 @@ export function DiscoveryAtelier({
         </div>
       </div>
 
-      {/* Right: Frameless Sharp-Edge Photographic Plate (no rounded-2xl SaaS box) */}
-      <div className="w-full max-w-[350px] shrink-0 border-l border-t border-[#d4af5a]/30 bg-black/35 p-3 backdrop-blur-md">
+      {/* Right: Frameless Vellum & Bronze Photographic Plate */}
+      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto w-full max-w-[350px] shrink-0 border-l border-t border-[#8C6D46]/35 bg-[#FAF6EE]/90 p-3 backdrop-blur-md shadow-[0_20px_50px_rgba(44,34,20,0.10)]">
         <div className="relative h-28 w-full overflow-hidden sm:h-40">
           <img
             src={activeVertical.image}
             alt={t(`categories.${activeVertical.key}`)}
-            className="h-full w-full object-cover opacity-90 transition-transform duration-700 hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-          <span className="absolute bottom-2 left-3 font-mono text-[10px] tracking-widest uppercase text-[#d4af5a]">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1C1917]/75 via-transparent to-transparent" />
+          <span className="absolute bottom-2 left-3 font-mono text-[10px] tracking-widest uppercase text-[#F5EFE6]">
             {t(`categories.${activeVertical.key}`)} · 0 UZS FEE
           </span>
         </div>
 
-        <div className="mt-3 flex items-center justify-between border-b border-white/10 pb-2.5 text-xs text-white/80">
+        <div className="mt-3 flex items-center justify-between border-b border-[#1C1917]/12 pb-2.5 text-xs text-[#1C1917]">
           <span className="inline-flex items-center gap-2">
-            {activeBeat === 0 && <Compass size={13} className="text-[#d4af5a]" />}
-            {activeBeat === 1 && <Scissors size={13} className="text-[#d4af5a]" />}
-            {activeBeat === 2 && <CalendarCheck size={13} className="text-[#d4af5a]" />}
+            {activeBeat === 0 && <Compass size={13} className="text-[#7A5B34]" />}
+            {activeBeat === 1 && <Scissors size={13} className="text-[#7A5B34]" />}
+            {activeBeat === 2 && <CalendarCheck size={13} className="text-[#7A5B34]" />}
             <span>{c.scenes[activeBeat].title}</span>
           </span>
         </div>
@@ -187,10 +187,10 @@ export function DiscoveryAtelier({
           href={TELEGRAM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-flex w-full items-center justify-between font-mono text-[11px] tracking-wider uppercase text-white transition-colors hover:text-[#d4af5a]"
+          className="mt-3 inline-flex w-full items-center justify-between font-mono text-[11px] tracking-wider uppercase text-[#1C1917] transition-colors hover:text-[#7A5B34]"
         >
           <span>{c.cta}</span>
-          <ArrowUpRight size={14} className="text-[#d4af5a]" />
+          <ArrowUpRight size={14} className="text-[#7A5B34]" />
         </a>
       </div>
     </div>

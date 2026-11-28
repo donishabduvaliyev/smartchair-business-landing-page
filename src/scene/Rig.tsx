@@ -91,38 +91,38 @@ export function Rig({
     const p = Math.min(Math.max(s.smooth, 0), 1);
 
     if (p < 0.14) {
-      // Act I: Smooth walk down reception aisle toward center-stage chair
+      // Act I: Walk through Reception into Hair-Cutting Salon Floor
       const t1 = p / 0.14;
       curves.w1.getPointAt(t1, pos.current);
       look.current.set(0.0, -1.6 + t1 * 0.4, -74);
-    } else if (p < 0.34) {
-      // Act II Hold: Orbital arc inside the +/-9m corridor centered on Hero Chair [0, -2.5, -74]
-      const tOrbit = (p - 0.14) / 0.20;
+    } else if (p < 0.33) {
+      // Act II Hold: Orbital arc inside +/-12.5m Hair-Cutting Floor framing Hero Chair & Mirror
+      const tOrbit = (p - 0.14) / 0.19;
       const eased = tOrbit * tOrbit * (3 - 2 * tOrbit);
-      const angle = -0.25 + eased * 0.72; // max x ~ 4.3m, safely inside +/-9m walls
-      const radius = 11.5 - eased * 2.0;
+      const angle = -0.25 + eased * 0.68;
+      const radius = 12.0 - eased * 1.8;
       pos.current.set(
         Math.sin(angle) * radius,
         0.0 + Math.sin(eased * Math.PI) * 0.65,
         -74 + Math.cos(angle) * radius
       );
-      look.current.set(0.0, -1.8 + eased * 1.1, -74 - eased * 6);
-    } else if (p < 0.42) {
-      // Portal Fly-Through: Push from orbit straight through toroidal vortex at z=-88 to z=-108
-      const tFly = (p - 0.34) / 0.08;
+      look.current.set(0.0, -1.5 + eased * 1.1, -80 - eased * 16);
+    } else if (p < 0.40) {
+      // Looking-Glass Mirror Teleport: Surge straight through z = -96.6 into World 2
+      const tFly = (p - 0.33) / 0.07;
       const eased = tFly * tFly * (3 - 2 * tFly);
-      const startAngle = -0.25 + 0.72;
-      const sx = Math.sin(startAngle) * 9.5;
-      const sz = -74 + Math.cos(startAngle) * 9.5;
+      const startAngle = -0.25 + 0.68;
+      const sx = Math.sin(startAngle) * 10.2;
+      const sz = -74 + Math.cos(startAngle) * 10.2;
       pos.current.set(
         sx * (1 - eased),
         0.0 + (1 - eased) * 0.15 + eased * 0.2,
         sz + (-108 - sz) * eased
       );
-      look.current.set(0.0, -0.7 * (1 - eased), -80 - eased * 65);
+      look.current.set(0.0, -0.4 * (1 - eased), -96 - eased * 50);
     } else {
-      // World 2 Horizon: 0.42 -> 1.00
-      const t2 = Math.min(1, (p - 0.42) / 0.58);
+      // World 2 Sunlit Classical Atelier: 0.40 -> 1.00
+      const t2 = Math.min(1, (p - 0.40) / 0.60);
       curves.w2.getPointAt(t2, pos.current);
       curves.aim2.getPointAt(t2, look.current);
     }
@@ -158,7 +158,8 @@ export function Rig({
 
     if (world?.current) {
       world.current.activeAct =
-        p < 0.14 ? 0 : p < 0.40 ? 1 : p < 0.62 ? 2 : p < 0.84 ? 3 : 4;
+        p < 0.14 ? 0 : p < 0.39 ? 1 : p < 0.62 ? 2 : p < 0.84 ? 3 : 4;
+      world.current.dimension = p >= 0.37 ? "classical" : "salon";
       projectAnchors(camera, world.current, size.width, size.height);
     }
   }, 0);

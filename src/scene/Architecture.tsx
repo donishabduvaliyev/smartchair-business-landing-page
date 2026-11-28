@@ -94,7 +94,7 @@ export function Architecture() {
 
   return (
     <group>
-      {/* World 1 Physical Barbershop Corridor (Zones 0 & 1: z +14 -> -102) */}
+      {/* World 1 Physical Barbershop: Reception & Hair-Cutting Floor (z +14 -> -98) */}
       {ZONES.slice(0, 2).map(([name, z0, z1, hw, cy, fk, wk]) => {
         const len = Math.abs(z1 - z0), mid = (z0 + z1) / 2;
         return (
@@ -114,6 +114,13 @@ export function Architecture() {
           </group>
         );
       })}
+      {/* Solid End-Wall Barrier at z = -98 completely sealing off World 1 */}
+      <mesh
+        geometry={planeGeo}
+        material={wallMats[0]}
+        position={[0, (8.6 + FLOOR_Y) / 2, -98]}
+        scale={[25, 8.6 - FLOOR_Y, 1]}
+      />
     </group>
   );
 }
