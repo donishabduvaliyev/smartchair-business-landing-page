@@ -29,13 +29,15 @@ function ScrollToTop() {
 
 export function Layout() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-bg text-text">
+    <div className="min-h-screen overflow-x-hidden text-text">
       <ScrollToTop />
       <Navbar />
-      <main>
+      <main className="relative z-10">
         <Outlet />
       </main>
-      <Footer />
+      <div className="relative z-10">
+        <Footer />
+      </div>
       <PartnerApplicationModal />
     </div>
   );

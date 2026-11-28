@@ -8,6 +8,7 @@ import { cn } from "../lib/utils";
 import { TELEGRAM_URL } from "../lib/constants";
 import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { SoundToggle } from "./SoundToggle";
 
 export function Navbar() {
   const { t } = useTranslation();
@@ -58,6 +59,7 @@ export function Navbar() {
         </div>
 
         <div className="hidden shrink-0 items-center gap-3 lg:flex">
+          <SoundToggle />
           <LanguageSwitcher />
           <a
             href={TELEGRAM_URL}
@@ -77,6 +79,7 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
+          <SoundToggle />
           <LanguageSwitcher />
           <button
             type="button"

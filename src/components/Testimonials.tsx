@@ -42,7 +42,7 @@ export function Testimonials() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
-                className="lg:col-span-7"
+                className="specular-card rounded-2xl p-6 sm:p-8 lg:col-span-7"
               >
                 <p className="font-editorial italic text-[28px] leading-[1.18] text-text sm:text-[36px] lg:text-[42px]">
                   &ldquo;{featured.quote}&rdquo;
@@ -55,7 +55,7 @@ export function Testimonials() {
               </motion.blockquote>
             )}
 
-            <div className="divide-y divide-white/[0.07] border-t border-white/[0.07] lg:col-span-5 lg:border-t-0">
+            <div className="space-y-4 lg:col-span-5">
               {secondaryQuotes.map((q, i) => (
                 <motion.blockquote
                   key={q.name || i}
@@ -67,7 +67,7 @@ export function Testimonials() {
                     delay: reducedMotion ? 0 : (i + 1) * 0.05,
                     ease: [0.23, 1, 0.32, 1],
                   }}
-                  className="py-6 first:lg:pt-0"
+                  className="specular-card rounded-2xl p-6"
                 >
                   <p className="text-[15px] leading-[1.7] tracking-[0.005em] text-text-secondary">
                     &ldquo;{q.quote}&rdquo;
