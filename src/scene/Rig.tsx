@@ -6,36 +6,39 @@ import type { ScrollState } from "../lib/useScroll";
 import { projectAnchors, type SpatialWorldState } from "../lib/spatialWorld";
 
 /**
- * One unbroken take. The camera walks a curve at eye height while a
- * separate aim curve decides what it looks at, so each room gets framed
- * the way an operator would frame it rather than pointing straight ahead.
+ * Piecewise-choreographed camera rig:
+ *  - 0.00 -> 0.14: Enter World 1 barbershop toward the center-stage Hero Chair
+ *  - 0.14 -> 0.34: Dedicated orbital hold around the chair during surface erosion
+ *  - 0.34 -> 0.42: Fly straight through the 3D Particle Portal Vortex (z = -88)
+ *  - 0.42 -> 1.00: Glide across World 2 horizon to the Reception Desk (z = -438)
  */
-const FLIGHT = [
-  [0.0, 0.2, 14], [1.0, 0.3, -9], [-0.5, 0.1, -32], [1.4, 0.4, -67],
-  [-0.8, 0.2, -102], [1.6, 0.5, -140], [2.6, 0.3, -178], [7.4, 0.2, -216],
-  [2.2, 0.4, -252], [1.0, 0.2, -287], [-0.9, 0.3, -322], [0.8, 0.1, -350],
-  [-0.7, 0.4, -378], [0.6, 0.0, -400], [-0.5, 0.2, -422], [0.3, -0.2, -440],
-  [0.0, -0.5, -458],
+const FLIGHT_WORLD1 = [
+  [0.0, 0.2, 14],
+  [0.6, 0.2, -14],
+  [0.2, 0.1, -46],
+  [-4.2, 0.0, -59],
 ] as const;
 
-const AIM = [
-  [-3.2, -2.0, -12],   // the reception terminal & diary under the lamp
-  [-2.6, -1.6, -24],
-  [-1.6, -0.6, -68],   // lock onto the Hero Barber Chair pedestal
-  [-1.6, 0.8, -72],    // follow the levitating chair & particle burst
-  [-4.0, 1.0, -116],   // the hall opens: mirrors down the left
-  [-11.0, 1.4, -142],
-  [-8.0, 0.2, -170],
-  [-5.6, -1.2, -212],  // left, into the row of chairs
-  [-5.0, -1.6, -232],
-  [-6.6, -2.4, -262],  // the basins
-  [-7.0, -2.6, -292],
-  [-5.6, 1.2, -334],   // one mirror, close
-  [-5.8, 1.4, -352],
-  [0.0, -0.8, -394],   // the back room
-  [-3.4, -1.2, -430],  // reception dock & pole
-  [-1.4, -1.6, -450],
-  [0.0, -1.9, -466],   // the door
+const FLIGHT_WORLD2 = [
+  [0.0, 0.2, -108],
+  [1.8, 0.4, -155],
+  [4.5, 0.3, -210],
+  [2.2, 0.4, -260],
+  [0.0, 0.3, -315],
+  [0.0, 0.2, -370],
+  [0.0, -0.4, -418],
+  [0.0, -1.2, -424],
+] as const;
+
+const AIM_WORLD2 = [
+  [0.0, 0.0, -145],
+  [-4.0, 0.8, -195],
+  [-5.5, 0.6, -235],
+  [-4.0, 0.4, -280],
+  [0.0, 0.2, -340],
+  [0.0, -0.4, -395],
+  [0.0, -2.4, -438],
+  [0.0, -3.2, -444],
 ] as const;
 
 function focusAt(p: number) {
@@ -43,14 +46,13 @@ function focusAt(p: number) {
     const a = FOCUS_KEYS[i], b = FOCUS_KEYS[i + 1];
     if (p >= a.p && p <= b.p) {
       let t = (p - a.p) / (b.p - a.p);
-      t = t * t * (3 - 2 * t);          
+      t = t * t * (3 - 2 * t);
       return a.d + (b.d - a.d) * t;
     }
   }
   return FOCUS_KEYS[FOCUS_KEYS.length - 1].d;
 }
 
-/** low-frequency wobble: the operator is human, the frame never settles */
 const wob = (t: number, a: number, b: number, c: number) =>
   Math.sin(t * a) * 0.6 + Math.sin(t * b + 1.7) * 0.3 + Math.sin(t * c + 4.1) * 0.1;
 
@@ -66,8 +68,9 @@ export function Rig({
   const { camera, size } = useThree();
   const curves = useMemo(
     () => ({
-      flight: new THREE.CatmullRomCurve3(FLIGHT.map((p) => new THREE.Vector3(...p)), false, "catmullrom", 0.28),
-      aim: new THREE.CatmullRomCurve3(AIM.map((p) => new THREE.Vector3(...p)), false, "catmullrom", 0.28),
+      w1: new THREE.CatmullRomCurve3(FLIGHT_WORLD1.map((p) => new THREE.Vector3(...p)), false, "catmullrom", 0.35),
+      w2: new THREE.CatmullRomCurve3(FLIGHT_WORLD2.map((p) => new THREE.Vector3(...p)), false, "catmullrom", 0.3),
+      aim2: new THREE.CatmullRomCurve3(AIM_WORLD2.map((p) => new THREE.Vector3(...p)), false, "catmullrom", 0.3),
     }),
     []
   );
@@ -79,37 +82,71 @@ export function Rig({
   useFrame((state, delta) => {
     const s = scroll.current!;
     const pt = pointer.current!;
-    const ease = reduced ? 1 : 1 - Math.pow(0.001, delta);   // frame-rate independent
+    const ease = reduced ? 1 : 1 - Math.pow(0.001, delta);
 
     s.smooth += (s.raw - s.smooth) * (reduced ? 1 : Math.min(ease * 0.9, 1));
     pt.sx += (pt.x - pt.sx) * Math.min(ease * 0.7, 1);
     pt.sy += (pt.y - pt.sy) * Math.min(ease * 0.7, 1);
 
     const p = Math.min(Math.max(s.smooth, 0), 1);
-    curves.flight.getPointAt(p, pos.current);
-    curves.aim.getPointAt(p, look.current);
+
+    if (p < 0.14) {
+      // Act I: Smooth walk down reception aisle toward center-stage chair
+      const t1 = p / 0.14;
+      curves.w1.getPointAt(t1, pos.current);
+      look.current.set(0.0, -1.6 + t1 * 0.4, -74);
+    } else if (p < 0.34) {
+      // Act II Hold: Orbital arc inside the +/-9m corridor centered on Hero Chair [0, -2.5, -74]
+      const tOrbit = (p - 0.14) / 0.20;
+      const eased = tOrbit * tOrbit * (3 - 2 * tOrbit);
+      const angle = -0.25 + eased * 0.72; // max x ~ 4.3m, safely inside +/-9m walls
+      const radius = 11.5 - eased * 2.0;
+      pos.current.set(
+        Math.sin(angle) * radius,
+        0.0 + Math.sin(eased * Math.PI) * 0.65,
+        -74 + Math.cos(angle) * radius
+      );
+      look.current.set(0.0, -1.8 + eased * 1.1, -74 - eased * 6);
+    } else if (p < 0.42) {
+      // Portal Fly-Through: Push from orbit straight through toroidal vortex at z=-88 to z=-108
+      const tFly = (p - 0.34) / 0.08;
+      const eased = tFly * tFly * (3 - 2 * tFly);
+      const startAngle = -0.25 + 0.72;
+      const sx = Math.sin(startAngle) * 9.5;
+      const sz = -74 + Math.cos(startAngle) * 9.5;
+      pos.current.set(
+        sx * (1 - eased),
+        0.0 + (1 - eased) * 0.15 + eased * 0.2,
+        sz + (-108 - sz) * eased
+      );
+      look.current.set(0.0, -0.7 * (1 - eased), -80 - eased * 65);
+    } else {
+      // World 2 Horizon: 0.42 -> 1.00
+      const t2 = Math.min(1, (p - 0.42) / 0.58);
+      curves.w2.getPointAt(t2, pos.current);
+      curves.aim2.getPointAt(t2, look.current);
+    }
 
     const t = state.clock.elapsedTime;
-    const hx = reduced ? 0 : wob(t, 0.43, 0.97, 2.31) * 0.42;
-    const hy = reduced ? 0 : wob(t + 11, 0.37, 1.13, 2.07) * 0.3;
-    const hr = reduced ? 0 : wob(t + 23, 0.29, 0.83, 1.77) * 0.0055;
+    const hx = reduced ? 0 : wob(t, 0.43, 0.97, 2.31) * 0.28;
+    const hy = reduced ? 0 : wob(t + 11, 0.37, 1.13, 2.07) * 0.2;
+    const hr = reduced ? 0 : wob(t + 23, 0.29, 0.83, 1.77) * 0.004;
 
     camera.position.set(
-      pos.current.x + pt.sx * 2.2 + hx,
-      pos.current.y - pt.sy * 1.4 + hy,
+      pos.current.x + pt.sx * 1.6 + hx,
+      pos.current.y - pt.sy * 1.1 + hy,
       pos.current.z
     );
-    look.current.x += pt.sx * 3.4;
-    look.current.y -= pt.sy * 2.2;
+    look.current.x += pt.sx * 2.4;
+    look.current.y -= pt.sy * 1.6;
     camera.lookAt(look.current);
-    camera.rotation.z += hr + pt.sx * 0.02;
+    camera.rotation.z += hr + pt.sx * 0.015;
 
-    // a DP swaps glass between setups; they do not zoom
     const active = SCENES.findIndex((sc) => p >= sc.a && p < sc.b);
     const idx = active < 0 ? SCENES.length - 1 : active;
     s.active = idx;
-    const target = (2 * Math.atan(24 / (2 * SCENES[idx].lens)) * 180) / Math.PI + 18;
-    fov.current += (target - fov.current) * 0.02;
+    const targetFov = p >= 0.34 && p <= 0.44 ? 58 : (2 * Math.atan(24 / (2 * SCENES[idx].lens)) * 180) / Math.PI + 18;
+    fov.current += (targetFov - fov.current) * 0.04;
     const cam = camera as THREE.PerspectiveCamera;
     if (Math.abs(cam.fov - fov.current) > 0.01) {
       cam.fov = fov.current;
@@ -121,7 +158,7 @@ export function Rig({
 
     if (world?.current) {
       world.current.activeAct =
-        p < 0.16 ? 0 : p < 0.34 ? 1 : p < 0.58 ? 2 : p < 0.82 ? 3 : 4;
+        p < 0.14 ? 0 : p < 0.40 ? 1 : p < 0.62 ? 2 : p < 0.84 ? 3 : 4;
       projectAnchors(camera, world.current, size.width, size.height);
     }
   }, 0);

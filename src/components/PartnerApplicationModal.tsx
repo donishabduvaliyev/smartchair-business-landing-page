@@ -42,13 +42,28 @@ const INPUT_CLASS =
 const INPUT_WITH_ICON_CLASS =
   "w-full h-11 rounded-[10px] border border-hairline-strong bg-surface-2 pl-10 pr-3.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
 
+const ARCH_INPUT_CLASS =
+  "w-full h-10 border-b border-white/20 bg-transparent px-0 text-sm text-[#f2efe9] placeholder:text-white/35 transition-colors focus:border-[#d4af5a] focus:outline-none";
+
+const ARCH_INPUT_WITH_ICON_CLASS =
+  "w-full h-10 border-b border-white/20 bg-transparent pl-6 pr-0 text-sm text-[#f2efe9] placeholder:text-white/35 transition-colors focus:border-[#d4af5a] focus:outline-none";
+
 export function PartnerFormBody({
   onClose,
   compact = false,
+  variant = "modal",
 }: {
   onClose?: () => void;
   compact?: boolean;
+  variant?: "modal" | "architectural";
 }) {
+  const isArch = variant === "architectural";
+  const inputCls = isArch ? ARCH_INPUT_CLASS : INPUT_CLASS;
+  const inputWithIconCls = isArch ? ARCH_INPUT_WITH_ICON_CLASS : INPUT_WITH_ICON_CLASS;
+  const iconLeftCls = isArch ? "left-0.5 text-[#d4af5a]/70" : "left-3.5 text-text-muted";
+  const labelCls = isArch
+    ? "mb-1 block font-mono text-[10px] uppercase tracking-[0.18em] text-[#d4af5a]/80"
+    : "mb-1.5 block text-xs font-medium text-text-secondary";
   const { t, i18n } = useTranslation();
   const reducedMotion = useReducedMotion();
   const [businessName, setBusinessName] = useState("");
@@ -184,34 +199,44 @@ export function PartnerFormBody({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Direct Call Banner inside Modal/Form */}
-      <div className="flex flex-col justify-between gap-3 rounded-xl border border-hairline bg-surface-2 p-4 sm:flex-row sm:items-center">
+      <div
+        className={
+          isArch
+            ? "flex flex-col justify-between gap-3 border-b border-white/15 pb-3.5 sm:flex-row sm:items-center"
+            : "flex flex-col justify-between gap-3 rounded-xl border border-hairline bg-surface-2 p-4 sm:flex-row sm:items-center"
+        }
+      >
         <div>
-          <p className="text-xs font-medium text-text">
+          <p className={isArch ? "font-mono text-[11px] uppercase tracking-[0.14em] text-[#f2efe9]" : "text-xs font-medium text-text"}>
             {t("partnerForm.directContactTitle")}
           </p>
-          <p className="mt-0.5 text-xs text-text-secondary">
+          <p className={isArch ? "mt-0.5 text-xs text-white/55" : "mt-0.5 text-xs text-text-secondary"}>
             {t("partnerForm.directContactDesc")}
           </p>
         </div>
         <a
           href={PHONE_HREF}
-          className="btn-secondary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[10px] px-3.5 text-xs font-medium whitespace-nowrap"
+          className={
+            isArch
+              ? "inline-flex h-8 shrink-0 items-center justify-center gap-2 border border-[#d4af5a]/45 bg-[#d4af5a]/10 px-3 font-mono text-xs text-[#f3dca2] whitespace-nowrap transition-colors hover:border-[#d4af5a] hover:bg-[#d4af5a]/20"
+              : "btn-secondary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[10px] px-3.5 text-xs font-medium whitespace-nowrap"
+          }
         >
-          <Phone size={14} strokeWidth={1.5} className="text-text-secondary" />
+          <Phone size={13} strokeWidth={1.5} className={isArch ? "text-[#d4af5a]" : "text-text-secondary"} />
           {PHONE_NUMBER}
         </a>
       </div>
 
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.businessName")} <span className="text-text-muted">*</span>
           </label>
           <div className="relative">
             <Building2
               size={15}
               strokeWidth={1.5}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+              className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${iconLeftCls}`}
             />
             <input
               type="text"
@@ -219,20 +244,20 @@ export function PartnerFormBody({
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               placeholder={t("partnerForm.fields.businessNamePlaceholder")}
-              className={INPUT_WITH_ICON_CLASS}
+              className={inputWithIconCls}
             />
           </div>
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.ownerName")} <span className="text-text-muted">*</span>
           </label>
           <div className="relative">
             <User
               size={15}
               strokeWidth={1.5}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+              className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${iconLeftCls}`}
             />
             <input
               type="text"
@@ -240,7 +265,7 @@ export function PartnerFormBody({
               value={ownerName}
               onChange={(e) => setOwnerName(e.target.value)}
               placeholder={t("partnerForm.fields.ownerNamePlaceholder")}
-              className={INPUT_WITH_ICON_CLASS}
+              className={inputWithIconCls}
             />
           </div>
         </div>
@@ -248,14 +273,14 @@ export function PartnerFormBody({
 
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.phone")} <span className="text-text-muted">*</span>
           </label>
           <div className="relative">
             <Phone
               size={15}
               strokeWidth={1.5}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+              className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${iconLeftCls}`}
             />
             <input
               type="tel"
@@ -263,22 +288,22 @@ export function PartnerFormBody({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder={t("partnerForm.fields.phonePlaceholder")}
-              className={INPUT_WITH_ICON_CLASS}
+              className={inputWithIconCls}
             />
           </div>
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.category")}
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className={`${INPUT_CLASS} appearance-none`}
+            className={`${inputCls} appearance-none`}
           >
             {CATEGORY_KEYS.map((key) => (
-              <option key={key} value={key} className="bg-surface-2 text-text">
+              <option key={key} value={key} className="bg-[#090b10] text-white">
                 {t(`categories.${key}`)}
               </option>
             ))}
@@ -288,7 +313,7 @@ export function PartnerFormBody({
 
       <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-3 sm:items-end">
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.city")}
           </label>
           <input
@@ -296,27 +321,27 @@ export function PartnerFormBody({
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder={t("partnerForm.fields.cityPlaceholder")}
-            className={INPUT_CLASS}
+            className={inputCls}
           />
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.staffCount")}
           </label>
           <div className="relative">
             <Users
               size={15}
               strokeWidth={1.5}
-              className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted"
+              className={`pointer-events-none absolute top-1/2 -translate-y-1/2 ${iconLeftCls}`}
             />
             <select
               value={staffCount}
               onChange={(e) => setStaffCount(e.target.value)}
-              className={`${INPUT_WITH_ICON_CLASS} appearance-none`}
+              className={`${inputWithIconCls} appearance-none`}
             >
               {STAFF_KEYS.map((sk) => (
-                <option key={sk} value={sk} className="bg-surface-2 text-text">
+                <option key={sk} value={sk} className="bg-[#090b10] text-white">
                   {t(`partnerForm.fields.staffOptions.${sk}`)}
                 </option>
               ))}
@@ -325,7 +350,7 @@ export function PartnerFormBody({
         </div>
 
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.social")}
           </label>
           <input
@@ -333,14 +358,14 @@ export function PartnerFormBody({
             value={telegramOrInstagram}
             onChange={(e) => setTelegramOrInstagram(e.target.value)}
             placeholder={t("partnerForm.fields.socialPlaceholder")}
-            className={INPUT_CLASS}
+            className={inputCls}
           />
         </div>
       </div>
 
       {!compact && (
         <div>
-          <label className="mb-1.5 block text-xs font-medium text-text-secondary">
+          <label className={labelCls}>
             {t("partnerForm.fields.message")}
           </label>
           <textarea
@@ -348,13 +373,23 @@ export function PartnerFormBody({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={t("partnerForm.fields.messagePlaceholder")}
-            className="w-full resize-none rounded-[10px] border border-hairline-strong bg-surface-2 px-3.5 py-2.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none"
+            className={
+              isArch
+                ? "w-full resize-none border-b border-white/20 bg-transparent py-2 text-sm text-[#f2efe9] placeholder:text-white/35 transition-colors focus:border-[#d4af5a] focus:outline-none"
+                : "w-full resize-none rounded-[10px] border border-hairline-strong bg-surface-2 px-3.5 py-2.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none"
+            }
           />
         </div>
       )}
 
       {/* Uzbekistan Law O‘RQ-547 Explicit Consent Checkbox */}
-      <label className="flex cursor-pointer items-start gap-3 rounded-[10px] border border-hairline bg-surface-2 p-3.5 text-xs leading-relaxed text-text-secondary">
+      <label
+        className={
+          isArch
+            ? "flex cursor-pointer items-start gap-3 border-l border-[#d4af5a]/35 bg-white/[0.02] px-3.5 py-2.5 text-xs leading-relaxed text-white/70"
+            : "flex cursor-pointer items-start gap-3 rounded-[10px] border border-hairline bg-surface-2 p-3.5 text-xs leading-relaxed text-text-secondary"
+        }
+      >
         <input
           type="checkbox"
           checked={consentAccepted}
@@ -383,7 +418,7 @@ export function PartnerFormBody({
       </label>
 
       {error && (
-        <p className="rounded-[10px] border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-xs font-medium text-danger">
+        <p className="border-l-2 border-danger bg-danger/10 px-3.5 py-2.5 text-xs font-medium text-danger">
           {error}
         </p>
       )}
@@ -391,7 +426,11 @@ export function PartnerFormBody({
       <button
         type="submit"
         disabled={submitting}
-        className="btn-primary flex h-11 w-full items-center justify-center gap-2 rounded-[10px] text-sm font-medium disabled:opacity-60"
+        className={
+          isArch
+            ? "flex h-11 w-full items-center justify-center gap-2 border border-[#d4af5a]/65 bg-[#d4af5a]/15 font-mono text-xs uppercase tracking-[0.2em] text-[#f3dca2] transition-all hover:border-[#d4af5a] hover:bg-[#d4af5a]/25 disabled:opacity-60"
+            : "btn-primary flex h-11 w-full items-center justify-center gap-2 rounded-[10px] text-sm font-medium disabled:opacity-60"
+        }
       >
         <Send size={15} strokeWidth={1.5} />
         {submitting ? t("partnerForm.submitting") : t("partnerForm.submit")}

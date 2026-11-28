@@ -43,10 +43,10 @@ export function SpatialStageOverlay({
         act1Ref.current.style.transform = `translate3d(0, ${(p * -120).toFixed(1)}px, 0)`;
       }
 
-      // Act II Metamorphosis caption visibility (0.125 -> 0.32)
+      // Act II Metamorphosis caption visibility (0.14 -> 0.38)
       if (act2Ref.current) {
-        const inV = Math.min(1, Math.max(0, (p - 0.125) / 0.045));
-        const outV = Math.min(1, Math.max(0, (0.32 - p) / 0.05));
+        const inV = Math.min(1, Math.max(0, (p - 0.14) / 0.045));
+        const outV = Math.min(1, Math.max(0, (0.39 - p) / 0.05));
         const v2 = Math.min(inV, outV);
         act2Ref.current.style.opacity = v2.toFixed(3);
         act2Ref.current.style.pointerEvents = v2 > 0.35 ? "auto" : "none";
@@ -56,8 +56,8 @@ export function SpatialStageOverlay({
       // World-projected tether anchored directly to the levitating 3D Hero Chair
       if (chairTagRef.current && world.current) {
         const anchor = world.current.anchors.chair;
-        const inV = Math.min(1, Math.max(0, (p - 0.10) / 0.04));
-        const outV = Math.min(1, Math.max(0, (0.21 - p) / 0.04));
+        const inV = Math.min(1, Math.max(0, (p - 0.14) / 0.04));
+        const outV = Math.min(1, Math.max(0, (0.33 - p) / 0.04));
         const vis = anchor?.visible ? Math.min(inV, outV) : 0;
         chairTagRef.current.style.opacity = vis.toFixed(3);
         if (anchor && vis > 0.02) {
@@ -65,10 +65,10 @@ export function SpatialStageOverlay({
         }
       }
 
-      // Act III Customer Discovery Atelier visibility (0.31 -> 0.56)
+      // Act III Customer Discovery Atelier visibility (0.42 -> 0.62)
       if (act3Ref.current) {
-        const inV = Math.min(1, Math.max(0, (p - 0.30) / 0.05));
-        const outV = Math.min(1, Math.max(0, (0.58 - p) / 0.05));
+        const inV = Math.min(1, Math.max(0, (p - 0.41) / 0.045));
+        const outV = Math.min(1, Math.max(0, (0.63 - p) / 0.05));
         const v3 = Math.min(inV, outV);
         act3Ref.current.style.opacity = v3.toFixed(3);
         act3Ref.current.style.pointerEvents = v3 > 0.35 ? "auto" : "none";
@@ -87,10 +87,10 @@ export function SpatialStageOverlay({
         }
       }
 
-      // Act IV Business Operations Spine visibility (0.56 -> 0.84)
+      // Act IV Business Operations Spine visibility (0.63 -> 0.85)
       if (act4Ref.current) {
-        const inV = Math.min(1, Math.max(0, (p - 0.56) / 0.05));
-        const outV = Math.min(1, Math.max(0, (0.85 - p) / 0.05));
+        const inV = Math.min(1, Math.max(0, (p - 0.63) / 0.045));
+        const outV = Math.min(1, Math.max(0, (0.86 - p) / 0.05));
         const v4 = Math.min(inV, outV);
         act4Ref.current.style.opacity = v4.toFixed(3);
         act4Ref.current.style.pointerEvents = v4 > 0.35 ? "auto" : "none";

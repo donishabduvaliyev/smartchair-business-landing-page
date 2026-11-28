@@ -17,10 +17,10 @@ export interface SpatialWorldState {
 
 export const WORLD_ANCHOR_POSITIONS: Record<string, [number, number, number]> = {
   threshold: [-3.2, -0.6, -12],
-  chair: [-1.6, 1.6, -72],
+  chair: [0.0, 1.4, -74],
   discovery: [-5.5, 2.2, -225],
   operations: [-5.5, 1.2, -292],
-  reception: [0.0, -0.8, -420],
+  reception: [0.0, -0.8, -438],
 };
 
 export function createSpatialWorld(): SpatialWorldState {
@@ -40,10 +40,10 @@ export function createSpatialWorld(): SpatialWorldState {
 /** Scroll targets (0..1) for the 5-Act Spatial Compass */
 export const ACT_SCROLL_TARGETS = [
   { id: "threshold", act: 0, p: 0.0 },
-  { id: "chair", act: 1, p: 0.165 },
-  { id: "discovery", act: 2, p: 0.38 },
-  { id: "operations", act: 3, p: 0.64 },
-  { id: "reception", act: 4, p: 0.96 },
+  { id: "chair", act: 1, p: 0.24 },
+  { id: "discovery", act: 2, p: 0.48 },
+  { id: "operations", act: 3, p: 0.72 },
+  { id: "reception", act: 4, p: 0.97 },
 ] as const;
 
 export function scrollToProgress(p: number) {

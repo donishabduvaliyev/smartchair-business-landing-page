@@ -11,6 +11,7 @@ import {
 } from "../lib/useScroll";
 import { createSpatialWorld, scrollToProgress } from "../lib/spatialWorld";
 import { SpatialCompass } from "../components/spatial/SpatialCompass";
+import { KineticTypographyStage } from "../components/spatial/KineticTypographyStage";
 import { SpatialStageOverlay } from "../components/spatial/SpatialStageOverlay";
 import { MobileFilm } from "../components/ui/MobileFilm";
 
@@ -62,7 +63,7 @@ export function Home() {
       {/* Full-Screen 3D World Stage */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0 h-screen w-screen overflow-hidden"
+        className="fixed inset-0 z-0 h-screen w-screen overflow-hidden"
       >
         <Scene
           scroll={scroll}
@@ -76,17 +77,20 @@ export function Home() {
       </div>
 
       {/* Minimal Persistent Spatial Compass */}
-      <SpatialCompass world={world} onConnectClick={() => scrollToProgress(0.96)} />
+      <SpatialCompass world={world} onConnectClick={() => scrollToProgress(0.97)} />
+
+      {/* Monumental Kinetic & Parting Portal Typography */}
+      <KineticTypographyStage scroll={scroll} />
 
       {/* Spatial World-Tethered Stage Overlays */}
       <SpatialStageOverlay
         scroll={scroll}
         world={world}
-        onOpenConnect={() => scrollToProgress(0.96)}
+        onOpenConnect={() => scrollToProgress(0.97)}
       />
 
       {/* Scroll Runway driving the unbroken 3D journey */}
-      <div aria-hidden="true" className="relative z-10 h-[560vh] pointer-events-none" />
+      <div aria-hidden="true" className="relative z-10 h-[760vh] pointer-events-none" />
     </div>
   );
 }

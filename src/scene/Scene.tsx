@@ -3,8 +3,9 @@ import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Architecture } from "./Architecture";
 import { Furniture } from "./Furniture";
-import { Practicals, Mirrors, Pole, Door, Fan, Dust } from "./Fixtures";
+import { Practicals, Mirrors, Fan, Dust } from "./Fixtures";
 import { HeroChairPortal } from "./HeroChairPortal";
+import { PostPortalWorld } from "./PostPortalWorld";
 import { SpatialTypography } from "./SpatialTypography";
 import { Rig } from "./Rig";
 import { Post } from "./Post";
@@ -109,12 +110,11 @@ export function Scene({
       <Architecture />
       <Furniture boxes={shop.boxes} cyls={shop.cyls} taps={shop.taps} />
       <HeroChairPortal scroll={scroll} world={world} reduced={reduced} compact={compact} />
+      <PostPortalWorld scroll={scroll} world={world} />
       <SpatialTypography scroll={scroll} />
       <Mirrors items={shop.mirrors} />
       <Practicals items={shop.practicals} />
       <Fan at={shop.fanAt} />
-      <Pole at={shop.poleAt} />
-      <Door />
       <Dust count={count} />
 
       <Rig scroll={scroll} pointer={pointer} reduced={reduced} focusRef={focusRef} world={world} />

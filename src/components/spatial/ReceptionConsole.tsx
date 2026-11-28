@@ -39,7 +39,7 @@ export function ReceptionConsole() {
   return (
     <div className="mx-auto flex w-full max-w-[1320px] flex-col justify-between gap-8 px-5 lg:flex-row lg:items-center lg:px-8">
       {/* Left: Reception Desk Invitation, Direct Contact & Legal Links */}
-      <div className="max-w-md rounded-2xl border border-white/10 bg-[#07080c]/75 p-6 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.65)]">
+      <div className="max-w-md border-l border-t border-white/15 bg-black/45 p-6 backdrop-blur-md">
         <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-[#d4af5a]">
           <Sparkles size={11} />
           <span>{c.eyebrow}</span>
@@ -97,13 +97,13 @@ export function ReceptionConsole() {
         </div>
       </div>
 
-      {/* Right: Diegetic Illuminated Reception Desk Enquiry Terminal */}
-      <div className="relative w-full max-w-[490px] shrink-0 rounded-2xl border border-[#d4af5a]/35 bg-[#090b10]/90 p-4 sm:p-5 backdrop-blur-2xl shadow-[0_28px_90px_rgba(0,0,0,0.9)] max-h-[calc(100vh-112px)] overflow-y-auto">
+      {/* Right: Diegetic Architectural Reception Ledger */}
+      <div className="relative w-full max-w-[490px] shrink-0 border-l border-t border-[#d4af5a]/40 bg-black/55 p-5 sm:p-6 backdrop-blur-md max-h-[calc(100vh-112px)] overflow-y-auto">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[#d4af5a]/70 to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-[#d4af5a]/80 via-[#d4af5a]/30 to-transparent"
         />
-        <PartnerFormBody compact />
+        <PartnerFormBody compact variant="architectural" />
       </div>
     </div>
   );

@@ -94,7 +94,8 @@ export function Architecture() {
 
   return (
     <group>
-      {ZONES.map(([name, z0, z1, hw, cy, fk, wk]) => {
+      {/* World 1 Physical Barbershop Corridor (Zones 0 & 1: z +14 -> -102) */}
+      {ZONES.slice(0, 2).map(([name, z0, z1, hw, cy, fk, wk]) => {
         const len = Math.abs(z1 - z0), mid = (z0 + z1) / 2;
         return (
           <group key={name}>
