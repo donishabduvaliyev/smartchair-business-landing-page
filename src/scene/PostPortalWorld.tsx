@@ -1,32 +1,26 @@
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { ALABASTER_FOG, ALABASTER_FOG_DENSITY, C, FLOOR_Y } from "./constants";
 import { FOG_FN, VERT_WORLD } from "./glsl";
-import { shade } from "./shade";
 import { ClassicalMaleBust } from "./ClassicalBust";
+import { MuseumModel } from "./MuseumModel";
 import type { ScrollState } from "../lib/useScroll";
 import type { SpatialWorldState } from "../lib/spatialWorld";
 
-const PLINTHS = [
-  { key: "barber", pos: [-9.2, FLOOR_Y, -162] as [number, number, number], ry: 0.34 },
-  { key: "hair", pos: [-4.2, FLOOR_Y, -180] as [number, number, number], ry: 0.16 },
-  { key: "nails", pos: [3.6, FLOOR_Y, -194] as [number, number, number], ry: -0.14 },
-  { key: "spa", pos: [8.8, FLOOR_Y, -210] as [number, number, number], ry: -0.34 },
-  { key: "cosmetology", pos: [-6.4, FLOOR_Y, -222] as [number, number, number], ry: 0.24 },
-  { key: "browsLashes", pos: [1.2, FLOOR_Y, -236] as [number, number, number], ry: 0.0 },
+const NICHES = [
+  { key: "barber", label: "I · BARBER", pos: [-14.4, FLOOR_Y, -158] as [number, number, number], ry: Math.PI / 2, side: -1 },
+  { key: "hair", label: "II · HAIR ATELIER", pos: [14.4, FLOOR_Y, -176] as [number, number, number], ry: -Math.PI / 2, side: 1 },
+  { key: "spa", label: "III · SPA SANCTUARY", pos: [-14.4, FLOOR_Y, -198] as [number, number, number], ry: Math.PI / 2, side: -1 },
+  { key: "cosmetology", label: "IV · COSMETOLOGY", pos: [14.4, FLOOR_Y, -216] as [number, number, number], ry: -Math.PI / 2, side: 1 },
+  { key: "nails", label: "V · NAIL STUDIO", pos: [-14.4, FLOOR_Y, -238] as [number, number, number], ry: Math.PI / 2, side: -1 },
+  { key: "browsLashes", label: "VI · BROWS & LASHES", pos: [14.4, FLOOR_Y, -252] as [number, number, number], ry: -Math.PI / 2, side: 1 },
 ] as const;
 
-const SLAB_COUNT = 16;
-
-function smoothstep(edge0: number, edge1: number, x: number) {
-  const t = Math.min(Math.max((x - edge0) / (edge1 - edge0), 0), 1);
-  return t * t * (3 - 2 * t);
-}
-
-function makeClassicalStoneMat(baseHex: number, veinStrength = 0.08): THREE.ShaderMaterial {
+function makeClassicalStoneMat(baseHex: number, veinStrength = 0.07): THREE.ShaderMaterial {
   const c = new THREE.Color(baseHex);
   return new THREE.ShaderMaterial({
+    side: THREE.DoubleSide,
     uniforms: {
       uBase: { value: c },
       uVein: { value: veinStrength },
@@ -54,10 +48,10 @@ function makeClassicalStoneMat(baseHex: number, veinStrength = 0.08): THREE.Shad
       varying vec3 vNorm;
       varying float vZ;
       void main() {
-        vec3 sunDir = normalize(vec3(0.45, 0.85, 0.35));
+        vec3 sunDir = normalize(vec3(0.35, 0.88, 0.32));
         float ndl = max(dot(normalize(vNorm), sunDir), 0.0);
-        float hemi = 0.70 + 0.30 * ndl;
-        float vein = sin(vWorld.x * 0.7 + vWorld.y * 1.1 + sin(vWorld.z * 0.45) * 2.2) * 0.5 + 0.5;
+        float hemi = 0.68 + 0.32 * ndl;
+        float vein = sin(vWorld.x * 0.65 + vWorld.y * 0.95 + sin(vWorld.z * 0.42) * 2.1) * 0.5 + 0.5;
         vec3 col = uBase * hemi * (1.0 - vein * uVein);
         gl_FragColor = vec4(applyFog(col, vZ), 1.0);
       }
@@ -65,209 +59,103 @@ function makeClassicalStoneMat(baseHex: number, veinStrength = 0.08): THREE.Shad
   });
 }
 
-function GroomingEmblem({
-  kind,
-  marbleMat,
-  bronzeMat,
-  travertineMat,
-  glassMat,
-}: {
-  kind: (typeof PLINTHS)[number]["key"];
-  marbleMat: THREE.Material;
-  bronzeMat: THREE.Material;
-  travertineMat: THREE.Material;
-  glassMat: THREE.Material;
-}) {
-  if (kind === "barber") {
-    return (
-      <group>
-        {/* Real CC0 Curly-Haired Classical Male Marble Bust */}
-        <ClassicalMaleBust position={[-0.18, 3.62, 0]} height={2.55} />
+function makePlaqueTexture(title: string, subtitle: string, anisotropy: number) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 384;
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    ctx.fillStyle = "#efe8dc";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        {/* Articulated Antique-Bronze Barber Shears */}
-        <group position={[0.92, 4.95, 0.35]}>
-          <mesh material={bronzeMat} position={[0, 0.2, 0]} rotation={[0, 0, 0.32]}>
-            <boxGeometry args={[0.09, 1.55, 0.04]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[0, 0.2, 0.04]} rotation={[0, 0, -0.32]}>
-            <boxGeometry args={[0.09, 1.55, 0.04]} />
-          </mesh>
-          <mesh material={marbleMat} position={[0, 0.25, 0.02]} rotation={[Math.PI / 2, 0, 0]}>
-            <cylinderGeometry args={[0.06, 0.06, 0.12, 12]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[-0.36, -0.68, 0]}>
-            <torusGeometry args={[0.18, 0.04, 10, 24]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[0.36, -0.68, 0.04]}>
-            <torusGeometry args={[0.18, 0.04, 10, 24]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[0.52, -0.84, 0.04]} rotation={[0, 0, -0.6]}>
-            <boxGeometry args={[0.04, 0.24, 0.04]} />
-          </mesh>
-        </group>
-      </group>
-    );
+    ctx.strokeStyle = "#8c6d46";
+    ctx.lineWidth = 8;
+    ctx.strokeRect(20, 20, canvas.width - 40, canvas.height - 40);
+
+    ctx.textAlign = "center";
+    ctx.font = '600 42px "JetBrains Mono", monospace';
+    ctx.fillStyle = "#7a5b34";
+    ctx.fillText(title, 512, 155);
+
+    ctx.font = 'italic 500 68px "Cormorant Garamond", Georgia, serif';
+    ctx.fillStyle = "#1c1917";
+    ctx.fillText(subtitle, 512, 265);
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.anisotropy = Math.min(8, anisotropy);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function makeFloorClockTexture(anisotropy: number) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 2048;
+  canvas.height = 2048;
+  const ctx = canvas.getContext("2d");
+  if (ctx) {
+    const cx = 1024;
+    const cy = 1024;
+    ctx.fillStyle = "#f2ece1";
+    ctx.fillRect(0, 0, 2048, 2048);
+
+    // Outer bronze Vitruvian rings
+    ctx.strokeStyle = "#8c6d46";
+    ctx.lineWidth = 14;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 940, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 740, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // 12 Hour Ticks & Roman Numerals
+    const romans = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
+    ctx.fillStyle = "#1c1917";
+    ctx.font = '600 104px "Cormorant Garamond", Georgia, serif';
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    for (let i = 0; i < 12; i++) {
+      const ang = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      const rx = cx + Math.cos(ang) * 840;
+      const ry = cy + Math.sin(ang) * 840;
+      ctx.save();
+      ctx.translate(rx, ry);
+      ctx.rotate(ang + Math.PI / 2);
+      ctx.fillText(romans[i], 0, 0);
+      ctx.restore();
+    }
+  }
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.anisotropy = Math.min(8, anisotropy);
+  tex.needsUpdate = true;
+  return tex;
+}
+
+function NicheSculpture({ kind }: { kind: (typeof NICHES)[number]["key"] }) {
+  if (kind === "barber") {
+    return <ClassicalMaleBust position={[0, 3.25, 0.25]} height={3.1} />;
   }
   if (kind === "hair") {
-    return (
-      <group>
-        {/* Beveled Bronze Oval Vanity Mirror + Sculpted Wide-Tooth Styling Comb */}
-        <group position={[-0.25, 4.95, 0]}>
-          <mesh material={bronzeMat} scale={[0.82, 1.18, 1.0]}>
-            <torusGeometry args={[0.88, 0.08, 14, 40]} />
-          </mesh>
-          <mesh material={glassMat} rotation={[Math.PI / 2, 0, 0]} scale={[0.76, 0.06, 1.12]}>
-            <cylinderGeometry args={[0.88, 0.88, 1.0, 28]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[0, -1.25, 0]}>
-            <cylinderGeometry args={[0.08, 0.18, 0.65, 14]} />
-          </mesh>
-        </group>
-
-        <group position={[0.92, 4.85, 0.25]} rotation={[0, 0, -0.22]}>
-          <mesh material={bronzeMat}>
-            <boxGeometry args={[0.16, 1.45, 0.06]} />
-          </mesh>
-          {Array.from({ length: 9 }, (_, i) => (
-            <mesh key={i} material={marbleMat} position={[-0.22, -0.58 + i * 0.145, 0]}>
-              <boxGeometry args={[0.34, 0.05, 0.05]} />
-            </mesh>
-          ))}
-        </group>
-      </group>
-    );
+    return <MuseumModel name="ornate_mirror_01" finish="bronze" position={[0, 3.25, 0.2]} height={3.2} />;
   }
-  if (kind === "nails") {
-    return (
-      <group position={[0, 3.72, 0]}>
-        {/* Carved Travertine Presentation Tray */}
-        <mesh material={travertineMat} position={[0, 0.1, 0]}>
-          <boxGeometry args={[1.65, 0.2, 1.35]} />
-        </mesh>
-        {/* Faceted Manicure Polish Flacon & Tapered Bronze Cap */}
-        <mesh material={glassMat} position={[-0.2, 0.68, 0]}>
-          <cylinderGeometry args={[0.42, 0.48, 0.92, 8]} />
-        </mesh>
-        <mesh material={bronzeMat} position={[-0.2, 1.56, 0]}>
-          <cylinderGeometry args={[0.15, 0.24, 0.88, 16]} />
-        </mesh>
-        {/* Angled Polish Brush & Pearl Cabochon */}
-        <mesh material={bronzeMat} position={[0.45, 0.52, 0.18]} rotation={[0, 0, -0.78]}>
-          <cylinderGeometry args={[0.05, 0.09, 0.95, 12]} />
-        </mesh>
-        <mesh material={marbleMat} position={[0.35, 0.34, -0.28]}>
-          <sphereGeometry args={[0.24, 16, 12]} />
-        </mesh>
-      </group>
-    );
+  if (kind === "spa") {
+    return <MuseumModel name="antique_ceramic_vase_01" finish="marble" position={[0, 3.25, 0.2]} height={2.9} />;
   }
   if (kind === "cosmetology") {
-    return (
-      <group>
-        {/* Classical Alabaster Essence Amphora */}
-        <group position={[-0.2, 4.85, 0]}>
-          <mesh material={bronzeMat} position={[0, -0.82, 0]}>
-            <cylinderGeometry args={[0.36, 0.48, 0.26, 20]} />
-          </mesh>
-          <mesh material={marbleMat} position={[0, -0.1, 0]}>
-            <cylinderGeometry args={[0.56, 0.32, 0.95, 22]} />
-          </mesh>
-          <mesh material={marbleMat} position={[0, 0.55, 0]}>
-            <sphereGeometry args={[0.58, 22, 16]} />
-          </mesh>
-          <mesh material={marbleMat} position={[0, 1.15, 0]}>
-            <cylinderGeometry args={[0.2, 0.28, 0.65, 18]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[0, 1.5, 0]} rotation={[Math.PI / 2, 0, 0]}>
-            <torusGeometry args={[0.24, 0.05, 10, 24]} />
-          </mesh>
-          {[-0.56, 0.56].map((hx, idx) => (
-            <mesh key={idx} material={bronzeMat} position={[hx, 0.65, 0]}>
-              <torusGeometry args={[0.28, 0.045, 10, 24]} />
-            </mesh>
-          ))}
-        </group>
-
-        {/* Angled Precision Serum Dropper Pipette */}
-        <group position={[0.82, 5.1, 0.25]} rotation={[0, 0, 0.32]}>
-          <mesh material={bronzeMat} position={[0, 0.68, 0]}>
-            <cylinderGeometry args={[0.14, 0.14, 0.48, 16]} />
-          </mesh>
-          <mesh material={marbleMat} position={[0, 0.42, 0]}>
-            <cylinderGeometry args={[0.18, 0.18, 0.12, 16]} />
-          </mesh>
-          <mesh material={glassMat} position={[0, -0.15, 0]}>
-            <cylinderGeometry args={[0.07, 0.035, 1.0, 14]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[0, -0.82, 0]}>
-            <sphereGeometry args={[0.09, 12, 10]} />
-          </mesh>
-        </group>
-      </group>
-    );
+    return <MuseumModel name="brass_vase_01" finish="bronze" position={[0, 3.25, 0.2]} height={2.85} />;
   }
-  if (kind === "browsLashes") {
-    return (
-      <group position={[0, 4.9, 0]}>
-        {/* Sculpted Classical Brow Arch & Golden-Ratio Ring */}
-        <mesh material={bronzeMat} position={[0, 0.55, 0]}>
-          <torusGeometry args={[0.92, 0.07, 12, 40, Math.PI]} />
-        </mesh>
-        <mesh material={marbleMat} position={[0, -0.05, -0.15]}>
-          <torusGeometry args={[0.52, 0.04, 10, 32]} />
-        </mesh>
-        {/* Precision Slanted Bronze Tweezers */}
-        <mesh material={bronzeMat} position={[-0.24, -0.15, 0.15]} rotation={[0, 0, -0.18]}>
-          <boxGeometry args={[0.07, 1.45, 0.09]} />
-        </mesh>
-        <mesh material={bronzeMat} position={[0.24, -0.15, 0.15]} rotation={[0, 0, 0.18]}>
-          <boxGeometry args={[0.07, 1.45, 0.09]} />
-        </mesh>
-        <mesh material={bronzeMat} position={[0, -0.88, 0.15]}>
-          <cylinderGeometry args={[0.14, 0.22, 0.22, 16]} />
-        </mesh>
-      </group>
-    );
+  if (kind === "nails") {
+    return <MuseumModel name="ornate_mirror_01" finish="marble" position={[0, 3.25, 0.2]} height={2.95} />;
   }
-  // spa
-  return (
-    <group position={[0, 3.62, 0]}>
-      {/* Two-Tiered Classical Fluted Marble Fountain Basin (Kylix) & Steam Rings */}
-      <mesh material={marbleMat} position={[0, 0.55, 0]}>
-        <cylinderGeometry args={[0.28, 0.55, 1.1, 20]} />
-      </mesh>
-      <mesh material={marbleMat} position={[0, 1.18, 0]}>
-        <cylinderGeometry args={[1.05, 0.42, 0.48, 28]} />
-      </mesh>
-      <mesh material={bronzeMat} position={[0, 1.44, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[1.06, 0.05, 10, 36]} />
-      </mesh>
-      <mesh material={marbleMat} position={[0, 1.65, 0]}>
-        <cylinderGeometry args={[0.16, 0.22, 0.55, 18]} />
-      </mesh>
-      <mesh material={marbleMat} position={[0, 2.02, 0]}>
-        <cylinderGeometry args={[0.58, 0.24, 0.28, 24]} />
-      </mesh>
-      <mesh material={bronzeMat} position={[0, 2.18, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.59, 0.035, 10, 32]} />
-      </mesh>
-      {/* Rising Warm Steam Rings */}
-      <mesh material={glassMat} position={[0, 2.58, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.42, 0.028, 8, 28]} />
-      </mesh>
-      <mesh material={glassMat} position={[0, 2.95, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.28, 0.022, 8, 24]} />
-      </mesh>
-    </group>
-  );
+  return <ClassicalMaleBust position={[0, 3.25, 0.25]} height={2.9} />;
 }
 
 /**
- * Dimension 2 — Sunlit Classical Renaissance Grooming Atelier:
- * Emerges after crossing the Looking-Glass Barber Mirror (z < -104).
- * Houses Ionic colonnades, 6 raycasted Grooming Art Plinths, the Vitruvian
- * Sundial Horologium around a sculpted Carrara Marble Barber Chair, and the
- * Maestro's Fluted-Marble Concierge Rostrum (z = -438).
+ * Dimension 2 — Enclosed Vatican "Braccio Nuovo" Renaissance Gallery,
+ * Pantheon Oculus Rotunda, & Semicircular Marble Apse (Zero Flatworld).
  */
 export function PostPortalWorld({
   scroll,
@@ -278,23 +166,26 @@ export function PostPortalWorld({
   world: React.RefObject<SpatialWorldState>;
   onSelectCategory?: (key: string) => void;
 }) {
-  const emblemRefs = useRef<(THREE.Group | null)[]>([]);
-  const clockRingRef = useRef<THREE.Group>(null);
+  const { gl } = useThree();
+  const maxAniso = gl.capabilities.getMaxAnisotropy();
+
+  const hourHandRef = useRef<THREE.Mesh>(null);
   const minuteHandRef = useRef<THREE.Mesh>(null);
-  const slabRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const nicheMatRefs = useRef<(THREE.Group | null)[]>([]);
 
   const {
     floorMat,
+    vaultMat,
+    wallMat,
     carraraMat,
     travertineMat,
     bronzeMat,
-    walnutMat,
-    ivoryMat,
-    glassMat,
-    slabGeo,
-    fluteAngles,
-    slabSeeds,
-    columnZ,
+    plaqueTextures,
+    clockTex,
+    friezeTex,
+    watchPlaqueTex,
+    registerPlaqueTex,
+    pilasterZ,
   } = useMemo(() => {
     const fMat = new THREE.ShaderMaterial({
       uniforms: {
@@ -308,187 +199,258 @@ export function PostPortalWorld({
         varying float vZ;
         void main() {
           vec2 p = vP.xy;
-          // Honed Roman travertine tiles with subtle stone mineral variation
-          vec2 tile = floor(vec2(p.x * 0.25, p.y * 0.18));
+          // Honed Carrara & Roman Travertine inlaid museum floor
+          vec2 tile = floor(vec2(p.x * 0.30, p.y * 0.22));
           float checker = mod(tile.x + tile.y, 2.0);
-          float groutX = smoothstep(0.03, 0.0, min(fract(p.x * 0.25), 1.0 - fract(p.x * 0.25)));
-          float groutZ = smoothstep(0.03, 0.0, min(fract(p.y * 0.18), 1.0 - fract(p.y * 0.18)));
-          float vein = sin(p.x * 0.9 + sin(p.y * 0.35) * 2.0) * 0.025;
+          float gx = smoothstep(0.03, 0.0, min(fract(p.x * 0.30), 1.0 - fract(p.x * 0.30)));
+          float gz = smoothstep(0.03, 0.0, min(fract(p.y * 0.22), 1.0 - fract(p.y * 0.22)));
+          float vein = sin(p.x * 0.8 + sin(p.y * 0.32) * 2.0) * 0.024;
 
-          vec3 travA = vec3(0.91, 0.87, 0.80) + vein;
-          vec3 travB = vec3(0.86, 0.81, 0.73) - vein;
+          vec3 travA = vec3(0.92, 0.88, 0.82) + vein;
+          vec3 travB = vec3(0.86, 0.81, 0.74) - vein;
           vec3 col = mix(travA, travB, checker);
-          col *= 1.0 - (groutX + groutZ) * 0.12;
+          col *= 1.0 - (gx + gz) * 0.10;
 
-          // Antique-bronze colonnade inlays & Vitruvian sanctuary rings
-          float aisle = smoothstep(0.09, 0.0, abs(abs(p.x) - 10.8)) * 0.55;
-          float rClock = length(vec2(p.x, p.y + 296.0));
-          float ringC = smoothstep(0.10, 0.0, abs(rClock - 7.4)) * 0.65
-                      + smoothstep(0.08, 0.0, abs(rClock - 11.2)) * 0.40;
-          float rDesk = length(vec2(p.x, p.y + 438.0));
-          float ringD = smoothstep(0.10, 0.0, abs(rDesk - 8.5)) * 0.55;
+          // Center marble aisle runner & bronze inlay trim
+          float runner = smoothstep(5.6, 5.2, abs(p.x));
+          vec3 runnerCol = vec3(0.95, 0.92, 0.87) + vein * 0.5;
+          col = mix(col, runnerCol, runner * 0.45);
+          float trim = smoothstep(0.08, 0.0, abs(abs(p.x) - 5.4))
+                     + smoothstep(0.07, 0.0, abs(abs(p.x) - 11.4));
+          col = mix(col, vec3(0.55, 0.43, 0.27), clamp(trim * 0.65, 0.0, 0.75));
 
-          vec3 bronze = vec3(0.55, 0.43, 0.27);
-          col = mix(col, bronze, clamp(aisle + ringC + ringD, 0.0, 0.75));
-
-          // Soft sunlit colonnade shadows along the outer porticoes
-          float porticoShade = smoothstep(11.0, 17.5, abs(p.x)) * 0.12;
-          col *= 1.0 - porticoShade;
+          // Sunlit skylight pools along the gallery axis
+          float skyPool = 0.5 + 0.5 * cos(p.y * 0.16);
+          col *= 0.92 + 0.12 * skyPool;
 
           gl_FragColor = vec4(applyFog(col, vZ), 1.0);
         }
       `,
     });
 
-    const sGeo = shade(new THREE.BoxGeometry(1.45, 0.32, 0.16));
-    const fAngles = Array.from({ length: 20 }, (_, i) => (i - 9.5) * 0.34);
-    const colsZ = [-118, -156, -195, -234, -272, -334, -372, -412];
+    // Coffered Renaissance Barrel-Vault Ceiling + Skylights Shader
+    const vMat = new THREE.ShaderMaterial({
+      side: THREE.DoubleSide,
+      uniforms: {
+        uFogCol: { value: ALABASTER_FOG },
+        uFogDen: { value: ALABASTER_FOG_DENSITY },
+      },
+      vertexShader: /* glsl */ `
+        varying vec2 vUv;
+        varying vec3 vWorld;
+        varying float vZ;
+        void main() {
+          vUv = uv;
+          vec4 wp = modelMatrix * vec4(position, 1.0);
+          vWorld = wp.xyz;
+          vec4 mv = viewMatrix * wp;
+          vZ = -mv.z;
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: /* glsl */ `
+        ${FOG_FN}
+        varying vec2 vUv;
+        varying vec3 vWorld;
+        varying float vZ;
+        void main() {
+          // Procedural Renaissance coffered panels & skylights
+          float cu = fract(vWorld.z * 0.085);
+          float cv = fract(vUv.x * 7.0);
+          float border = min(min(cu, 1.0 - cu), min(cv, 1.0 - cv));
+          float recess = smoothstep(0.14, 0.22, border);
+          float bronzeRim = smoothstep(0.16, 0.12, abs(border - 0.14));
 
-    const seeds = Array.from({ length: SLAB_COUNT }, (_, i) => {
-      const s1 = ((i * 137.5 + 17) % 100) / 100;
-      const s2 = ((i * 293.1 + 53) % 100) / 100;
-      const s3 = ((i * 419.7 + 89) % 100) / 100;
-      return {
-        sx: (s1 - 0.5) * 20,
-        sy: (s2 - 0.3) * 11,
-        sz: (s3 - 0.5) * 26,
-        rx: (s1 - 0.5) * 1.6,
-        ry: (s2 - 0.5) * 2.2,
-      };
+          // Clerestory sunlit skylight panels along vault crown
+          float crown = smoothstep(3.8, 0.8, abs(vWorld.x));
+          float skylight = crown * smoothstep(0.24, 0.30, border);
+
+          vec3 stone = mix(vec3(0.91, 0.87, 0.80), vec3(0.80, 0.74, 0.66), recess * 0.65);
+          stone = mix(stone, vec3(0.62, 0.49, 0.32), bronzeRim * 0.42);
+          stone = mix(stone, vec3(0.99, 0.97, 0.93), skylight * 0.92);
+
+          gl_FragColor = vec4(applyFog(stone, vZ), 1.0);
+        }
+      `,
     });
+
+    // Solid Travertine Gallery Wall with Dado Wainscoting & Pilaster Bays
+    const wMat = new THREE.ShaderMaterial({
+      side: THREE.DoubleSide,
+      uniforms: {
+        uFogCol: { value: ALABASTER_FOG },
+        uFogDen: { value: ALABASTER_FOG_DENSITY },
+      },
+      vertexShader: /* glsl */ `
+        varying vec3 vWorld;
+        varying float vZ;
+        void main() {
+          vec4 wp = modelMatrix * vec4(position, 1.0);
+          vWorld = wp.xyz;
+          vec4 mv = viewMatrix * wp;
+          vZ = -mv.z;
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: /* glsl */ `
+        ${FOG_FN}
+        varying vec3 vWorld;
+        varying float vZ;
+        void main() {
+          float y = vWorld.y;
+          vec3 dado = vec3(0.80, 0.74, 0.66);
+          vec3 upper = vec3(0.90, 0.86, 0.79);
+          vec3 col = mix(dado, upper, smoothstep(-3.2, -3.0, y));
+          // Bronze dado rail & cornice accent
+          float rail = smoothstep(0.16, 0.0, abs(y + 3.1));
+          float cornice = smoothstep(0.24, 0.0, abs(y - 12.6));
+          col = mix(col, vec3(0.56, 0.44, 0.28), clamp(rail + cornice, 0.0, 0.8));
+          gl_FragColor = vec4(applyFog(col, vZ), 1.0);
+        }
+      `,
+    });
+
+    const pTexts = NICHES.map((n) => {
+      const [num, name] = n.label.split(" · ");
+      return makePlaqueTexture(num, name, maxAniso);
+    });
+
+    const pZ = [-118, -138, -158, -176, -198, -216, -238, -252, -268, -328, -352, -378, -404];
 
     return {
       floorMat: fMat,
-      carraraMat: makeClassicalStoneMat(C.CARRARA, 0.07),
-      travertineMat: makeClassicalStoneMat(C.TRAVERTINE, 0.09),
+      vaultMat: vMat,
+      wallMat: wMat,
+      carraraMat: makeClassicalStoneMat(C.CARRARA, 0.06),
+      travertineMat: makeClassicalStoneMat(C.TRAVERTINE, 0.08),
       bronzeMat: makeClassicalStoneMat(C.BRONZE, 0.03),
-      walnutMat: makeClassicalStoneMat(C.WOOD, 0.05),
-      ivoryMat: makeClassicalStoneMat(0xfbf8f1, 0.03),
-      glassMat: makeClassicalStoneMat(0xdbe3ea, 0.02),
-      slabGeo: sGeo,
-      fluteAngles: fAngles,
-      slabSeeds: seeds,
-      columnZ: colsZ,
+      plaqueTextures: pTexts,
+      clockTex: makeFloorClockTexture(maxAniso),
+      friezeTex: makePlaqueTexture("ANNO MMXXVI // UZBEKISTAN", "SMARTCHAIR ATELIER", maxAniso),
+      watchPlaqueTex: makePlaqueTexture("HOROLOGIUM", "Live Scheduling", maxAniso),
+      registerPlaqueTex: makePlaqueTexture("THESAURUS", "Checkout & Z-Reports", maxAniso),
+      pilasterZ: pZ,
     };
-  }, []);
+  }, [maxAniso]);
+
+  useEffect(() => {
+    return () => {
+      plaqueTextures.forEach((t) => t.dispose());
+      clockTex.dispose();
+      friezeTex.dispose();
+      watchPlaqueTex.dispose();
+      registerPlaqueTex.dispose();
+    };
+  }, [plaqueTextures, clockTex, friezeTex, watchPlaqueTex, registerPlaqueTex]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
     const p = scroll.current?.smooth ?? 0;
 
-    // Gentle sculptural sway & float keeping busts/tools facing forward toward visitors
-    emblemRefs.current.forEach((grp, idx) => {
+    // Gentle highlight scale on selected Niche pedestal group
+    nicheMatRefs.current.forEach((grp, idx) => {
       if (!grp) return;
-      const spec = PLINTHS[idx];
-      const isSelected = world.current?.selectedCategory === spec.key;
-      const targetY = Math.sin(t * 1.1 + idx * 0.9) * 0.10 + (isSelected ? 0.35 : 0);
-      grp.position.y += (targetY - grp.position.y) * 0.08;
-      grp.rotation.y = Math.sin(t * 0.75 + idx * 0.9) * 0.28;
-      const s = isSelected ? 1.09 : 1.0;
-      grp.scale.lerp(new THREE.Vector3(s, s, s), 0.1);
+      const isSelected = world.current?.selectedCategory === NICHES[idx].key;
+      const targetS = isSelected ? 1.05 : 1.0;
+      grp.scale.lerp(new THREE.Vector3(targetS, targetS, targetS), 0.1);
     });
 
-    // Vitruvian Sundial Horologium & 16 snapping ivory appointment slabs (0.56 -> 0.74)
-    const snap = smoothstep(0.56, 0.74, p);
-    if (clockRingRef.current) {
-      clockRingRef.current.rotation.z = t * 0.05;
+    // Sweep Roman Floor Clock bronze hands smoothly
+    if (hourHandRef.current) {
+      hourHandRef.current.rotation.z = -t * 0.08 - p * 3.0;
     }
     if (minuteHandRef.current) {
-      minuteHandRef.current.rotation.z = -t * 0.30 - p * 10.0;
+      minuteHandRef.current.rotation.z = -t * 0.35 - p * 12.0;
     }
-
-    slabRefs.current.forEach((mesh, i) => {
-      if (!mesh) return;
-      const seed = slabSeeds[i];
-      const angle = (i / SLAB_COUNT) * Math.PI * 2;
-      const ringR = 4.35;
-      const tx = Math.cos(angle) * ringR;
-      const ty = Math.sin(angle) * ringR;
-      const tz = 0;
-
-      mesh.position.set(
-        seed.sx + (tx - seed.sx) * snap,
-        seed.sy + (ty - seed.sy) * snap,
-        seed.sz + (tz - seed.sz) * snap
-      );
-      mesh.rotation.set(
-        seed.rx * (1 - snap),
-        seed.ry * (1 - snap),
-        angle * snap
-      );
-    });
   });
 
   return (
     <group>
-      {/* Sunlit Honed Roman Travertine Piazza Floor */}
+      {/* 1. Bounded Gallery Marble & Travertine Floor (34m x 364m) */}
       <mesh
         material={floorMat}
-        position={[0, FLOOR_Y, -295]}
+        position={[0, FLOOR_Y, -284]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
-        <planeGeometry args={[260, 410]} />
+        <planeGeometry args={[34, 364]} />
       </mesh>
 
-      {/* Fluted Ionic Marble Colonnades & Architrave Beams */}
-      {columnZ.map((z) =>
-        [-14.8, 14.8].map((x) => (
-          <group key={`${z}_${x}`} position={[x, FLOOR_Y, z]}>
-            {/* Stepped Plinth Base */}
-            <mesh material={travertineMat} position={[0, 0.45, 0]}>
-              <boxGeometry args={[2.2, 0.9, 2.2]} />
+      {/* 2. Solid Lateral Gallery Walls (Left x = -16.2, Right x = +16.2) */}
+      {[-16.2, 16.2].map((x) => (
+        <mesh
+          key={`wall_${x}`}
+          material={wallMat}
+          position={[x, 3.2, -280]}
+          rotation={[0, x < 0 ? Math.PI / 2 : -Math.PI / 2, 0]}
+        >
+          <planeGeometry args={[356, 20.5]} />
+        </mesh>
+      ))}
+
+      {/* 3. Entry Tympanum Back Wall behind Teleport (z = -102) */}
+      <mesh material={wallMat} position={[0, 6.5, -102]}>
+        <planeGeometry args={[34, 28]} />
+      </mesh>
+
+      {/* 4. Full Coffered Barrel-Vault Ceiling with Clerestory Skylights (Gallery Wing 1 & 2) */}
+      <mesh
+        material={vaultMat}
+        position={[0, 13.4, -186]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <cylinderGeometry args={[16.3, 16.3, 168, 32, 1, true, Math.PI / 2, Math.PI]} />
+      </mesh>
+      <mesh
+        material={vaultMat}
+        position={[0, 13.4, -380]}
+        rotation={[Math.PI / 2, 0, 0]}
+      >
+        <cylinderGeometry args={[16.3, 16.3, 120, 32, 1, true, Math.PI / 2, Math.PI]} />
+      </mesh>
+
+      {/* 5. Articulated Ionic Pilasters & Continuous Entablature Beams */}
+      {pilasterZ.map((z) =>
+        [-15.4, 15.4].map((x) => (
+          <group key={`pil_${z}_${x}`} position={[x, FLOOR_Y, z]}>
+            <mesh material={travertineMat} position={[0, 0.5, 0]}>
+              <boxGeometry args={[1.6, 1.0, 1.6]} />
             </mesh>
-            {/* Fluted Carrara Shaft */}
-            <mesh material={carraraMat} position={[0, 10.5, 0]}>
-              <cylinderGeometry args={[0.72, 0.86, 19.2, 16]} />
+            <mesh material={carraraMat} position={[0, 10.2, 0]}>
+              <cylinderGeometry args={[0.62, 0.74, 18.4, 16]} />
             </mesh>
-            {/* Ionic Capital & Bronze Astragal */}
-            <mesh material={bronzeMat} position={[0, 19.9, 0]}>
-              <cylinderGeometry args={[0.92, 0.78, 0.25, 16]} />
+            <mesh material={bronzeMat} position={[0, 19.5, 0]}>
+              <cylinderGeometry args={[0.82, 0.68, 0.24, 16]} />
             </mesh>
-            <mesh material={carraraMat} position={[0, 20.55, 0]}>
-              <boxGeometry args={[2.3, 1.0, 2.3]} />
+            <mesh material={carraraMat} position={[0, 20.0, 0]}>
+              <boxGeometry args={[1.7, 0.8, 1.7]} />
             </mesh>
           </group>
         ))
       )}
 
-      {/* Longitudinal Entablature Beams */}
-      {[-14.8, 14.8].map((x) => (
-        <mesh key={`beam_${x}`} material={carraraMat} position={[x, FLOOR_Y + 21.8, -270]}>
-          <boxGeometry args={[2.1, 1.6, 330]} />
+      {[-15.4, 15.4].map((x) => (
+        <mesh key={`ent_${x}`} material={carraraMat} position={[x, 13.4, -278]}>
+          <boxGeometry args={[1.5, 1.4, 344]} />
         </mesh>
       ))}
 
-      {/* 4 Coffered Renaissance Triumphal Arches */}
-      {[-118, -195, -272, -372].map((z) => (
-        <group key={`arch_${z}`} position={[0, FLOOR_Y, z]}>
-          <mesh material={travertineMat} position={[0, 21.6, 0]}>
-            <boxGeometry args={[32.0, 1.8, 2.2]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[0, 20.6, 0]}>
-            <boxGeometry args={[28.4, 0.14, 2.26]} />
-          </mesh>
-          <mesh material={carraraMat} position={[0, 22.8, 0]}>
-            <boxGeometry args={[33.2, 0.7, 2.6]} />
-          </mesh>
-        </group>
-      ))}
-
-      {/* Act III — Colonnade of the Six Grooming Arts */}
-      {PLINTHS.map((m, idx) => (
+      {/* 6. Act III — 6 Recessed Arched Wall Niches with Real CC0 Scans & Plaques */}
+      {NICHES.map((n, idx) => (
         <group
-          key={m.key}
-          position={m.pos}
-          rotation={[0, m.ry, 0]}
+          key={n.key}
+          ref={(el) => {
+            nicheMatRefs.current[idx] = el;
+          }}
+          position={n.pos}
+          rotation={[0, n.ry, 0]}
           onClick={(e) => {
             e.stopPropagation();
-            if (world.current) world.current.selectedCategory = m.key;
-            onSelectCategory?.(m.key);
+            if (world.current) world.current.selectedCategory = n.key;
+            onSelectCategory?.(n.key);
           }}
           onPointerOver={(e) => {
             e.stopPropagation();
-            if (world.current) world.current.hoveredAnchor = m.key;
+            if (world.current) world.current.hoveredAnchor = n.key;
             document.body.style.cursor = "pointer";
           }}
           onPointerOut={() => {
@@ -496,183 +458,163 @@ export function PostPortalWorld({
             document.body.style.cursor = "";
           }}
         >
-          {/* Stepped Marble Plinth */}
-          <mesh material={travertineMat} position={[0, 0.35, 0]}>
-            <boxGeometry args={[2.5, 0.7, 2.5]} />
+          {/* Arched Niche Frame & Recessed Alcove */}
+          <mesh material={travertineMat} position={[-2.4, 5.2, -0.8]}>
+            <boxGeometry args={[0.7, 10.4, 1.4]} />
           </mesh>
-          <mesh material={carraraMat} position={[0, 2.1, 0]}>
-            <boxGeometry args={[1.95, 2.8, 1.95]} />
+          <mesh material={travertineMat} position={[2.4, 5.2, -0.8]}>
+            <boxGeometry args={[0.7, 10.4, 1.4]} />
           </mesh>
-          <mesh material={bronzeMat} position={[0, 3.55, 0]}>
-            <boxGeometry args={[2.1, 0.12, 2.1]} />
+          <mesh material={bronzeMat} position={[0, 8.6, -0.2]}>
+            <torusGeometry args={[2.1, 0.08, 10, 32, Math.PI]} />
+          </mesh>
+          <mesh material={carraraMat} position={[0, 8.6, -0.6]}>
+            <torusGeometry args={[2.3, 0.28, 12, 32, Math.PI]} />
           </mesh>
 
-          {/* Animated Sculpted Grooming Emblem */}
-          <group
-            ref={(el) => {
-              emblemRefs.current[idx] = el;
-            }}
-          >
-            <GroomingEmblem
-              kind={m.key}
-              marbleMat={carraraMat}
-              bronzeMat={bronzeMat}
-              travertineMat={travertineMat}
-              glassMat={glassMat}
-            />
-          </group>
+          {/* Stepped Marble Display Pedestal */}
+          <mesh material={travertineMat} position={[0, 0.35, 0.2]}>
+            <boxGeometry args={[2.7, 0.7, 2.2]} />
+          </mesh>
+          <mesh material={carraraMat} position={[0, 1.9, 0.2]}>
+            <boxGeometry args={[2.1, 2.4, 1.8]} />
+          </mesh>
+          <mesh material={bronzeMat} position={[0, 3.16, 0.2]}>
+            <boxGeometry args={[2.25, 0.12, 1.95]} />
+          </mesh>
+
+          {/* Chiseled Roman Pedestal Plaque */}
+          <mesh position={[0, 1.95, 1.12]}>
+            <planeGeometry args={[1.75, 0.66]} />
+            <meshBasicMaterial map={plaqueTextures[idx]} />
+          </mesh>
+
+          {/* Real Scanned CC0 3D Museum Sculpture */}
+          <NicheSculpture kind={n.key} />
         </group>
       ))}
 
-      {/* Act IV — Vitruvian Sundial Horologium & Sculpted Marble Barber Chair */}
+      {/* 7. Act IV — Sunlit Pantheon Rotunda Dome, Floor Clock & Real Salon Monuments (z = -296) */}
       <group position={[0, FLOOR_Y, -296]}>
-        {/* Stepped Circular Travertine Dais */}
+        {/* Coffered Pantheon Dome & Glowing Overhead Oculus */}
+        <mesh material={vaultMat} position={[0, 19.6, 0]}>
+          <sphereGeometry args={[21.5, 36, 16, 0, Math.PI * 2, 0.34, Math.PI / 2 - 0.34]} />
+        </mesh>
+        <mesh material={bronzeMat} position={[0, 29.8, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[7.2, 0.24, 12, 48]} />
+        </mesh>
+        {/* Warm Oculus Sunbeam Shaft */}
+        <mesh position={[0, 16.0, 0]}>
+          <cylinderGeometry args={[6.8, 9.8, 30, 32, 1, true]} />
+          <meshBasicMaterial color={0xfff4de} transparent opacity={0.08} depthWrite={false} side={THREE.DoubleSide} />
+        </mesh>
+
+        {/* Stepped Circular Marble Dais & Inlaid Roman Floor Clock (XII · III · VI · IX) */}
         <mesh material={travertineMat} position={[0, 0.22, 0]}>
-          <cylinderGeometry args={[6.4, 6.8, 0.44, 48]} />
+          <cylinderGeometry args={[8.6, 9.1, 0.44, 48]} />
         </mesh>
-        <mesh material={carraraMat} position={[0, 0.56, 0]}>
-          <cylinderGeometry args={[4.8, 5.1, 0.24, 48]} />
+        <mesh material={carraraMat} position={[0, 0.54, 0]}>
+          <cylinderGeometry args={[6.8, 7.2, 0.22, 48]} />
+        </mesh>
+        <mesh position={[0, 0.66, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[6.5, 48]} />
+          <meshBasicMaterial map={clockTex} />
         </mesh>
 
-        {/* Center-Stage Sculpted Carrara Marble & Bronze Barber Chair */}
-        <group position={[0, 0.68, 0]} scale={0.78}>
-          <mesh material={bronzeMat} position={[0, 0.3, 0]}>
-            <cylinderGeometry args={[1.9, 1.2, 0.6, 24]} />
+        {/* Sweeping Bronze Clock Hands Flat on the Floor Dais */}
+        <group position={[0, 0.70, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <mesh ref={hourHandRef} material={bronzeMat} position={[0, 0, 0]}>
+            <boxGeometry args={[0.18, 4.2, 0.04]} />
           </mesh>
-          <mesh material={bronzeMat} position={[0, 1.5, 0]}>
-            <cylinderGeometry args={[0.45, 0.45, 1.8, 18]} />
-          </mesh>
-          <mesh material={carraraMat} position={[0, 2.75, 0]}>
-            <boxGeometry args={[3.0, 0.85, 3.0]} />
-          </mesh>
-          <mesh material={carraraMat} position={[0, 4.55, -1.2]} rotation={[-0.14, 0, 0]}>
-            <boxGeometry args={[3.0, 3.4, 0.8]} />
-          </mesh>
-          <mesh material={carraraMat} position={[0, 6.45, -1.55]} rotation={[-0.14, 0, 0]}>
-            <boxGeometry args={[1.6, 0.95, 0.65]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[-1.6, 3.55, 0]}>
-            <boxGeometry args={[0.45, 0.32, 2.8]} />
-          </mesh>
-          <mesh material={bronzeMat} position={[1.6, 3.55, 0]}>
-            <boxGeometry args={[0.45, 0.32, 2.8]} />
+          <mesh ref={minuteHandRef} material={bronzeMat} position={[0, 0, 0.03]}>
+            <boxGeometry args={[0.11, 5.6, 0.04]} />
           </mesh>
         </group>
 
-        {/* Surrounding Bronze Armillary Sundial Ring & 16 Ivory Appointment Slabs */}
-        <group position={[0, 6.8, 0]}>
-          <group ref={clockRingRef}>
-            <mesh material={bronzeMat}>
-              <torusGeometry args={[5.2, 0.09, 12, 64]} />
-            </mesh>
-            <mesh material={carraraMat}>
-              <torusGeometry args={[5.7, 0.14, 12, 64]} />
-            </mesh>
-          </group>
-          <mesh ref={minuteHandRef} material={bronzeMat} position={[0, 0, 0.1]}>
-            <boxGeometry args={[0.11, 3.6, 0.08]} />
-          </mesh>
+        {/* Centerpiece Real 3D BarberShopChair_01 Beneath the Pantheon Oculus */}
+        <MuseumModel name="BarberShopChair_01" finish="marble" position={[0, 0.72, 0]} height={4.4} />
 
-          {slabSeeds.map((_, i) => (
-            <mesh
-              key={i}
-              ref={(el) => {
-                slabRefs.current[i] = el;
-              }}
-              geometry={slabGeo}
-              material={i % 4 === 0 ? bronzeMat : ivoryMat}
-            />
-          ))}
+        {/* Flanking Platform Monuments: Vintage Pocket Watch (Scheduling) & Cash Register (Checkout) */}
+        <group position={[-6.4, 0, 2.4]} rotation={[0, 0.36, 0]}>
+          <mesh material={travertineMat} position={[0, 0.3, 0]}>
+            <boxGeometry args={[2.2, 0.6, 2.0]} />
+          </mesh>
+          <mesh material={carraraMat} position={[0, 1.65, 0]}>
+            <boxGeometry args={[1.7, 2.1, 1.5]} />
+          </mesh>
+          <mesh position={[0, 1.65, 0.77]}>
+            <planeGeometry args={[1.45, 0.54]} />
+            <meshBasicMaterial map={watchPlaqueTex} />
+          </mesh>
+          <MuseumModel name="vintage_pocket_watch" finish="bronze" position={[0, 2.72, 0]} rotation={[0.4, 0, 0]} height={2.05} />
         </group>
 
-        {/* SmartChair Walk-In QR Obelisk connecting live queue to scheduled slots */}
-        <group position={[-6.8, 0, 2.8]} rotation={[0, 0.35, 0]}>
-          <mesh material={travertineMat} position={[0, 0.25, 0]}>
-            <boxGeometry args={[1.6, 0.5, 1.1]} />
+        <group position={[6.4, 0, 2.4]} rotation={[0, -0.36, 0]}>
+          <mesh material={travertineMat} position={[0, 0.3, 0]}>
+            <boxGeometry args={[2.2, 0.6, 2.0]} />
           </mesh>
-          <mesh material={carraraMat} position={[0, 2.3, 0]}>
-            <boxGeometry args={[1.15, 3.6, 0.28]} />
+          <mesh material={carraraMat} position={[0, 1.65, 0]}>
+            <boxGeometry args={[1.7, 2.1, 1.5]} />
           </mesh>
-          <mesh material={bronzeMat} position={[0, 4.16, 0]}>
-            <boxGeometry args={[1.24, 0.12, 0.34]} />
+          <mesh position={[0, 1.65, 0.77]}>
+            <planeGeometry args={[1.45, 0.54]} />
+            <meshBasicMaterial map={registerPlaqueTex} />
           </mesh>
-          {/* 3x3 Antique-Bronze QR Finder Relief Matrix */}
-          {[-0.28, 0, 0.28].map((qx, xi) =>
-            [-0.28, 0, 0.28].map((qy, yi) => {
-              if ((xi + yi) % 2 === 1 && !(xi === 0 && yi === 2)) return null;
-              return (
-                <mesh
-                  key={`${xi}_${yi}`}
-                  material={bronzeMat}
-                  position={[qx, 3.05 + qy, 0.16]}
-                >
-                  <boxGeometry args={[0.18, 0.18, 0.05]} />
-                </mesh>
-              );
-            })
-          )}
+          <MuseumModel name="CashRegister_01" finish="bronze" position={[0, 2.72, 0]} height={2.15} />
         </group>
       </group>
 
-      {/* Act V — The Maestro's Fluted-Marble & Walnut Concierge Rostrum (z = -438) */}
+      {/* 8. Act V — Semicircular Marble Apse, Coffered Half-Dome & Integrated Concierge Rostrum (z = -438) */}
       <group position={[0, FLOOR_Y, -438]}>
-        {/* Travertine Step */}
-        <mesh material={travertineMat} position={[0, 0.18, 0]}>
-          <boxGeometry args={[9.4, 0.36, 3.6]} />
+        {/* Curved Semicircular Marble Apse Wall & Coffered Half-Dome Sealing the Hall */}
+        <mesh material={wallMat} position={[0, 10.2, 0]}>
+          <cylinderGeometry args={[16.2, 16.2, 20.5, 32, 1, true, Math.PI / 2, Math.PI]} />
         </mesh>
-        {/* Main Walnut & Carrara Body */}
-        <mesh material={walnutMat} position={[0, 1.65, 0]}>
-          <boxGeometry args={[7.4, 2.6, 2.1]} />
+        <mesh material={vaultMat} position={[0, 20.4, 0]}>
+          <sphereGeometry args={[16.2, 32, 14, Math.PI, Math.PI, 0, Math.PI / 2]} />
         </mesh>
-        {/* 20 Vertical Carrara Marble Flutes */}
-        {fluteAngles.map((fx, i) => (
-          <mesh key={i} material={carraraMat} position={[fx, 1.65, 1.08]}>
-            <boxGeometry args={[0.12, 2.35, 0.10]} />
-          </mesh>
-        ))}
-        {/* Cantilevered Carrara Marble Top Slab with Bronze Astragal */}
-        <mesh material={carraraMat} position={[0, 3.12, 0]}>
-          <boxGeometry args={[8.0, 0.24, 2.5]} />
-        </mesh>
-        <mesh material={bronzeMat} position={[0, 2.98, 1.15]}>
-          <boxGeometry args={[7.8, 0.08, 0.12]} />
-        </mesh>
-        {/* Angled Bronze & Marble Appointment Ledger Lectern */}
-        <group position={[0, 3.32, 0.2]} rotation={[0.28, 0, 0]}>
-          <mesh material={bronzeMat}>
-            <boxGeometry args={[1.65, 0.08, 1.05]} />
-          </mesh>
-          <mesh material={ivoryMat} position={[0, 0.07, 0]}>
-            <boxGeometry args={[1.45, 0.06, 0.88]} />
-          </mesh>
-        </group>
 
-        {/* Twin Monumental Guardian Classical Male Busts Flanking the Rostrum */}
+        {/* Engraved "SMARTCHAIR ATELIER" Roman Frieze on the Apse Arch */}
+        <mesh position={[0, 16.4, -4.5]}>
+          <planeGeometry args={[11.2, 2.6]} />
+          <meshBasicMaterial map={friezeTex} />
+        </mesh>
+
+        {/* 3-Step Semicircular Carrara Marble & Travertine Apse Podium */}
+        <mesh material={travertineMat} position={[0, 0.18, 0]}>
+          <cylinderGeometry args={[10.5, 11.0, 0.36, 40]} />
+        </mesh>
+        <mesh material={carraraMat} position={[0, 0.52, 0]}>
+          <cylinderGeometry args={[8.2, 8.6, 0.32, 40]} />
+        </mesh>
+        <mesh material={travertineMat} position={[0, 0.84, 0]}>
+          <cylinderGeometry args={[6.0, 6.3, 0.32, 40]} />
+        </mesh>
+
+        {/* Unified Carved Marble Concierge Counter + Real ClassicConsole_01 Growing from the Podium */}
+        <MuseumModel name="ClassicConsole_01" finish="marble" position={[0, 1.0, 0.8]} height={2.55} />
+        <mesh material={carraraMat} position={[0, 3.62, 0.8]}>
+          <boxGeometry args={[6.4, 0.22, 2.1]} />
+        </mesh>
+        <mesh material={bronzeMat} position={[0, 3.48, 1.78]}>
+          <boxGeometry args={[6.2, 0.08, 0.10]} />
+        </mesh>
+
+        {/* Twin Curly-Haired Classical Male Busts in Flanking Marble Pedestal Niches */}
         {[
-          { x: -6.4, ry: 0.32 },
-          { x: 6.4, ry: -0.32 },
+          { x: -6.8, ry: 0.34 },
+          { x: 6.8, ry: -0.34 },
         ].map((g) => (
-          <group key={g.x} position={[g.x, 0, -1.2]} rotation={[0, g.ry, 0]}>
-            <mesh material={travertineMat} position={[0, 0.3, 0]}>
-              <boxGeometry args={[2.3, 0.6, 2.3]} />
+          <group key={g.x} position={[g.x, 0.68, -2.0]} rotation={[0, g.ry, 0]}>
+            <mesh material={carraraMat} position={[0, 1.35, 0]}>
+              <boxGeometry args={[1.85, 2.7, 1.85]} />
             </mesh>
-            <mesh material={carraraMat} position={[0, 1.55, 0]}>
-              <boxGeometry args={[1.75, 1.9, 1.75]} />
+            <mesh material={bronzeMat} position={[0, 2.76, 0]}>
+              <boxGeometry args={[2.0, 0.12, 2.0]} />
             </mesh>
-            <mesh material={bronzeMat} position={[0, 2.55, 0]}>
-              <boxGeometry args={[1.9, 0.12, 1.9]} />
-            </mesh>
-            <ClassicalMaleBust position={[0, 2.61, 0]} height={2.85} />
+            <ClassicalMaleBust position={[0, 2.82, 0]} height={2.9} />
           </group>
         ))}
-
-        {/* Sunlit Renaissance Triumphal Back Arch */}
-        <mesh material={carraraMat} position={[0, 7.6, -5.8]}>
-          <torusGeometry args={[6.4, 0.32, 14, 64, Math.PI]} />
-        </mesh>
-        <mesh material={bronzeMat} position={[0, 7.6, -5.5]}>
-          <torusGeometry args={[5.9, 0.07, 10, 64, Math.PI]} />
-        </mesh>
       </group>
     </group>
   );
