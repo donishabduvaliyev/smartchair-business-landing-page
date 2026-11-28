@@ -33,8 +33,8 @@ function DimensionDirector({
 
   useFrame(() => {
     const p = scroll.current?.smooth ?? 0;
-    if (world1Ref.current) world1Ref.current.visible = p < 0.385;
-    if (world2Ref.current) world2Ref.current.visible = p > 0.345;
+    if (world1Ref.current) world1Ref.current.visible = p < 0.368;
+    if (world2Ref.current) world2Ref.current.visible = p >= 0.362;
 
     const t = Math.min(Math.max((p - 0.35) / 0.04, 0), 1);
     const daylight = t * t * (3 - 2 * t);

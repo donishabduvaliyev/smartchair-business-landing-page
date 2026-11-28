@@ -43,6 +43,7 @@ export function BusinessOperationsSpine({
     setActiveKey(key);
     if (world.current) {
       world.current.selectedOpsModule = key;
+      world.current.userClickedGaze = true;
     }
   };
 

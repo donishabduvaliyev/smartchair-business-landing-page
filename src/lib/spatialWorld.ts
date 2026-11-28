@@ -16,6 +16,7 @@ export interface SpatialWorldState {
   hoveredAnchor: string | null;
   selectedCategory: string;
   selectedOpsModule: OpsModuleId;
+  userClickedGaze: boolean;
   anchors: Record<string, ProjectedAnchor>;
 }
 
@@ -28,21 +29,21 @@ export const WORLD_ANCHOR_POSITIONS: Record<string, [number, number, number]> = 
 };
 
 export const NICHE_LOOK_TARGETS: Record<string, [number, number, number]> = {
-  barber: [-8.0, 0.8, -162],
-  hair: [8.0, 0.8, -176],
-  spa: [-8.0, 0.8, -198],
-  massage: [-8.0, 0.8, -198],
-  cosmetology: [8.0, 0.8, -216],
-  nails: [-8.0, 0.8, -238],
-  browsLashes: [8.0, 0.8, -252],
-  makeup: [8.0, 0.8, -252],
+  barber: [-6.0, -0.4, -158],
+  hair: [6.0, -0.4, -176],
+  spa: [-6.0, -0.4, -198],
+  massage: [-6.0, -0.4, -198],
+  cosmetology: [6.0, -0.4, -216],
+  nails: [-6.0, -0.4, -238],
+  browsLashes: [6.0, -0.4, -252],
+  makeup: [6.0, -0.4, -252],
 };
 
 export const OPS_LOOK_TARGETS: Record<OpsModuleId, [number, number, number]> = {
-  requests: [-7.8, -3.8, -294.6],
-  queue: [-4.2, -3.6, -296.0],
-  register: [7.8, -3.8, -294.6],
-  crm: [4.2, -3.6, -296.0],
+  requests: [-6.2, -1.0, -294.6],
+  queue: [-3.5, -1.0, -296.0],
+  register: [6.2, -1.0, -294.6],
+  crm: [3.5, -1.0, -296.0],
 };
 
 export function createSpatialWorld(): SpatialWorldState {
@@ -57,6 +58,7 @@ export function createSpatialWorld(): SpatialWorldState {
     hoveredAnchor: null,
     selectedCategory: "barber",
     selectedOpsModule: "requests",
+    userClickedGaze: false,
     anchors,
   };
 }

@@ -47,6 +47,7 @@ export function DiscoveryAtelier({
     setSelectedKey(key);
     if (world.current) {
       world.current.selectedCategory = key;
+      world.current.userClickedGaze = true;
     }
   };
 

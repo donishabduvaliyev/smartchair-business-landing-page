@@ -385,13 +385,13 @@ export function PostPortalWorld({
 
   return (
     <group>
-      {/* 1. Bounded Gallery Marble & Travertine Floor (34m x 364m) */}
+      {/* 1. Bounded Gallery Marble & Travertine Floor (34m x 388m) */}
       <mesh
         material={floorMat}
-        position={[0, FLOOR_Y, -284]}
+        position={[0, FLOOR_Y, -272]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
-        <planeGeometry args={[34, 364]} />
+        <planeGeometry args={[34, 388]} />
       </mesh>
 
       {/* 2. Solid Lateral Gallery Walls (Left x = -16.2, Right x = +16.2) */}
@@ -399,25 +399,25 @@ export function PostPortalWorld({
         <mesh
           key={`wall_${x}`}
           material={wallMat}
-          position={[x, 3.2, -280]}
+          position={[x, 3.2, -268]}
           rotation={[0, x < 0 ? Math.PI / 2 : -Math.PI / 2, 0]}
         >
-          <planeGeometry args={[356, 20.5]} />
+          <planeGeometry args={[380, 20.5]} />
         </mesh>
       ))}
 
-      {/* 3. Entry Tympanum Back Wall behind Teleport (z = -102) */}
-      <mesh material={wallMat} position={[0, 6.5, -102]}>
+      {/* 3. Entry Tympanum Back Wall behind Teleport (z = -82) */}
+      <mesh material={wallMat} position={[0, 6.5, -82]}>
         <planeGeometry args={[34, 28]} />
       </mesh>
 
       {/* 4. Full Coffered Barrel-Vault Ceiling with Clerestory Skylights (Gallery Wing 1 & 2) */}
       <mesh
         material={vaultMat}
-        position={[0, 13.4, -186]}
+        position={[0, 13.4, -176]}
         rotation={[Math.PI / 2, 0, 0]}
       >
-        <cylinderGeometry args={[16.3, 16.3, 168, 32, 1, true, Math.PI / 2, Math.PI]} />
+        <cylinderGeometry args={[16.3, 16.3, 188, 32, 1, true, Math.PI / 2, Math.PI]} />
       </mesh>
       <mesh
         material={vaultMat}
@@ -448,8 +448,8 @@ export function PostPortalWorld({
       )}
 
       {[-15.4, 15.4].map((x) => (
-        <mesh key={`ent_${x}`} material={carraraMat} position={[x, 13.4, -278]}>
-          <boxGeometry args={[1.5, 1.4, 344]} />
+        <mesh key={`ent_${x}`} material={carraraMat} position={[x, 13.4, -266]}>
+          <boxGeometry args={[1.5, 1.4, 368]} />
         </mesh>
       ))}
 
@@ -464,7 +464,10 @@ export function PostPortalWorld({
           rotation={[0, n.ry, 0]}
           onClick={(e) => {
             e.stopPropagation();
-            if (world.current) world.current.selectedCategory = n.key;
+            if (world.current) {
+              world.current.selectedCategory = n.key;
+              world.current.userClickedGaze = true;
+            }
             onSelectCategory?.(n.key);
           }}
           onPointerOver={(e) => {
@@ -553,7 +556,13 @@ export function PostPortalWorld({
           ref={(el) => { opsMatRefs.current[0] = el; }}
           position={[-7.8, 0, 1.4]}
           rotation={[0, 0.36, 0]}
-          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "requests"; }}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (world.current) {
+              world.current.selectedOpsModule = "requests";
+              world.current.userClickedGaze = true;
+            }
+          }}
           onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
           onPointerOut={() => { document.body.style.cursor = ""; }}
         >
@@ -574,7 +583,13 @@ export function PostPortalWorld({
           ref={(el) => { opsMatRefs.current[1] = el; }}
           position={[7.8, 0, 1.4]}
           rotation={[0, -0.36, 0]}
-          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "register"; }}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (world.current) {
+              world.current.selectedOpsModule = "register";
+              world.current.userClickedGaze = true;
+            }
+          }}
           onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
           onPointerOut={() => { document.body.style.cursor = ""; }}
         >
