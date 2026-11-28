@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { useFrame } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { ALABASTER_FOG, ALABASTER_FOG_DENSITY } from "./constants";
 import { FOG_FN } from "./glsl";
@@ -8,6 +9,18 @@ export type MuseumFinish = "marble" | "bronze";
 
 const assetCache = new Map<string, THREE.Group>();
 const promiseCache = new Map<string, Promise<THREE.Group>>();
+
+const PRELOAD_QUEUE: Array<{ name: string; finish: MuseumFinish }> = [
+  { name: "BarberShopChair_01", finish: "marble" },
+  { name: "ornate_mirror_01", finish: "bronze" },
+  { name: "vintage_pocket_watch", finish: "bronze" },
+  { name: "CashRegister_01", finish: "bronze" },
+  { name: "ClassicConsole_01", finish: "marble" },
+  { name: "antique_ceramic_vase_01", finish: "marble" },
+  { name: "brass_vase_01", finish: "bronze" },
+  { name: "brass_goblets", finish: "bronze" },
+  { name: "seadogs_compass", finish: "bronze" },
+];
 
 function makeMuseumMaterial(diffTex: THREE.Texture | null, finish: MuseumFinish): THREE.ShaderMaterial {
   const tint = finish === "bronze" ? new THREE.Color(0x8c6d46) : new THREE.Color(0xf4efe6);
@@ -108,8 +121,10 @@ function loadMuseumModel(modelName: string, finish: MuseumFinish): Promise<THREE
         box.getSize(size);
         box.getCenter(center);
 
+        // Normalize by largest XYZ dimension so flat scans never explode across the floor
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale = maxDim > 0 ? 1 / maxDim : 1;
         const norm = new THREE.Group();
-        const scale = size.y > 0 ? 1 / size.y : 1;
         root.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
         root.scale.setScalar(scale);
         norm.add(root);
@@ -129,10 +144,20 @@ function loadMuseumModel(modelName: string, finish: MuseumFinish): Promise<THREE
   return p;
 }
 
+/** Staggered idle preloading so Dimension 2 sculptures are cached before arrival. */
+export function preloadAllMuseumModels(lowBandwidth = false): void {
+  if (typeof window === "undefined") return;
+  const list = lowBandwidth ? PRELOAD_QUEUE.slice(0, 5) : PRELOAD_QUEUE;
+  list.forEach((item, idx) => {
+    window.setTimeout(() => {
+      loadMuseumModel(item.name, item.finish).catch(() => {});
+    }, 280 + idx * 180);
+  });
+}
+
 /**
- * Loads a local CC0 Poly Haven 1K glTF model, normalizes it to 1m height
- * resting at y = 0, and shades all sub-meshes in sunlit Carrara marble or
- * antique Renaissance bronze.
+ * Loads a compressed CC0 Poly Haven 1K glTF model, normalizes its max
+ * bounding dimension to 1m resting at y = 0, and eases in without popping.
  */
 export function MuseumModel({
   name,
@@ -148,13 +173,17 @@ export function MuseumModel({
   height?: number;
 }) {
   const key = `${name}:${finish}`;
-  const [template, setTemplate] = useState<THREE.Group | null>(assetCache.get(key) ?? null);
+  const [template, setTemplate] = useState<THREE.Group | null>(() => assetCache.get(key) ?? null);
+  const groupRef = useRef<THREE.Group>(null);
+  const revealRef = useRef(assetCache.has(key) ? 1 : 0.85);
 
   useEffect(() => {
     let active = true;
     const cached = assetCache.get(key);
     if (cached) {
-      setTemplate(cached);
+      Promise.resolve().then(() => {
+        if (active) setTemplate(cached);
+      });
     } else {
       loadMuseumModel(name, finish)
         .then((grp) => {
@@ -169,9 +198,25 @@ export function MuseumModel({
     };
   }, [key, name, finish]);
 
+  useFrame((_, delta) => {
+    if (template && groupRef.current && revealRef.current < 1) {
+      revealRef.current = Math.min(1, revealRef.current + delta * 3.0);
+      groupRef.current.scale.setScalar(height * revealRef.current);
+    }
+  });
+
   const instance = useMemo(() => (template ? template.clone() : null), [template]);
 
   if (!instance) return null;
 
-  return <primitive object={instance} position={position} rotation={rotation} scale={height} />;
+  return (
+    <group
+      ref={groupRef}
+      position={position}
+      rotation={rotation}
+      scale={height * revealRef.current}
+    >
+      <primitive object={instance} />
+    </group>
+  );
 }

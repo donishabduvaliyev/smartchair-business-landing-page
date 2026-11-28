@@ -34,15 +34,15 @@ function InstagramIcon({ size = 14, className = "" }: { size?: number; className
 }
 
 export function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { openPartnerModal } = usePartnerModal();
+  const lang = i18n.language?.slice(0, 2);
 
   const PRODUCT_LINKS = [
-    { label: t("footer.links.forBusiness"), href: "/#for-business" },
-    { label: t("footer.links.features"), href: "/#features" },
-    { label: t("footer.links.howItWorks"), href: "/#how-it-works" },
-    { label: t("footer.links.reviews"), href: "/#reviews" },
-    { label: t("footer.links.faq"), href: "/#faq" },
+    { label: lang === "uz" ? "3D Galereya" : lang === "ru" ? "3D Галерея" : "3D Gallery", to: "/" },
+    { label: lang === "uz" ? "Xizmatlar" : lang === "ru" ? "Услуги" : "Services", to: "/services" },
+    { label: t("footer.links.forBusiness"), to: "/for-salons" },
+    { label: t("footer.links.faq"), to: "/faq" },
   ];
 
   const CONTACT_LINKS = [
@@ -78,12 +78,12 @@ export function Footer() {
             <ul className="mt-4 space-y-3">
               {PRODUCT_LINKS.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.to}
                     className="text-sm text-text-muted transition-colors hover:text-text"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

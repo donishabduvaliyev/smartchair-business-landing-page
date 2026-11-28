@@ -11,11 +11,12 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 import { SoundToggle } from "./SoundToggle";
 
 export function Navbar() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { openPartnerModal } = usePartnerModal();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const reducedMotion = useReducedMotion();
+  const lang = i18n.language?.slice(0, 2);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -25,11 +26,10 @@ export function Navbar() {
   }, []);
 
   const LINKS = [
-    { label: t("nav.forBusiness"), href: "/#for-business" },
-    { label: t("nav.features"), href: "/#features" },
-    { label: t("nav.howItWorks"), href: "/#how-it-works" },
-    { label: t("nav.reviews"), href: "/#reviews" },
-    { label: t("nav.faq"), href: "/#faq" },
+    { label: lang === "uz" ? "3D Bosh sahifa" : lang === "ru" ? "3D Главная" : "3D Gallery", to: "/" },
+    { label: lang === "uz" ? "Xizmatlar" : lang === "ru" ? "Услуги" : "Services", to: "/services" },
+    { label: t("nav.forBusiness"), to: "/for-salons" },
+    { label: t("nav.faq"), to: "/faq" },
   ];
 
   return (
@@ -48,13 +48,13 @@ export function Navbar() {
 
         <div className="hidden items-center gap-4 xl:gap-6 lg:flex">
           {LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
+            <Link
+              key={link.to}
+              to={link.to}
               className="whitespace-nowrap text-sm font-normal text-text-secondary transition-colors hover:text-text"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -104,14 +104,14 @@ export function Navbar() {
           >
             <div className="mx-auto flex max-w-[1160px] flex-col gap-1 px-6 py-4">
               {LINKS.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
+                <Link
+                  key={link.to}
+                  to={link.to}
                   onClick={() => setOpen(false)}
                   className="whitespace-nowrap rounded-[10px] px-3.5 py-2.5 text-sm font-normal text-text-secondary transition-colors hover:bg-surface-1 hover:text-text"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
               <a
                 href={TELEGRAM_URL}

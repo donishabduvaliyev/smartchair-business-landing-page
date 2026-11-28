@@ -8,7 +8,8 @@ import {
   usePointer,
   useScrollState,
 } from "../lib/useScroll";
-import { createSpatialWorld, scrollToProgress } from "../lib/spatialWorld";
+import { createSpatialWorld } from "../lib/spatialWorld";
+import { usePartnerModal } from "../context/PartnerModalContext";
 import { SpatialCompass } from "../components/spatial/SpatialCompass";
 import { KineticTypographyStage } from "../components/spatial/KineticTypographyStage";
 import { SpatialStageOverlay } from "../components/spatial/SpatialStageOverlay";
@@ -20,6 +21,7 @@ const LazyScene = lazy(() =>
 
 export function Home() {
   useSEO({ canonicalPath: "/" });
+  const { openPartnerModal } = usePartnerModal();
 
   const scroll = useScrollState();
   const pointer = usePointer();
@@ -77,12 +79,13 @@ export function Home() {
             world={world}
             compact={handheld}
             onCriticalPerf={() => setTooWeak(true)}
+            onOpenConnect={openPartnerModal}
           />
         </Suspense>
       </div>
 
       {/* Minimal Persistent Spatial Compass */}
-      <SpatialCompass world={world} onConnectClick={() => scrollToProgress(0.97)} />
+      <SpatialCompass world={world} onConnectClick={openPartnerModal} />
 
       {/* Monumental Kinetic & Parting Portal Typography */}
       <KineticTypographyStage scroll={scroll} />
@@ -91,7 +94,7 @@ export function Home() {
       <SpatialStageOverlay
         scroll={scroll}
         world={world}
-        onOpenConnect={() => scrollToProgress(0.97)}
+        onOpenConnect={openPartnerModal}
       />
 
       {/* Scroll Runway driving the unbroken 3D journey */}

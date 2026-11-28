@@ -71,7 +71,7 @@ export function SpatialCompass({
         {/* 5-Act Spatial Compass */}
         <div
           aria-label="Spatial journey sections"
-          className={`hidden items-center gap-1 rounded-full border px-2 py-1 lg:flex transition-colors duration-500 ${
+          className={`hidden items-center gap-1 rounded-full border px-2 py-1 xl:flex transition-colors duration-500 ${
             isClassical
               ? "border-[#8C6D46]/20 bg-[#EFE7D8]/75"
               : "border-white/[0.08] bg-black/30"
@@ -98,8 +98,34 @@ export function SpatialCompass({
           ))}
         </div>
 
-        {/* Utility & Direct Actions */}
+        {/* Utility, Side Page Navigation & Direct Actions */}
         <div className="flex shrink-0 items-center gap-1 sm:gap-2.5">
+          <div className="hidden md:flex items-center gap-3 mr-1 font-mono text-[10px] uppercase tracking-wider">
+            <Link
+              to="/services"
+              className={`transition-colors ${
+                isClassical ? "text-[#1C1917]/70 hover:text-[#1C1917]" : "text-white/70 hover:text-white"
+              }`}
+            >
+              {lang === "uz" ? "Xizmatlar" : lang === "ru" ? "Услуги" : "Services"}
+            </Link>
+            <Link
+              to="/for-salons"
+              className={`transition-colors ${
+                isClassical ? "text-[#1C1917]/70 hover:text-[#1C1917]" : "text-white/70 hover:text-white"
+              }`}
+            >
+              {lang === "uz" ? "Biznes" : lang === "ru" ? "Салонам" : "For Salons"}
+            </Link>
+            <Link
+              to="/faq"
+              className={`transition-colors ${
+                isClassical ? "text-[#1C1917]/70 hover:text-[#1C1917]" : "text-white/70 hover:text-white"
+              }`}
+            >
+              FAQ
+            </Link>
+          </div>
           <span className="hidden sm:inline-flex">
             <SoundToggle tone={isClassical ? "light" : "dark"} />
           </span>
@@ -108,7 +134,7 @@ export function SpatialCompass({
             href={TELEGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className={`hidden whitespace-nowrap px-2.5 py-1.5 text-xs font-medium transition-colors sm:inline-block ${
+            className={`hidden whitespace-nowrap px-2 py-1.5 text-xs font-medium transition-colors md:inline-block ${
               isClassical ? "text-[#1C1917]/75 hover:text-[#1C1917]" : "text-white/75 hover:text-white"
             }`}
           >
@@ -136,7 +162,7 @@ export function SpatialCompass({
 
       {/* Mobile / Tablet Compact 5-Act Wayfinder */}
       <div
-        className={`flex items-center justify-between sm:justify-center gap-1 overflow-x-auto border-t px-2.5 py-1.5 lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+        className={`flex items-center justify-between sm:justify-center gap-1 overflow-x-auto border-t px-2.5 py-1.5 xl:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
           isClassical ? "border-[#8C6D46]/15" : "border-white/[0.05]"
         }`}
       >

@@ -24,7 +24,7 @@ export const WORLD_ANCHOR_POSITIONS: Record<string, [number, number, number]> = 
   chair: [0.0, 1.4, -74],
   discovery: [-6.5, 2.2, -210],
   operations: [0.0, 2.8, -296],
-  reception: [0.0, -0.8, -438],
+  reception: [0.0, -0.2, -437.2],
 };
 
 export const NICHE_LOOK_TARGETS: Record<string, [number, number, number]> = {
@@ -39,10 +39,10 @@ export const NICHE_LOOK_TARGETS: Record<string, [number, number, number]> = {
 };
 
 export const OPS_LOOK_TARGETS: Record<OpsModuleId, [number, number, number]> = {
-  requests: [-6.6, -3.8, -293],
-  queue: [-6.6, -3.8, -300],
-  register: [6.6, -3.8, -293],
-  crm: [6.6, -3.8, -300],
+  requests: [-7.8, -3.8, -294.6],
+  queue: [-4.2, -3.6, -296.0],
+  register: [7.8, -3.8, -294.6],
+  crm: [4.2, -3.6, -296.0],
 };
 
 export function createSpatialWorld(): SpatialWorldState {

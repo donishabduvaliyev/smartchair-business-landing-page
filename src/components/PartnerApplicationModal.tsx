@@ -39,8 +39,14 @@ const STAFF_KEYS = ["1-2", "3-5", "6-10", "10+"] as const;
 const INPUT_CLASS =
   "w-full h-11 rounded-[10px] border border-hairline-strong bg-surface-2 px-3.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
 
+const INPUT_COMPACT_CLASS =
+  "w-full h-10 rounded-[10px] border border-hairline-strong bg-surface-2 px-3 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
+
 const INPUT_WITH_ICON_CLASS =
   "w-full h-11 rounded-[10px] border border-hairline-strong bg-surface-2 pl-10 pr-3.5 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
+
+const INPUT_COMPACT_WITH_ICON_CLASS =
+  "w-full h-10 rounded-[10px] border border-hairline-strong bg-surface-2 pl-9 pr-3 text-sm text-text placeholder:text-text-muted transition-colors focus:border-white/30 focus:outline-none";
 
 const ARCH_INPUT_CLASS =
   "w-full h-10 border-b border-[#1C1917]/20 bg-transparent px-0 text-sm text-[#1C1917] placeholder:text-[#1C1917]/40 transition-colors focus:border-[#8C6D46] focus:outline-none";
@@ -58,12 +64,26 @@ export function PartnerFormBody({
   variant?: "modal" | "architectural";
 }) {
   const isArch = variant === "architectural";
-  const inputCls = isArch ? ARCH_INPUT_CLASS : INPUT_CLASS;
-  const inputWithIconCls = isArch ? ARCH_INPUT_WITH_ICON_CLASS : INPUT_WITH_ICON_CLASS;
-  const iconLeftCls = isArch ? "left-0.5 text-[#7A5B34]" : "left-3.5 text-text-muted";
+  const inputCls = isArch
+    ? ARCH_INPUT_CLASS
+    : compact
+      ? INPUT_COMPACT_CLASS
+      : INPUT_CLASS;
+  const inputWithIconCls = isArch
+    ? ARCH_INPUT_WITH_ICON_CLASS
+    : compact
+      ? INPUT_COMPACT_WITH_ICON_CLASS
+      : INPUT_WITH_ICON_CLASS;
+  const iconLeftCls = isArch
+    ? "left-0.5 text-[#7A5B34]"
+    : compact
+      ? "left-3 text-text-muted"
+      : "left-3.5 text-text-muted";
   const labelCls = isArch
     ? "mb-1 block font-mono text-[10px] uppercase tracking-[0.18em] text-[#7A5B34]"
-    : "mb-1.5 block text-xs font-medium text-text-secondary";
+    : compact
+      ? "mb-1 block truncate text-[11px] font-medium text-text-secondary"
+      : "mb-1.5 block text-xs font-medium text-text-secondary";
   const { t, i18n } = useTranslation();
   const reducedMotion = useReducedMotion();
   const [businessName, setBusinessName] = useState("");
@@ -197,37 +217,39 @@ export function PartnerFormBody({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* Direct Call Banner inside Modal/Form */}
-      <div
-        className={
-          isArch
-            ? "flex flex-col justify-between gap-3 border-b border-[#1C1917]/15 pb-3.5 sm:flex-row sm:items-center"
-            : "flex flex-col justify-between gap-3 rounded-xl border border-hairline bg-surface-2 p-4 sm:flex-row sm:items-center"
-        }
-      >
-        <div>
-          <p className={isArch ? "font-mono text-[11px] uppercase tracking-[0.14em] text-[#1C1917]" : "text-xs font-medium text-text"}>
-            {t("partnerForm.directContactTitle")}
-          </p>
-          <p className={isArch ? "mt-0.5 text-xs text-[#4B433B]" : "mt-0.5 text-xs text-text-secondary"}>
-            {t("partnerForm.directContactDesc")}
-          </p>
-        </div>
-        <a
-          href={PHONE_HREF}
+    <form onSubmit={handleSubmit} className={compact ? "space-y-3" : "space-y-4"}>
+      {/* Direct Call Banner inside standalone/mobile Form (modal shows compact header pill instead) */}
+      {!compact && (
+        <div
           className={
             isArch
-              ? "inline-flex h-8 shrink-0 items-center justify-center gap-2 border border-[#8C6D46]/50 bg-[#8C6D46]/10 px-3 font-mono text-xs text-[#5C4324] whitespace-nowrap transition-colors hover:border-[#8C6D46] hover:bg-[#8C6D46]/20"
-              : "btn-secondary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[10px] px-3.5 text-xs font-medium whitespace-nowrap"
+              ? "flex flex-col justify-between gap-3 border-b border-[#1C1917]/15 pb-3.5 sm:flex-row sm:items-center"
+              : "flex flex-col justify-between gap-3 rounded-xl border border-hairline bg-surface-2 p-4 sm:flex-row sm:items-center"
           }
         >
-          <Phone size={13} strokeWidth={1.5} className={isArch ? "text-[#7A5B34]" : "text-text-secondary"} />
-          {PHONE_NUMBER}
-        </a>
-      </div>
+          <div>
+            <p className={isArch ? "font-mono text-[11px] uppercase tracking-[0.14em] text-[#1C1917]" : "text-xs font-medium text-text"}>
+              {t("partnerForm.directContactTitle")}
+            </p>
+            <p className={isArch ? "mt-0.5 text-xs text-[#4B433B]" : "mt-0.5 text-xs text-text-secondary"}>
+              {t("partnerForm.directContactDesc")}
+            </p>
+          </div>
+          <a
+            href={PHONE_HREF}
+            className={
+              isArch
+                ? "inline-flex h-8 shrink-0 items-center justify-center gap-2 border border-[#8C6D46]/50 bg-[#8C6D46]/10 px-3 font-mono text-xs text-[#5C4324] whitespace-nowrap transition-colors hover:border-[#8C6D46] hover:bg-[#8C6D46]/20"
+                : "btn-secondary inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-[10px] px-3.5 text-xs font-medium whitespace-nowrap"
+            }
+          >
+            <Phone size={13} strokeWidth={1.5} className={isArch ? "text-[#7A5B34]" : "text-text-secondary"} />
+            {PHONE_NUMBER}
+          </a>
+        </div>
+      )}
 
-      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
           <label className={labelCls}>
             {t("partnerForm.fields.businessName")} <span className="text-text-muted">*</span>
@@ -271,7 +293,7 @@ export function PartnerFormBody({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
           <label className={labelCls}>
             {t("partnerForm.fields.phone")} <span className="text-text-muted">*</span>
@@ -311,7 +333,7 @@ export function PartnerFormBody({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-3 sm:items-end">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
           <label className={labelCls}>
             {t("partnerForm.fields.city")}
@@ -348,19 +370,19 @@ export function PartnerFormBody({
             </select>
           </div>
         </div>
+      </div>
 
-        <div>
-          <label className={labelCls}>
-            {t("partnerForm.fields.social")}
-          </label>
-          <input
-            type="text"
-            value={telegramOrInstagram}
-            onChange={(e) => setTelegramOrInstagram(e.target.value)}
-            placeholder={t("partnerForm.fields.socialPlaceholder")}
-            className={inputCls}
-          />
-        </div>
+      <div>
+        <label className={labelCls}>
+          {t("partnerForm.fields.social")}
+        </label>
+        <input
+          type="text"
+          value={telegramOrInstagram}
+          onChange={(e) => setTelegramOrInstagram(e.target.value)}
+          placeholder={t("partnerForm.fields.socialPlaceholder")}
+          className={inputCls}
+        />
       </div>
 
       {!compact && (
@@ -387,7 +409,9 @@ export function PartnerFormBody({
         className={
           isArch
             ? "flex cursor-pointer items-start gap-3 border-l border-[#8C6D46]/45 bg-[#8C6D46]/[0.06] px-3.5 py-2.5 text-xs leading-relaxed text-[#4B433B]"
-            : "flex cursor-pointer items-start gap-3 rounded-[10px] border border-hairline bg-surface-2 p-3.5 text-xs leading-relaxed text-text-secondary"
+            : compact
+              ? "flex cursor-pointer items-start gap-2.5 rounded-[10px] border border-hairline bg-surface-2 p-2.5 text-[11px] leading-snug text-text-secondary"
+              : "flex cursor-pointer items-start gap-3 rounded-[10px] border border-hairline bg-surface-2 p-3.5 text-xs leading-relaxed text-text-secondary"
         }
       >
         <input
@@ -437,7 +461,7 @@ export function PartnerFormBody({
         className={
           isArch
             ? "flex h-11 w-full items-center justify-center gap-2 border border-[#1C1917] bg-[#1C1917] font-mono text-xs uppercase tracking-[0.2em] text-[#F5EFE6] transition-all hover:bg-[#332D29] disabled:opacity-60"
-            : "btn-primary flex h-11 w-full items-center justify-center gap-2 rounded-[10px] text-sm font-medium disabled:opacity-60"
+            : `btn-primary flex ${compact ? "h-10" : "h-11"} w-full items-center justify-center gap-2 rounded-[10px] text-sm font-medium disabled:opacity-60`
         }
       >
         <Send size={15} strokeWidth={1.5} />
@@ -472,17 +496,26 @@ export function PartnerApplicationModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98, y: 8 }}
             transition={{ duration: 0.24, ease: [0.23, 1, 0.32, 1] }}
-            className="surface-card relative z-10 max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-[20px] p-6 sm:p-8"
+            className="surface-card relative z-10 max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-[20px] p-5 sm:p-6"
           >
-            <div className="mb-5 flex items-start justify-between gap-4">
+            <div className="mb-3.5 flex items-start justify-between gap-4">
               <div>
-                <p className="text-[13px] font-medium text-text-muted">
-                  {t("partnerForm.eyebrow")}
-                </p>
-                <h2 className="mt-1.5 text-2xl font-medium tracking-[-0.02em] text-text">
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <p className="text-xs font-medium text-text-muted">
+                    {t("partnerForm.eyebrow")}
+                  </p>
+                  <a
+                    href={PHONE_HREF}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-hairline-strong bg-surface-2 px-2.5 py-0.5 font-mono text-[11px] text-[#d4af5a] transition-colors hover:border-[#d4af5a]/50"
+                  >
+                    <Phone size={11} strokeWidth={1.5} />
+                    <span>{PHONE_NUMBER}</span>
+                  </a>
+                </div>
+                <h2 className="mt-1 text-xl font-medium tracking-[-0.02em] text-text sm:text-2xl">
                   {t("partnerForm.modalTitle")}
                 </h2>
-                <p className="mt-1 text-xs leading-[1.6] text-text-secondary">
+                <p className="mt-0.5 text-xs leading-relaxed text-text-secondary">
                   {t("partnerForm.modalSubtitle")}
                 </p>
               </div>
@@ -490,7 +523,7 @@ export function PartnerApplicationModal() {
                 type="button"
                 onClick={closePartnerModal}
                 aria-label="Close modal"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border border-hairline-strong bg-surface-2 text-text-muted transition-colors hover:bg-surface-3 hover:text-text"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-hairline-strong bg-surface-2 text-text-muted transition-colors hover:bg-surface-3 hover:text-text"
               >
                 <X size={16} strokeWidth={1.5} />
               </button>
@@ -498,8 +531,8 @@ export function PartnerApplicationModal() {
 
             <PartnerFormBody onClose={closePartnerModal} compact />
 
-            <div className="mt-4 flex items-center justify-center gap-1.5 font-mono text-xs text-text-muted">
-              <ShieldCheck size={14} strokeWidth={1.5} className="text-text-secondary" />
+            <div className="mt-3 flex items-center justify-center gap-1.5 font-mono text-[11px] text-text-muted">
+              <ShieldCheck size={13} strokeWidth={1.5} className="text-text-secondary" />
               <span>O‘RQ-547 Personal Data Protected</span>
             </div>
           </motion.div>

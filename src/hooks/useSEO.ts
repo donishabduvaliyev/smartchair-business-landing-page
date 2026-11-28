@@ -95,79 +95,83 @@ export function useSEO(options?: SEOOptions) {
     setMetaTag('meta[name="twitter:url"]', "name", "twitter:url", canonicalUrl);
     setMetaTag('meta[name="twitter:image"]', "name", "twitter:image", ogImage);
 
-    // Sync structured JSON-LD @graph (truthful & matching rendered FAQ)
+    // Sync structured JSON-LD @graph (FAQPage emitted on /faq so schema matches rendered FAQ content 100%)
     const jsonLdEl = document.getElementById("smartchair-jsonld");
     if (jsonLdEl) {
-      const faqs = STORY_CONTENT[lang].act5.faqs;
-      const graph = {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "SoftwareApplication",
-            "@id": "https://smartchair.uz/#app",
-            name: "SmartChair",
-            alternateName: [
-              "smartchair.uz",
-              "Smart Chair Uzbekistan",
-              "SmartChair Sartaroshxona",
-              "SmartChair Барбершоп",
-            ],
-            applicationCategory: "LifestyleApplication",
-            operatingSystem: "Web, Telegram, iOS, Android",
-            url: "https://smartchair.uz",
-            description,
-            offers: {
-              "@type": "Offer",
-              price: "0",
-              priceCurrency: "UZS",
-            },
+      const graphNodes: Record<string, unknown>[] = [
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://smartchair.uz/#app",
+          name: "SmartChair",
+          alternateName: [
+            "smartchair.uz",
+            "Smart Chair Uzbekistan",
+            "SmartChair Sartaroshxona",
+            "SmartChair Барбершоп",
+          ],
+          applicationCategory: "LifestyleApplication",
+          operatingSystem: "Web, Telegram, iOS, Android",
+          url: "https://smartchair.uz",
+          description,
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "UZS",
           },
-          {
-            "@type": "Organization",
-            "@id": "https://smartchair.uz/#org",
-            name: "SmartChair",
-            url: "https://smartchair.uz",
-            logo: "https://smartchair.uz/favicon-512x512.png",
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://smartchair.uz/#org",
+          name: "SmartChair",
+          url: "https://smartchair.uz",
+          logo: "https://smartchair.uz/favicon-512x512.png",
+          telephone: "+998949827070",
+          contactPoint: {
+            "@type": "ContactPoint",
             telephone: "+998949827070",
-            contactPoint: {
-              "@type": "ContactPoint",
-              telephone: "+998949827070",
-              contactType: "customer service",
-              areaServed: "UZ",
-              availableLanguage: ["Uzbek", "Russian", "English"],
+            contactType: "customer service",
+            areaServed: "UZ",
+            availableLanguage: ["Uzbek", "Russian", "English"],
+          },
+          sameAs: [
+            "https://t.me/SmartChairNamanganbot",
+            "https://instagram.com/_smartchair",
+          ],
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Namangan",
+            addressCountry: "UZ",
+          },
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://smartchair.uz/#website",
+          url: "https://smartchair.uz",
+          name: "SmartChair",
+          publisher: { "@id": "https://smartchair.uz/#org" },
+        },
+      ];
+
+      if (normalizedPath === "/faq") {
+        const faqs = STORY_CONTENT[lang].act5.faqs;
+        graphNodes.push({
+          "@type": "FAQPage",
+          "@id": "https://smartchair.uz/faq#faq",
+          mainEntity: faqs.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.a,
             },
-            sameAs: [
-              "https://t.me/SmartChairNamanganbot",
-              "https://instagram.com/_smartchair",
-            ],
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Namangan",
-              addressCountry: "UZ",
-            },
-          },
-          {
-            "@type": "WebSite",
-            "@id": "https://smartchair.uz/#website",
-            url: "https://smartchair.uz",
-            name: "SmartChair",
-            publisher: { "@id": "https://smartchair.uz/#org" },
-          },
-          {
-            "@type": "FAQPage",
-            "@id": "https://smartchair.uz/#faq",
-            mainEntity: faqs.map((item) => ({
-              "@type": "Question",
-              name: item.q,
-              acceptedAnswer: {
-                "@type": "Answer",
-                text: item.a,
-              },
-            })),
-          },
-        ],
-      };
-      jsonLdEl.textContent = JSON.stringify(graph);
+          })),
+        });
+      }
+
+      jsonLdEl.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": graphNodes,
+      });
     }
   }, [title, description, canonicalUrl, ogImage, lang, defaultMeta.ogLocale]);
 }

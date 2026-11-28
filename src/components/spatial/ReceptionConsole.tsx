@@ -1,4 +1,4 @@
-import { ChevronDown, Phone, Sparkles } from "lucide-react";
+import { ArrowRight, Phone, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -10,50 +10,78 @@ import {
   TELEGRAM_URL,
 } from "../../lib/constants";
 import { normalizeLang, STORY_CONTENT } from "../../content/storyContent";
-import { PartnerFormBody } from "../PartnerApplicationModal";
+import { usePartnerModal } from "../../context/PartnerModalContext";
 
-export function ReceptionConsole() {
+const PAGE_LINKS_LABEL = {
+  uz: { services: "Xizmatlar", salons: "Biznes uchun", faq: "Savol-javob" },
+  ru: { services: "Услуги", salons: "Для салонов", faq: "FAQ" },
+  en: { services: "Services", salons: "For Salons", faq: "FAQ" },
+} as const;
+
+/**
+ * Chapter V Whisper — Single compact translucent frosted-glass concierge card
+ * leaving the Semicircular Marble Apse, Classical Busts & Console unobstructed.
+ */
+export function ReceptionConsole({
+  onOpenConnect,
+}: {
+  onOpenConnect?: () => void;
+}) {
   const { t, i18n } = useTranslation();
   const lang = normalizeLang(i18n.language);
   const c = STORY_CONTENT[lang].act5;
+  const navLbl = PAGE_LINKS_LABEL[lang];
+  const { openPartnerModal } = usePartnerModal();
+  const handleConnect = onOpenConnect ?? openPartnerModal;
 
   return (
     <section
       aria-labelledby="ch5-heading"
-      className="mx-auto flex w-full max-w-[1320px] flex-col justify-between gap-6 px-5 lg:flex-row lg:items-end lg:px-8"
+      className="mx-auto flex w-full max-w-[1340px] justify-start px-5 lg:px-10"
     >
-      {/* Left: Atelier Registry Story, Direct Contact, FAQ Drawer & Legal Links */}
-      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto max-w-md border-l border-t border-[#8C6D46]/35 bg-[#FAF6EE]/90 p-5 sm:p-6 backdrop-blur-md shadow-[0_20px_50px_rgba(44,34,20,0.08)]">
-        <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-[#7A5B34]">
+      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto max-w-md rounded-2xl border border-white/55 bg-white/38 p-5 backdrop-blur-xl shadow-[0_12px_36px_rgba(28,25,23,0.08)]">
+        <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.22em] uppercase text-[#6E502B]">
           <Sparkles size={11} />
           <span>{c.eyebrow}</span>
         </p>
 
         <h2
           id="ch5-heading"
-          className="mt-2 font-editorial text-3xl italic text-[#1C1917] sm:text-4xl"
+          className="mt-1.5 font-editorial text-2xl italic text-[#1C1917] sm:text-3xl"
         >
           {c.headline}
         </h2>
 
-        <p className="mt-2.5 text-sm leading-relaxed text-[#4B433B]">
+        <p className="mt-2 text-xs leading-relaxed text-[#2C2621]/85 sm:text-sm">
           {c.sub}
         </p>
 
-        {/* Direct Contact Strip */}
-        <div className="mt-4 flex flex-wrap items-center gap-3 text-xs">
+        {/* Primary CTA & Direct Call Pill */}
+        <div className="mt-4 flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={handleConnect}
+            className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#1C1917] px-4 text-xs sm:text-sm font-medium text-[#F5EFE6] transition-colors hover:bg-[#332D29]"
+          >
+            <span>{t("hero.ctaBusiness")}</span>
+            <ArrowRight size={14} />
+          </button>
           <a
             href={PHONE_HREF}
-            className="inline-flex items-center gap-2 rounded-full border border-[#8C6D46]/40 bg-[#8C6D46]/10 px-3.5 py-1.5 font-mono text-[#6E502B] transition-colors hover:bg-[#8C6D46]/20"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#8C6D46]/45 bg-white/45 px-3 font-mono text-xs text-[#6E502B] transition-colors hover:bg-white/70"
           >
             <Phone size={12} />
             <span>{PHONE_NUMBER}</span>
           </a>
+        </div>
+
+        {/* Social Handles Strip */}
+        <div className="mt-2.5 flex flex-wrap items-center gap-3 font-mono text-[11px] text-[#2C2621]/80">
           <a
             href={TELEGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-[#4B433B] transition-colors hover:text-[#1C1917]"
+            className="transition-colors hover:text-[#1C1917]"
           >
             {TELEGRAM_HANDLE}
           </a>
@@ -61,62 +89,33 @@ export function ReceptionConsole() {
             href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-[#4B433B] transition-colors hover:text-[#1C1917]"
+            className="transition-colors hover:text-[#1C1917]"
           >
             {INSTAGRAM_HANDLE}
           </a>
         </div>
 
-        {/* Truthful Crawlable Vellum FAQ Accordion matching JSON-LD FAQPage */}
-        <div className="mt-4 border-t border-[#1C1917]/12 pt-3">
-          <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#7A5B34]">
-            {c.faqTitle}
-          </p>
-          <div className="space-y-1.5 max-h-[168px] overflow-y-auto pr-1">
-            {c.faqs.map((item) => (
-              <details
-                key={item.q}
-                className="group/faq border-b border-[#1C1917]/10 pb-1.5 text-xs"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-2 font-medium text-[#1C1917] hover:text-[#7A5B34]">
-                  <span>{item.q}</span>
-                  <ChevronDown
-                    size={13}
-                    className="shrink-0 text-[#7A5B34] transition-transform group-open/faq:rotate-180"
-                  />
-                </summary>
-                <p className="mt-1 leading-relaxed text-[#4B433B]">
-                  {item.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-
-        {/* Preserved Legal Navigation */}
-        <div className="mt-4 flex flex-wrap items-center gap-4 border-t border-[#1C1917]/12 pt-3 font-mono text-[10px] uppercase tracking-wider text-[#5C5349]">
-          <Link to="/privacy" className="transition-colors hover:text-[#1C1917]">
-            {t("footer.privacy", "Privacy Policy")}
+        {/* Dedicated Editorial & Legal Pages */}
+        <div className="mt-3.5 flex flex-wrap items-center gap-x-3.5 gap-y-1.5 border-t border-[#1C1917]/12 pt-3 font-mono text-[10px] uppercase tracking-wider text-[#4B433B]">
+          <Link to="/services" className="inline-flex items-center gap-1 font-medium text-[#1C1917] hover:text-[#6E502B]">
+            <span>{navLbl.services}</span>
+            <ArrowRight size={10} />
           </Link>
-          <Link to="/terms" className="transition-colors hover:text-[#1C1917]">
+          <Link to="/for-salons" className="inline-flex items-center gap-1 font-medium text-[#1C1917] hover:text-[#6E502B]">
+            <span>{navLbl.salons}</span>
+            <ArrowRight size={10} />
+          </Link>
+          <Link to="/faq" className="inline-flex items-center gap-1 font-medium text-[#1C1917] hover:text-[#6E502B]">
+            <span>{navLbl.faq}</span>
+            <ArrowRight size={10} />
+          </Link>
+          <Link to="/privacy" className="hover:text-[#1C1917]">
+            {t("footer.privacy", "Privacy")}
+          </Link>
+          <Link to="/terms" className="hover:text-[#1C1917]">
             {t("footer.terms", "Terms")}
           </Link>
-          <Link to="/refund" className="transition-colors hover:text-[#1C1917]">
-            {t("footer.refund", "Refund")}
-          </Link>
-          <Link to="/delete-account" className="transition-colors hover:text-[#1C1917]">
-            {t("footer.deleteAccount", "Delete Account")}
-          </Link>
         </div>
-      </div>
-
-      {/* Right: Vellum & Bronze Architectural Partnership Ledger */}
-      <div className="pointer-events-none group-data-[interactive=true]:pointer-events-auto relative w-full max-w-[490px] shrink-0 border-l border-t border-[#8C6D46]/45 bg-[#FAF6EE]/94 p-5 sm:p-6 backdrop-blur-md shadow-[0_24px_60px_rgba(44,34,20,0.12)] max-h-[calc(100vh-112px)] overflow-y-auto">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-[#8C6D46]/80 via-[#8C6D46]/30 to-transparent"
-        />
-        <PartnerFormBody compact variant="architectural" />
       </div>
     </section>
   );

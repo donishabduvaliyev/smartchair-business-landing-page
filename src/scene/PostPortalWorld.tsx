@@ -136,27 +136,27 @@ function makeFloorClockTexture(anisotropy: number) {
 
 function NicheSculpture({ kind }: { kind: (typeof NICHES)[number]["key"] }) {
   if (kind === "barber") {
-    return <ClassicalMaleBust position={[0, 3.25, 0.25]} height={3.1} />;
+    return <ClassicalMaleBust position={[0, 3.25, 0.25]} height={3.0} />;
   }
   if (kind === "hair") {
-    return <MuseumModel name="ornate_mirror_01" finish="bronze" position={[0, 3.25, 0.2]} height={3.2} />;
+    return <MuseumModel name="ornate_mirror_01" finish="bronze" position={[0, 3.25, 0.2]} height={3.0} />;
   }
   if (kind === "spa") {
-    return <MuseumModel name="antique_ceramic_vase_01" finish="marble" position={[0, 3.25, 0.2]} height={2.9} />;
+    return <MuseumModel name="antique_ceramic_vase_01" finish="marble" position={[0, 3.25, 0.2]} height={2.7} />;
   }
   if (kind === "cosmetology") {
-    return <MuseumModel name="brass_vase_01" finish="bronze" position={[0, 3.25, 0.2]} height={2.85} />;
+    return <MuseumModel name="brass_vase_01" finish="bronze" position={[0, 3.25, 0.2]} height={2.7} />;
   }
   if (kind === "nails") {
-    return <MuseumModel name="brass_goblets" finish="bronze" position={[0, 3.25, 0.2]} height={2.15} />;
+    return <MuseumModel name="brass_goblets" finish="bronze" position={[0, 3.25, 0.2]} height={2.0} />;
   }
   return (
     <MuseumModel
       name="seadogs_compass"
       finish="bronze"
       position={[0, 3.35, 0.25]}
-      rotation={[0.45, 0, 0]}
-      height={1.85}
+      rotation={[0.35, 0, 0]}
+      height={1.65}
     />
   );
 }
@@ -169,10 +169,12 @@ export function PostPortalWorld({
   scroll,
   world,
   onSelectCategory,
+  onOpenConnect,
 }: {
   scroll: React.RefObject<ScrollState>;
   world: React.RefObject<SpatialWorldState>;
   onSelectCategory?: (key: string) => void;
+  onOpenConnect?: () => void;
 }) {
   const { gl } = useThree();
   const maxAniso = gl.capabilities.getMaxAnisotropy();
@@ -193,9 +195,7 @@ export function PostPortalWorld({
     clockTex,
     friezeTex,
     watchPlaqueTex,
-    qrPlaqueTex,
     registerPlaqueTex,
-    codexPlaqueTex,
     pilasterZ,
   } = useMemo(() => {
     const fMat = new THREE.ShaderMaterial({
@@ -339,9 +339,7 @@ export function PostPortalWorld({
       clockTex: makeFloorClockTexture(maxAniso),
       friezeTex: makePlaqueTexture("ANNO MMXXVI // UZBEKISTAN", "SMARTCHAIR ATELIER", maxAniso),
       watchPlaqueTex: makePlaqueTexture("HOROLOGIUM", "Live Scheduling", maxAniso),
-      qrPlaqueTex: makePlaqueTexture("PORTA QR", "Walk-In Queue", maxAniso),
       registerPlaqueTex: makePlaqueTexture("THESAURUS", "Checkout & Z-Reports", maxAniso),
-      codexPlaqueTex: makePlaqueTexture("ARCHIVUM", "Client Codex", maxAniso),
       pilasterZ: pZ,
     };
   }, [maxAniso]);
@@ -352,11 +350,9 @@ export function PostPortalWorld({
       clockTex.dispose();
       friezeTex.dispose();
       watchPlaqueTex.dispose();
-      qrPlaqueTex.dispose();
       registerPlaqueTex.dispose();
-      codexPlaqueTex.dispose();
     };
-  }, [plaqueTextures, clockTex, friezeTex, watchPlaqueTex, qrPlaqueTex, registerPlaqueTex, codexPlaqueTex]);
+  }, [plaqueTextures, clockTex, friezeTex, watchPlaqueTex, registerPlaqueTex]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
@@ -370,7 +366,7 @@ export function PostPortalWorld({
       grp.scale.lerp(new THREE.Vector3(targetS, targetS, targetS), 0.1);
     });
 
-    const opsKeys: OpsModuleId[] = ["requests", "queue", "register", "crm"];
+    const opsKeys: OpsModuleId[] = ["requests", "register"];
     opsMatRefs.current.forEach((grp, idx) => {
       if (!grp) return;
       const isSelected = world.current?.selectedOpsModule === opsKeys[idx];
@@ -519,17 +515,12 @@ export function PostPortalWorld({
 
       {/* 7. Act IV — Sunlit Pantheon Rotunda Dome, Floor Clock & Real Salon Monuments (z = -296) */}
       <group position={[0, FLOOR_Y, -296]}>
-        {/* Coffered Pantheon Dome & Glowing Overhead Oculus */}
+        {/* Coffered Pantheon Dome & Open Daylight Oculus (zero overlapping cone triangle) */}
         <mesh material={vaultMat} position={[0, 19.6, 0]}>
           <sphereGeometry args={[21.5, 36, 16, 0, Math.PI * 2, 0.34, Math.PI / 2 - 0.34]} />
         </mesh>
         <mesh material={bronzeMat} position={[0, 29.8, 0]} rotation={[Math.PI / 2, 0, 0]}>
           <torusGeometry args={[7.2, 0.24, 12, 48]} />
-        </mesh>
-        {/* Warm Oculus Sunbeam Shaft */}
-        <mesh position={[0, 16.0, 0]}>
-          <cylinderGeometry args={[6.8, 9.8, 30, 32, 1, true]} />
-          <meshBasicMaterial color={0xfff4de} transparent opacity={0.08} depthWrite={false} side={THREE.DoubleSide} />
         </mesh>
 
         {/* Stepped Circular Marble Dais & Inlaid Roman Floor Clock (XII · III · VI · IX) */}
@@ -555,13 +546,13 @@ export function PostPortalWorld({
         </group>
 
         {/* Centerpiece Real 3D BarberShopChair_01 Beneath the Pantheon Oculus */}
-        <MuseumModel name="BarberShopChair_01" finish="marble" position={[0, 0.72, 0]} height={4.4} />
+        <MuseumModel name="BarberShopChair_01" finish="marble" position={[0, 0.72, 0]} height={4.2} />
 
-        {/* 4 Purposeful Platform Monuments around the Master Barber Chair */}
+        {/* Clean Hero Monuments at Wide Distance: Upright Pocket Watch & Salon Cash Register */}
         <group
           ref={(el) => { opsMatRefs.current[0] = el; }}
-          position={[-6.6, 0, 3.0]}
-          rotation={[0, 0.42, 0]}
+          position={[-7.8, 0, 1.4]}
+          rotation={[0, 0.36, 0]}
           onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "requests"; }}
           onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
           onPointerOut={() => { document.body.style.cursor = ""; }}
@@ -576,47 +567,13 @@ export function PostPortalWorld({
             <planeGeometry args={[1.45, 0.54]} />
             <meshBasicMaterial map={watchPlaqueTex} />
           </mesh>
-          <MuseumModel name="vintage_pocket_watch" finish="bronze" position={[0, 2.72, 0]} rotation={[0.4, 0, 0]} height={2.05} />
+          <MuseumModel name="vintage_pocket_watch" finish="bronze" position={[0, 2.76, 0]} height={1.45} />
         </group>
 
         <group
           ref={(el) => { opsMatRefs.current[1] = el; }}
-          position={[-6.6, 0, -3.4]}
-          rotation={[0, 0.72, 0]}
-          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "queue"; }}
-          onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
-          onPointerOut={() => { document.body.style.cursor = ""; }}
-        >
-          <mesh material={travertineMat} position={[0, 0.3, 0]}>
-            <boxGeometry args={[2.2, 0.6, 2.0]} />
-          </mesh>
-          <mesh material={carraraMat} position={[0, 1.65, 0]}>
-            <boxGeometry args={[1.7, 2.1, 1.5]} />
-          </mesh>
-          <mesh position={[0, 1.65, 0.77]}>
-            <planeGeometry args={[1.45, 0.54]} />
-            <meshBasicMaterial map={qrPlaqueTex} />
-          </mesh>
-          {/* Marble & Bronze Walk-In QR Obelisk */}
-          <mesh material={carraraMat} position={[0, 3.8, 0]}>
-            <boxGeometry args={[1.1, 2.2, 0.24]} />
-          </mesh>
-          {[-0.26, 0, 0.26].map((qx, xi) =>
-            [-0.26, 0, 0.26].map((qy, yi) => {
-              if ((xi + yi) % 2 === 1 && !(xi === 0 && yi === 2)) return null;
-              return (
-                <mesh key={`${xi}_${yi}`} material={bronzeMat} position={[qx, 3.85 + qy, 0.14]}>
-                  <boxGeometry args={[0.16, 0.16, 0.05]} />
-                </mesh>
-              );
-            })
-          )}
-        </group>
-
-        <group
-          ref={(el) => { opsMatRefs.current[2] = el; }}
-          position={[6.6, 0, 3.0]}
-          rotation={[0, -0.42, 0]}
+          position={[7.8, 0, 1.4]}
+          rotation={[0, -0.36, 0]}
           onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "register"; }}
           onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
           onPointerOut={() => { document.body.style.cursor = ""; }}
@@ -631,28 +588,7 @@ export function PostPortalWorld({
             <planeGeometry args={[1.45, 0.54]} />
             <meshBasicMaterial map={registerPlaqueTex} />
           </mesh>
-          <MuseumModel name="CashRegister_01" finish="bronze" position={[0, 2.72, 0]} height={2.15} />
-        </group>
-
-        <group
-          ref={(el) => { opsMatRefs.current[3] = el; }}
-          position={[6.6, 0, -3.4]}
-          rotation={[0, -0.72, 0]}
-          onClick={(e) => { e.stopPropagation(); if (world.current) world.current.selectedOpsModule = "crm"; }}
-          onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = "pointer"; }}
-          onPointerOut={() => { document.body.style.cursor = ""; }}
-        >
-          <mesh material={travertineMat} position={[0, 0.3, 0]}>
-            <boxGeometry args={[2.2, 0.6, 2.0]} />
-          </mesh>
-          <mesh material={carraraMat} position={[0, 1.65, 0]}>
-            <boxGeometry args={[1.7, 2.1, 1.5]} />
-          </mesh>
-          <mesh position={[0, 1.65, 0.77]}>
-            <planeGeometry args={[1.45, 0.54]} />
-            <meshBasicMaterial map={codexPlaqueTex} />
-          </mesh>
-          <MuseumModel name="binder_notebook" finish="marble" position={[0, 2.75, 0]} rotation={[0.35, 0, 0]} height={1.65} />
+          <MuseumModel name="CashRegister_01" finish="bronze" position={[0, 2.72, 0]} height={1.75} />
         </group>
       </group>
 
@@ -683,14 +619,22 @@ export function PostPortalWorld({
           <cylinderGeometry args={[6.0, 6.3, 0.32, 40]} />
         </mesh>
 
-        {/* Unified Carved Marble Concierge Counter + Real ClassicConsole_01 Growing from the Podium */}
-        <MuseumModel name="ClassicConsole_01" finish="marble" position={[0, 1.0, 0.8]} height={2.55} />
-        <mesh material={carraraMat} position={[0, 3.62, 0.8]}>
-          <boxGeometry args={[6.4, 0.22, 2.1]} />
-        </mesh>
-        <mesh material={bronzeMat} position={[0, 3.48, 1.78]}>
-          <boxGeometry args={[6.2, 0.08, 0.10]} />
-        </mesh>
+        {/* Interactive Real ClassicConsole_01 Concierge Desk on Marble Apse Podium */}
+        <group
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenConnect?.();
+          }}
+          onPointerOver={(e) => {
+            e.stopPropagation();
+            document.body.style.cursor = "pointer";
+          }}
+          onPointerOut={() => {
+            document.body.style.cursor = "";
+          }}
+        >
+          <MuseumModel name="ClassicConsole_01" finish="marble" position={[0, 1.0, 0.8]} height={4.0} />
+        </group>
 
         {/* Twin Curly-Haired Classical Male Busts in Flanking Marble Pedestal Niches */}
         {[

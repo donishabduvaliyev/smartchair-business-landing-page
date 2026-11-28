@@ -53,3 +53,23 @@ export const prefersReducedMotion = () =>
 export const isHandheld = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(max-width: 820px), (hover: none)").matches;
+
+export function isLowEndOrSlowNetwork(): boolean {
+  if (typeof window === "undefined") return false;
+  const nav = navigator as Navigator & {
+    connection?: { saveData?: boolean; effectiveType?: string };
+    deviceMemory?: number;
+  };
+  const conn = nav.connection;
+  if (conn?.saveData) return true;
+  if (conn?.effectiveType && ["slow-2g", "2g", "3g"].includes(conn.effectiveType)) {
+    return true;
+  }
+  if (typeof nav.hardwareConcurrency === "number" && nav.hardwareConcurrency <= 4) {
+    return true;
+  }
+  if (typeof nav.deviceMemory === "number" && nav.deviceMemory <= 4) {
+    return true;
+  }
+  return false;
+}

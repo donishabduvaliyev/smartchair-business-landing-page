@@ -6,8 +6,8 @@ import { shade } from "./shade";
 import type { ScrollState } from "../lib/useScroll";
 import type { SpatialWorldState } from "../lib/spatialWorld";
 
-const PARTICLE_COUNT_DESKTOP = 24000;
-const PARTICLE_COUNT_MOBILE = 3500;
+const PARTICLE_COUNT_DESKTOP = 8500;
+const PARTICLE_COUNT_MOBILE = 1800;
 
 function smoothstep(edge0: number, edge1: number, x: number) {
   const t = Math.min(Math.max((x - edge0) / (edge1 - edge0), 0), 1);
@@ -274,8 +274,8 @@ export function HeroChairPortal({
           vec4 mv = modelViewMatrix * vec4(finalPos, 1.0);
           gl_Position = projectionMatrix * mv;
 
-          float size = mix(42.0, 115.0, r3) * (0.5 + 0.5 * e);
-          gl_PointSize = clamp(size / max(-mv.z, 1.0), 1.5, 11.0);
+          float size = mix(54.0, 130.0, r3) * (0.5 + 0.5 * e);
+          gl_PointSize = clamp(size / max(-mv.z, 1.0), 1.8, 12.5);
 
           float fadeIn = smoothstep(0.01, 0.14, wave);
           float fadeOut = 1.0 - smoothstep(0.84, 1.0, uPortal);

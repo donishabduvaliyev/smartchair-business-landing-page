@@ -125,6 +125,7 @@ export function SpatialStageOverlay({
         const anchor = world.current.anchors.reception;
         const vis = anchor?.visible && p > 0.85 ? Math.min(1, (p - 0.85) / 0.05) : 0;
         receptionTagRef.current.style.opacity = vis.toFixed(3);
+        receptionTagRef.current.style.pointerEvents = vis > 0.35 ? "auto" : "none";
         if (anchor && vis > 0.02) {
           receptionTagRef.current.style.transform = `translate3d(${anchor.x.toFixed(1)}px, ${anchor.y.toFixed(1)}px, 0)`;
         }
@@ -143,38 +144,38 @@ export function SpatialStageOverlay({
 
   return (
     <div className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
-      {/* Chapter I — Threshold Narrative & Semantic Page H1 */}
+      {/* Chapter I — Frosted Translucent Threshold Story & Primary H1 */}
       <section
         ref={act1Ref}
         aria-labelledby="ch1-heading"
-        className="absolute inset-x-0 bottom-16 mx-auto max-w-[1320px] px-5 sm:bottom-12 lg:px-8"
+        className="absolute inset-x-0 bottom-14 mx-auto max-w-[1320px] px-5 sm:bottom-10 lg:px-8"
       >
-        <div className="max-w-xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-black/50 px-3 py-1 font-mono text-[11px] tracking-wider text-[#d4af5a] backdrop-blur-md">
+        <div className="max-w-lg rounded-2xl border border-white/18 bg-black/28 p-5 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.28)]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1 font-mono text-[11px] tracking-wider text-[#d4af5a]">
             <span className="h-1.5 w-1.5 rounded-full bg-[#d4af5a] animate-pulse" />
             <span>{t("hero.badge", { city: CITY })}</span>
           </div>
 
           <h1
             id="ch1-heading"
-            className="mt-3 font-sans text-xl font-medium tracking-[-0.02em] text-[#f2efe9] sm:text-2xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
+            className="mt-3 font-sans text-lg font-medium tracking-[-0.02em] text-[#f2efe9] sm:text-xl"
           >
             {story.act1.h1}
           </h1>
 
-          <p className="mt-2 text-xs leading-relaxed text-white/80 sm:text-sm drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+          <p className="mt-2 text-xs leading-relaxed text-white/80 sm:text-sm">
             {story.act1.storyLead}
           </p>
 
-          <div className="mt-5 flex flex-wrap items-center gap-3">
+          <div className="mt-4 flex flex-wrap items-center gap-2.5">
             <button
               type="button"
               onClick={onOpenConnect}
-              className="btn-primary group inline-flex h-11 items-center justify-center gap-2 rounded-[10px] px-5 text-sm font-medium shadow-[0_0_24px_rgba(255,255,255,0.16)]"
+              className="btn-primary group inline-flex h-10 items-center justify-center gap-2 rounded-[10px] px-4 text-xs sm:text-sm font-medium"
             >
               {t("hero.ctaBusiness")}
               <ArrowRight
-                size={16}
+                size={15}
                 className="transition-transform duration-150 group-hover:translate-x-0.5"
               />
             </button>
@@ -182,7 +183,7 @@ export function SpatialStageOverlay({
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary inline-flex h-11 items-center justify-center rounded-[10px] border border-white/15 bg-black/45 px-5 text-sm font-medium backdrop-blur-md hover:border-[#d4af5a]/50"
+              className="btn-secondary inline-flex h-10 items-center justify-center rounded-[10px] border border-white/20 bg-white/10 px-4 text-xs sm:text-sm font-medium hover:border-[#d4af5a]/50"
             >
               {t("hero.ctaCustomer")}
             </a>
@@ -203,32 +204,32 @@ export function SpatialStageOverlay({
         <div className="mx-auto h-8 w-px bg-gradient-to-b from-[#d4af5a]/70 to-transparent" />
       </div>
 
-      {/* Chapter II — Chair Metamorphosis Narrative */}
+      {/* Chapter II — Frosted Translucent Looking-Glass Narrative */}
       <section
         ref={act2Ref}
         aria-labelledby="ch2-heading"
         style={{ opacity: 0 }}
-        className="absolute inset-x-0 bottom-12 mx-auto max-w-[1320px] px-5 lg:px-8"
+        className="absolute inset-x-0 bottom-10 mx-auto max-w-[1320px] px-5 lg:px-8"
       >
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div className="max-w-lg border-l border-[#d4af5a]/50 pl-4">
+          <div className="max-w-md rounded-2xl border border-white/18 bg-black/28 p-5 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.28)]">
             <p className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#d4af5a]">
               {story.act2.eyebrow}
             </p>
             <h2
               id="ch2-heading"
-              className="mt-1 font-editorial text-2xl italic text-[#f2efe9] sm:text-3xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]"
+              className="mt-1 font-editorial text-2xl italic text-[#f2efe9] sm:text-3xl"
             >
               {story.act2.heading}
             </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-white/85 drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
+            <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-white/85">
               {story.act2.body}
             </p>
           </div>
           <button
             type="button"
             onClick={() => scrollToProgress(0.42)}
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-black/45 px-4 py-2 font-mono text-[11px] tracking-wider uppercase text-white/80 backdrop-blur-md transition-colors hover:border-[#d4af5a]/50 hover:text-white"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-black/32 px-4 py-2 font-mono text-[11px] tracking-wider uppercase text-white/85 backdrop-blur-xl transition-colors hover:border-[#d4af5a]/50 hover:text-white"
           >
             <span>{story.act2.cta}</span>
             <ArrowRight size={13} />
@@ -285,13 +286,17 @@ export function SpatialStageOverlay({
       {/* World-Projected Tether Tag in Chapter V */}
       <div
         ref={receptionTagRef}
-        style={{ opacity: 0 }}
-        className="pointer-events-none absolute left-0 top-0 -translate-x-1/2 -translate-y-full pb-3 hidden md:block"
+        style={{ opacity: 0, pointerEvents: "none" }}
+        className="absolute left-0 top-0 -translate-x-1/2 -translate-y-full pb-3 hidden md:block"
       >
-        <div className="flex items-center gap-2 rounded-full border border-[#8C6D46]/45 bg-[#FAF6EE]/92 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#6E502B] backdrop-blur-md shadow-sm">
+        <button
+          type="button"
+          onClick={onOpenConnect}
+          className="flex cursor-pointer items-center gap-2 rounded-full border border-[#8C6D46]/45 bg-[#FAF6EE]/92 px-3 py-1 font-mono text-[10px] tracking-widest uppercase text-[#6E502B] backdrop-blur-md shadow-sm transition-transform hover:scale-105"
+        >
           <span className="h-1.5 w-1.5 rounded-full bg-[#8C6D46]" />
           <span>{story.act5.tether}</span>
-        </div>
+        </button>
         <div className="mx-auto h-6 w-px bg-gradient-to-b from-[#8C6D46]/70 to-transparent" />
       </div>
 
@@ -302,7 +307,7 @@ export function SpatialStageOverlay({
         style={{ opacity: 0 }}
         className="group pointer-events-none absolute inset-x-0 bottom-4 max-h-[calc(100vh-112px)] overflow-y-auto sm:bottom-6 lg:overflow-visible"
       >
-        <ReceptionConsole />
+        <ReceptionConsole onOpenConnect={onOpenConnect} />
       </div>
 
       {/* Scroll Cue */}

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Architecture } from "./Architecture";
@@ -10,8 +10,10 @@ import { SpatialTypography } from "./SpatialTypography";
 import { Rig } from "./Rig";
 import { Post } from "./Post";
 import { buildShop } from "./shop";
+import { preloadClassicalBust } from "./ClassicalBust";
+import { preloadAllMuseumModels } from "./MuseumModel";
 import { ALABASTER_FOG, ALABASTER_FOG_DENSITY, FOG_COLOR, FOG_DENSITY } from "./constants";
-import type { ScrollState } from "../lib/useScroll";
+import { isLowEndOrSlowNetwork, type ScrollState } from "../lib/useScroll";
 import type { SpatialWorldState } from "../lib/spatialWorld";
 
 const SALON_CLEAR = new THREE.Color(0x05070a);
@@ -113,7 +115,7 @@ function dustBudget(base: number, tier: number) {
 }
 
 export function Scene({
-  scroll, pointer, reduced, onCriticalPerf, focusRef: externalFocusRef, world, compact = false,
+  scroll, pointer, reduced, onCriticalPerf, focusRef: externalFocusRef, world, compact = false, onOpenConnect,
 }: {
   scroll: React.RefObject<ScrollState>;
   pointer: React.RefObject<{ x: number; y: number; sx: number; sy: number }>;
@@ -122,21 +124,29 @@ export function Scene({
   focusRef?: React.RefObject<number>;
   world: React.RefObject<SpatialWorldState>;
   compact?: boolean;
+  onOpenConnect?: () => void;
 }) {
   const shop = useMemo(() => buildShop(), []);
   const internalFocusRef = useRef(16);
   const focusRef = externalFocusRef ?? internalFocusRef;
   const world1Ref = useRef<THREE.Group>(null);
   const world2Ref = useRef<THREE.Group>(null);
-  const baseCount = useRef(compact || window.innerWidth < 900 ? 1200 : 5200).current;
+  const [lowEnd] = useState(isLowEndOrSlowNetwork);
+  const isLite = compact || lowEnd;
+  const baseCount = useRef(isLite || window.innerWidth < 900 ? 1100 : 3800).current;
   const [tier, setTier] = useState(0);
   const count = dustBudget(baseCount, tier);
+
+  useEffect(() => {
+    preloadClassicalBust();
+    preloadAllMuseumModels(isLite);
+  }, [isLite]);
 
   return (
     <Canvas
       id="stage"
       flat
-      dpr={[1, compact ? 1.25 : Math.min(window.devicePixelRatio || 1, 1.75)]}
+      dpr={[1, isLite ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)]}
       gl={{ antialias: false, alpha: false, powerPreference: "high-performance" }}
       camera={{ fov: compact ? 54 : 46, near: 0.5, far: 700, position: [0, 0.2, 14] }}
       onCreated={({ gl, scene }) => {
@@ -149,14 +159,14 @@ export function Scene({
       <group ref={world1Ref}>
         <Architecture />
         <Furniture boxes={shop.boxes} cyls={shop.cyls} taps={shop.taps} />
-        <HeroChairPortal scroll={scroll} world={world} reduced={reduced} compact={compact} />
+        <HeroChairPortal scroll={scroll} world={world} reduced={reduced} compact={isLite} />
         <Mirrors items={shop.mirrors} />
         <Practicals items={shop.practicals} />
         <Fan at={shop.fanAt} />
       </group>
 
       <group ref={world2Ref} visible={false}>
-        <PostPortalWorld scroll={scroll} world={world} />
+        <PostPortalWorld scroll={scroll} world={world} onOpenConnect={onOpenConnect} />
       </group>
 
       <SpatialTypography scroll={scroll} />

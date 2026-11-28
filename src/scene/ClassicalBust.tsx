@@ -119,6 +119,14 @@ function loadBustAsset(): Promise<CachedBustAsset> {
   return loadPromise;
 }
 
+export function preloadClassicalBust(): void {
+  if (!cachedAsset && typeof window !== "undefined") {
+    loadBustAsset().catch(() => {
+      // Ignore background preload failures; live mount handles retries cleanly
+    });
+  }
+}
+
 /**
  * Reusable CC0 Classical Curly-Haired Male Marble Bust shaded in
  * sunlit Carrara marble to match Dimension 2 without Three.js scene lights.

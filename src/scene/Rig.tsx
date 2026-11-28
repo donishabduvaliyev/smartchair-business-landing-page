@@ -21,7 +21,7 @@ const FLIGHT_WORLD1 = [
   [0.0, 0.2, 14],
   [0.6, 0.2, -14],
   [0.2, 0.1, -46],
-  [-4.2, 0.0, -59],
+  [-2.969, 0.0, -62.373],
 ] as const;
 
 const FLIGHT_WORLD2 = [
@@ -42,8 +42,8 @@ const AIM_WORLD2 = [
   [-4.0, 0.4, -280],
   [0.0, 0.2, -340],
   [0.0, -0.4, -395],
-  [0.0, -2.4, -438],
-  [0.0, -3.2, -444],
+  [0.0, -0.6, -438],
+  [0.0, -0.4, -442],
 ] as const;
 
 function focusAt(p: number) {
@@ -56,6 +56,11 @@ function focusAt(p: number) {
     }
   }
   return FOCUS_KEYS[FOCUS_KEYS.length - 1].d;
+}
+
+function smoothstep(e0: number, e1: number, x: number) {
+  const t = Math.min(Math.max((x - e0) / (e1 - e0), 0), 1);
+  return t * t * (3 - 2 * t);
 }
 
 const wob = (t: number, a: number, b: number, c: number) =>
@@ -98,10 +103,11 @@ export function Rig({
     const p = Math.min(Math.max(s.smooth, 0), 1);
 
     if (p < 0.14) {
-      // Act I: Walk through Reception into Hair-Cutting Salon Floor
+      // Act I: Smooth walk through Reception into Hair-Cutting Floor (C0/C1 matched to Orbit start)
       const t1 = p / 0.14;
+      const eLook = t1 * t1 * (3 - 2 * t1);
       curves.w1.getPointAt(t1, pos.current);
-      look.current.set(0.0, -1.6 + t1 * 0.4, -74);
+      look.current.set(0.0, -1.6 + eLook * 0.1, -74 - eLook * 6);
     } else if (p < 0.33) {
       // Act II Hold: Orbital arc inside +/-12.5m Hair-Cutting Floor framing Hero Chair & Mirror
       const tOrbit = (p - 0.14) / 0.19;
@@ -115,7 +121,7 @@ export function Rig({
       );
       look.current.set(0.0, -1.5 + eased * 1.1, -80 - eased * 16);
     } else if (p < 0.40) {
-      // Looking-Glass Mirror Teleport: Surge straight through z = -96.6 into World 2
+      // Looking-Glass Mirror Teleport: C0/C1 matched at both ends (z=-64.7 -> z=-108.0)
       const tFly = (p - 0.33) / 0.07;
       const eased = tFly * tFly * (3 - 2 * tFly);
       const startAngle = -0.25 + 0.68;
@@ -123,10 +129,10 @@ export function Rig({
       const sz = -74 + Math.cos(startAngle) * 10.2;
       pos.current.set(
         sx * (1 - eased),
-        0.0 + (1 - eased) * 0.15 + eased * 0.2,
+        0.2 * eased,
         sz + (-108 - sz) * eased
       );
-      look.current.set(0.0, -0.4 * (1 - eased), -96 - eased * 50);
+      look.current.set(0.0, -0.4 * (1 - eased), -96 - eased * 49);
     } else {
       // World 2 Sunlit Classical Atelier: 0.40 -> 1.00
       const t2 = Math.min(1, (p - 0.40) / 0.60);
@@ -141,11 +147,13 @@ export function Rig({
           desiredAlpha = 0.28;
         } else if (p >= 0.63 && p <= 0.84) {
           targetArr = OPS_LOOK_TARGETS[world.current.selectedOpsModule] ?? null;
-          desiredAlpha = 0.30;
+          desiredAlpha = 0.28;
         }
-        gazeAlpha.current += (desiredAlpha - gazeAlpha.current) * 0.05;
+        gazeAlpha.current += (desiredAlpha - gazeAlpha.current) * 0.04;
         if (targetArr) {
-          gazeLook.current.set(targetArr[0], targetArr[1], targetArr[2]);
+          const desiredVec = new THREE.Vector3(targetArr[0], targetArr[1], targetArr[2]);
+          if (gazeLook.current.lengthSq() < 0.001) gazeLook.current.copy(desiredVec);
+          gazeLook.current.lerp(desiredVec, 0.05);
           look.current.lerp(gazeLook.current, gazeAlpha.current);
         }
       }
@@ -169,7 +177,9 @@ export function Rig({
     const active = SCENES.findIndex((sc) => p >= sc.a && p < sc.b);
     const idx = active < 0 ? SCENES.length - 1 : active;
     s.active = idx;
-    const targetFov = p >= 0.34 && p <= 0.44 ? 58 : (2 * Math.atan(24 / (2 * SCENES[idx].lens)) * 180) / Math.PI + 18;
+    const portalBell = smoothstep(0.31, 0.36, p) * (1 - smoothstep(0.38, 0.45, p));
+    const baseFov = (2 * Math.atan(24 / (2 * SCENES[idx].lens)) * 180) / Math.PI + 18;
+    const targetFov = baseFov + portalBell * 10;
     fov.current += (targetFov - fov.current) * 0.04;
     const cam = camera as THREE.PerspectiveCamera;
     if (Math.abs(cam.fov - fov.current) > 0.01) {
