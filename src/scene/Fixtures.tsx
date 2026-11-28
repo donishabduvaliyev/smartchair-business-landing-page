@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { END_Z, FOG_COLOR, FOG_DENSITY, SODIUM } from "./constants";
 import { FOG_FN, SPRITE, VERT_UV } from "./glsl";
+import { makeArchedFrameGeo, makeArchedPortalGeo } from "./sculptedGeometries";
 import type { Mirror, Practical } from "./shop";
 
 const fogU = () => ({ uFogCol: { value: FOG_COLOR }, uFogDen: { value: FOG_DENSITY } });
@@ -51,24 +52,19 @@ function Shaft({ p, w, h, colour, seed }: { p: [number, number, number]; w: numb
 }
 
 export function Practicals({ items }: { items: Practical[] }) {
-  const bulbs = useRef<THREE.Mesh[]>([]);
-  // a round source seen edge-on disappears, so bulbs face the camera
-  useFrame((state) => {
-    bulbs.current.forEach((m) => m && m.quaternion.copy(state.camera.quaternion));
-  });
-
   return (
     <group>
       {items.map((L, i) => {
         const round = Math.abs(L.w - L.h) < 0.01;
         return (
           <group key={i}>
-            <mesh
-              ref={(el) => { if (round && el) bulbs.current[i] = el; }}
-              position={L.p} rotation={[0, L.ry, 0]}
-            >
-              <planeGeometry args={[L.w, L.h]} />
-              <meshBasicMaterial color={L.color} fog transparent opacity={0.95} side={THREE.DoubleSide} />
+            <mesh position={L.p} rotation={[0, L.ry, 0]}>
+              {round ? (
+                <sphereGeometry args={[L.w * 0.42, 16, 12]} />
+              ) : (
+                <capsuleGeometry args={[Math.min(L.w, L.h) * 0.32, Math.max(0.15, Math.max(L.w, L.h) - Math.min(L.w, L.h)), 6, 12]} />
+              )}
+              <meshBasicMaterial color={L.color} fog transparent opacity={0.95} />
             </mesh>
             <Shaft p={L.p} w={L.sw} h={L.sh} colour={L.color} seed={i * 1.7} />
           </group>
@@ -80,9 +76,12 @@ export function Practicals({ items }: { items: Practical[] }) {
 
 /* ------------------------------------------------------------------ */
 export function Mirrors({ items }: { items: Mirror[] }) {
-  const mat = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
+  const { archGeo, frameGeo, mat, frameMat } = useMemo(
+    () => ({
+      archGeo: makeArchedPortalGeo(1, 1, 16, 24),
+      frameGeo: makeArchedFrameGeo(1, 1, 0.032),
+      frameMat: new THREE.MeshBasicMaterial({ color: 0x9b7b43, fog: true }),
+      mat: new THREE.ShaderMaterial({
         transparent: true, side: THREE.DoubleSide,
         uniforms: fogU(),
         vertexShader: VERT_UV,
@@ -94,21 +93,23 @@ export function Mirrors({ items }: { items: Mirror[] }) {
             float e = min(min(uv.x,1.0-uv.x), min(uv.y,1.0-uv.y));
             float halo   = smoothstep(0.065, 0.0, e);
             float glass  = 0.055 + 0.085*pow(uv.y, 1.8);
-            float bounce = pow(max(1.0-abs(uv.y-0.86)/0.18, 0.0), 2.0)*0.65;
+            float bounce = pow(max(1.0-abs(uv.y-0.82)/0.18, 0.0), 2.0)*0.65;
             float smear  = pow(max(1.0-abs(uv.x-0.30)/0.34, 0.0), 2.6)*0.18;
             vec3 col = vec3(0.42,0.48,0.54)*glass + vec3(0.95,0.82,0.52)*(bounce+smear);
             col += vec3(0.83,0.69,0.35)*halo*1.25;
             gl_FragColor = vec4(applyFog(col, vZ), 0.96);
           }`,
       }),
+    }),
     []
   );
   return (
     <group>
       {items.map((m, i) => (
-        <mesh key={i} material={mat} position={m.p} rotation={[0, m.ry, 0]}>
-          <planeGeometry args={[m.s[0], m.s[1]]} />
-        </mesh>
+        <group key={i} position={m.p} rotation={[0, m.ry, 0]} scale={[m.s[0], m.s[1], 1]}>
+          <mesh geometry={archGeo} material={mat} />
+          <mesh geometry={frameGeo} material={frameMat} />
+        </group>
       ))}
     </group>
   );

@@ -5,10 +5,13 @@ export type Cyl = { c: number; p: [number, number, number]; r: number; h: number
 export type Practical = { p: [number, number, number]; w: number; h: number; ry: number; color: number; sw: number; sh: number };
 export type Mirror = { p: [number, number, number]; s: [number, number]; ry: number };
 
+export type SalonChairPlacement = { p: [number, number, number]; yaw: number };
+
 export interface Shop {
   boxes: Box[];
   cyls: Cyl[];
   taps: Cyl[];
+  chairs: SalonChairPlacement[];
   practicals: Practical[];
   mirrors: Mirror[];
   fanAt: [number, number, number];
@@ -17,6 +20,7 @@ export interface Shop {
 
 export function buildShop(): Shop {
   const boxes: Box[] = [], cyls: Cyl[] = [], taps: Cyl[] = [];
+  const chairs: SalonChairPlacement[] = [];
   const practicals: Practical[] = [], mirrors: Mirror[] = [];
 
   const box = (c: number, x: number, y: number, z: number, sx: number, sy: number, sz: number, ry = 0, rx = 0) =>
@@ -30,22 +34,9 @@ export function buildShop(): Shop {
   const mirror = (x: number, y: number, z: number, w: number, h: number, ry = 0) =>
     mirrors.push({ p: [x, y, z], s: [w, h], ry });
 
-  /* ---- Barber chair & wall station helpers for the Hair-Cutting Floor ---- */
-  const chair = (x: number, z: number, yaw: number, recline = -0.16) => {
-    const cs = Math.cos(yaw), sn = Math.sin(yaw);
-    tap(C.CHROME, x, FLOOR_Y + 0.3, z, 2.0, 0.6);
-    cyl(C.CHROME, x, FLOOR_Y + 0.75, z, 1.15, 0.4);
-    cyl(C.CHROME, x, FLOOR_Y + 1.7, z, 0.48, 2.0);
-    cyl(C.CHROME, x + 1.0 * sn, FLOOR_Y + 1.1, z - 1.0 * cs, 0.1, 1.5, yaw, 1.15);
-    box(C.HIDE, x, FLOOR_Y + 2.95, z, 3.0, 0.85, 3.0, yaw);
-    box(C.DARK, x, FLOOR_Y + 2.45, z, 3.2, 0.28, 3.2, yaw);
-    box(C.HIDE, x - 1.25 * cs, FLOOR_Y + 4.75, z - 1.25 * sn, 3.0, 3.5, 0.8, yaw, recline);
-    box(C.DARK, x - 1.42 * cs, FLOOR_Y + 4.75, z - 1.42 * sn, 3.2, 3.7, 0.22, yaw, recline);
-    box(C.HIDE, x - 1.62 * cs, FLOOR_Y + 6.6, z - 1.62 * sn, 1.7, 1.0, 0.7, yaw, recline);
-    box(C.DARK, x - 1.6 * sn, FLOOR_Y + 3.75, z + 1.6 * cs, 0.55, 0.38, 2.9, yaw);
-    box(C.DARK, x + 1.6 * sn, FLOOR_Y + 3.75, z - 1.6 * cs, 0.55, 0.38, 2.9, yaw);
-    box(C.CHROME, x + 1.9 * cs, FLOOR_Y + 1.45, z + 1.9 * sn, 1.7, 0.16, 1.1, yaw, 0.42);
-    cyl(C.CHROME, x + 1.35 * cs, FLOOR_Y + 1.05, z + 1.35 * sn, 0.09, 1.0, yaw, 0.5);
+  /* ---- Sculpted BarberShopChair_01 instances for the Hair-Cutting Floor ---- */
+  const chair = (x: number, z: number, yaw: number) => {
+    chairs.push({ p: [x, FLOOR_Y, z], yaw });
   };
 
   const station = (z: number, wallX: number, side: number) => {
@@ -71,9 +62,11 @@ export function buildShop(): Shop {
     }
     if (maxC - minC > 0.01) box(C.BLOCK, 0, (minC + maxC) / 2, z1, minW * 2, maxC - minC, 0.6);
     const fw = minW - 0.35, fh = minC - 0.5;
-    box(C.WOOD2, -fw, (FLOOR_Y + fh) / 2, z1, 0.5, fh - FLOOR_Y, 0.7);
-    box(C.WOOD2, fw, (FLOOR_Y + fh) / 2, z1, 0.5, fh - FLOOR_Y, 0.7);
-    box(C.WOOD2, 0, fh, z1, fw * 2 + 0.5, 0.5, 0.7);
+    cyl(C.WOOD2, -fw, (FLOOR_Y + fh) / 2, z1, 0.28, fh - FLOOR_Y);
+    cyl(C.WOOD2, fw, (FLOOR_Y + fh) / 2, z1, 0.28, fh - FLOOR_Y);
+    cyl(C.CHROME, -fw, fh - 0.2, z1, 0.36, 0.22);
+    cyl(C.CHROME, fw, fh - 0.2, z1, 0.36, 0.22);
+    box(C.WOOD2, 0, fh, z1, fw * 2 + 0.5, 0.45, 0.65);
   }
 
   /* ================= 01 RECEPTION — warm walnut & SmartChair terminal ================= */
@@ -90,7 +83,7 @@ export function buildShop(): Shop {
   box(C.WOOD, 6.4, 0.6, -26, 0.4, 3.0, 1.6);
 
   /* ================= 02 HAIR-CUTTING SALON FLOOR (z: -30 -> -98) ================= */
-  // Left & Right wall barber stations with illuminated mirrors, walnut counters & flanking chairs
+  // Left & Right wall barber stations with illuminated arched mirrors, curved walnut counters & sculpted chairs
   [-46, -66, -84].forEach((z, i) => {
     station(z, -12.5, 1);
     chair(-8.4, z, -Math.PI / 2 + (i % 2 ? 0.14 : -0.10));
@@ -104,17 +97,18 @@ export function buildShop(): Shop {
     light(0, 7.6, z, 1.8, 1.8, 0, 0xffe0a3, 18, 18);
   });
 
-  // Framed Classical Barber Mirror Pediment on the solid end-wall (z = -97.2)
-  box(C.WOOD, -4.3, 0.2, -97.2, 0.75, 14.4, 0.9);
-  box(C.WOOD, 4.3, 0.2, -97.2, 0.75, 14.4, 0.9);
-  box(C.WOOD2, 0, 5.2, -97.1, 9.6, 0.95, 1.0);
+  // Fluted Walnut Columns framing the Grand Arched Mirror Pediment (z = -97.0)
+  cyl(C.WOOD, -4.3, -0.6, -97.1, 0.42, 12.8);
+  cyl(C.WOOD, 4.3, -0.6, -97.1, 0.42, 12.8);
+  cyl(C.CHROME, -4.3, 5.4, -97.1, 0.54, 0.3);
+  cyl(C.CHROME, 4.3, 5.4, -97.1, 0.54, 0.3);
   box(C.WOOD, 0, -5.8, -97.0, 9.4, 2.2, 1.1);
   light(0, 4.4, -96.4, 6.8, 0.32, 0, 0xffe4b5, 14, 12);
 
   void tap;
 
   return {
-    boxes, cyls, taps, practicals, mirrors,
+    boxes, cyls, taps, chairs, practicals, mirrors,
     fanAt: [0, 9.6, -74],
     poleAt: [-4.4, -1.0, -448],
   };

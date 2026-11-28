@@ -7,8 +7,15 @@ import { FOG_FN } from "./glsl";
 
 export type MuseumFinish = "marble" | "bronze";
 
+export interface SalonRawAsset {
+  geometry: THREE.BufferGeometry;
+  diffTex: THREE.Texture | null;
+}
+
 const assetCache = new Map<string, THREE.Group>();
 const promiseCache = new Map<string, Promise<THREE.Group>>();
+const rawAssetCache = new Map<string, SalonRawAsset>();
+const rawPromiseCache = new Map<string, Promise<SalonRawAsset>>();
 
 const PRELOAD_QUEUE: Array<{ name: string; finish: MuseumFinish }> = [
   { name: "BarberShopChair_01", finish: "marble" },
@@ -144,9 +151,80 @@ function loadMuseumModel(modelName: string, finish: MuseumFinish): Promise<THREE
   return p;
 }
 
+/**
+ * Loads and normalizes a CC0 glTF mesh into a single centered, Y-up [0, 1]
+ * BufferGeometry + optional diffuse texture for instanced & shader-morphed rendering.
+ */
+export function loadRawSalonAsset(modelName: string): Promise<SalonRawAsset> {
+  const existing = rawAssetCache.get(modelName);
+  if (existing) return Promise.resolve(existing);
+  const inflight = rawPromiseCache.get(modelName);
+  if (inflight) return inflight;
+
+  const p = new Promise<SalonRawAsset>((resolve, reject) => {
+    const loader = new GLTFLoader();
+    loader.load(
+      `/models/${modelName}/${modelName}_1k.gltf`,
+      (gltf) => {
+        const root = gltf.scene;
+        root.updateMatrixWorld(true);
+
+        let primaryMesh: THREE.Mesh | null = null;
+        root.traverse((obj) => {
+          if (!primaryMesh && obj instanceof THREE.Mesh) {
+            primaryMesh = obj;
+          }
+        });
+
+        if (!primaryMesh) {
+          reject(new Error(`No mesh found in ${modelName}`));
+          return;
+        }
+
+        const mesh = primaryMesh as THREE.Mesh;
+        const geo = mesh.geometry.clone();
+        geo.applyMatrix4(mesh.matrixWorld);
+        if (!geo.attributes.normal) geo.computeVertexNormals();
+        geo.computeBoundingBox();
+
+        const bb = geo.boundingBox!;
+        const size = new THREE.Vector3();
+        const center = new THREE.Vector3();
+        bb.getSize(size);
+        bb.getCenter(center);
+
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const scale = maxDim > 0 ? 1 / maxDim : 1;
+        geo.translate(-center.x, -bb.min.y, -center.z);
+        geo.scale(scale, scale, scale);
+        geo.computeBoundingBox();
+
+        const origMat = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+        const diffTex =
+          origMat && "map" in origMat && origMat.map instanceof THREE.Texture
+            ? origMat.map
+            : null;
+
+        const asset = { geometry: geo, diffTex };
+        rawAssetCache.set(modelName, asset);
+        resolve(asset);
+      },
+      undefined,
+      (err) => {
+        rawPromiseCache.delete(modelName);
+        reject(err);
+      }
+    );
+  });
+
+  rawPromiseCache.set(modelName, p);
+  return p;
+}
+
 /** Staggered idle preloading so Dimension 2 sculptures are cached before arrival. */
 export function preloadAllMuseumModels(lowBandwidth = false): void {
   if (typeof window === "undefined") return;
+  loadRawSalonAsset("BarberShopChair_01").catch(() => {});
   const list = lowBandwidth ? PRELOAD_QUEUE.slice(0, 5) : PRELOAD_QUEUE;
   list.forEach((item, idx) => {
     window.setTimeout(() => {

@@ -158,7 +158,7 @@ export function Scene({
 
       <group ref={world1Ref}>
         <Architecture />
-        <Furniture boxes={shop.boxes} cyls={shop.cyls} taps={shop.taps} />
+        <Furniture boxes={shop.boxes} cyls={shop.cyls} taps={shop.taps} chairs={shop.chairs} />
         <HeroChairPortal scroll={scroll} world={world} reduced={reduced} compact={isLite} />
         <Mirrors items={shop.mirrors} />
         <Practicals items={shop.practicals} />
@@ -166,7 +166,7 @@ export function Scene({
       </group>
 
       <group ref={world2Ref} visible={false}>
-        <PostPortalWorld scroll={scroll} world={world} onOpenConnect={onOpenConnect} />
+        <PostPortalWorld scroll={scroll} world={world} reduced={reduced} onOpenConnect={onOpenConnect} />
       </group>
 
       <SpatialTypography scroll={scroll} />
